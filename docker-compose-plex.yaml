@@ -1,0 +1,17 @@
+---
+version: "2.1"
+services:
+  plex:
+    image: linuxserver/plex
+    container_name: plex
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - VERSION=docker
+      - PLEX_CLAIM= #optional
+    volumes:
+      - /home/piragenth/drive-1/:/home/piragenth/drive-1/
+      - /home/piragenth/drive-2/:/home/piragenth/drive-2/
+    ports: 
+      - 32400:32400
+    restart: unless-stopped

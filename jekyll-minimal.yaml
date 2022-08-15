@@ -1,0 +1,12 @@
+version: '3'
+services:
+  jekyll-serve:
+    container_name: jekyll-minimal
+    image: jekyll/jekyll:latest
+    volumes:
+      - "/home/piragenth/Documents/GitHub/minimal-mistakes-master/:/srv/jekyll"
+    ports:
+      - 81:4000
+    command: 'jekyll build'
+    command: 'jekyll serve'
+    restart: unless-stopped

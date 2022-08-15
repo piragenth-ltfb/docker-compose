@@ -1,0 +1,13 @@
+---
+version: "2.1"
+services:
+  jellyfin:
+    image: linuxserver/jellyfin
+    container_name: jellyfin
+    volumes:
+      - /home/piragenth/drive-1/:/home/piragenth/drive-1/
+      - /home/piragenth/drive-2/:/home/piragenth/drive-2/
+    ports:
+      - 8000:8096
+    restart: unless-stopped
+

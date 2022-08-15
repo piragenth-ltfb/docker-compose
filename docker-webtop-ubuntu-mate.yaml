@@ -1,0 +1,11 @@
+---
+version: "2.1"
+services:
+  webtop:
+    image: linuxserver/webtop:ubuntu-mate
+    container_name: webtop-ubuntu-mate
+    volumes:
+      - /home/piragenth/drive-1/:/home/piragenth/drive-1/
+      - /home/piragenth/drive-2/:/home/piragenth/drive-2/
+    shm_size: "5gb" #optional
+    restart: unless-stopped
