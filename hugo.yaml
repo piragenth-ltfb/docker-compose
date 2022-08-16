@@ -1,0 +1,11 @@
+version: '3'
+services:
+  hugo:
+    container_name: hugo
+    image: ubuntu:latest
+    volumes:
+      - "/home/piragenth/Documents/GitHub/ltfb:/srv/hugo"
+    ports:
+      - 80:1313
+    
+    restart: unless-stopped
