@@ -1,6 +1,6 @@
 version: '3'
 services:
-  jekyll-serve:
+  jekyll-minimal:
     container_name: jekyll-minimal
     image: jekyll/jekyll:latest
     volumes:

@@ -6,6 +6,6 @@ services:
     volumes:
       - "/home/piragenth/Documents/GitHub/piragenth-ltfb.github.io:/srv/jekyll"
     ports:
-      - 8080:4000
+      - 80:4000
     command: 'jekyll serve'
     restart: unless-stopped
