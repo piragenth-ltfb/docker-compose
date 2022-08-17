@@ -6,6 +6,6 @@ services:
     volumes:
       - "/home/piragenth/Documents/GitHub/ltfb:/srv/hugo"
     ports:
-      - 80:1313
-    
+      - 8081:1313
+#    command: hugo server    
     restart: unless-stopped
