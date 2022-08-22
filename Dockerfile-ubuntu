@@ -1,2 +1,3 @@
 FROM ubuntu
-RUN apt update && apt upgrade -y && apt install sudo nano git gdebi bmon nginx wget curl neofetch cmatrix -y && echo 'nameserver 8.8.8.8' > /etc/resolv.conf
+ENV DEBIAN_FRONTEND=noninteractive 
+RUN apt update && echo 'nameserver 8.8.8.8' > /etc/resolv.conf && apt upgrade -y && apt install sudo nano git gdebi bmon nginx wget curl neofetch cmatrix -y 
