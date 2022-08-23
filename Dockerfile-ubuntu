@@ -1,6 +1,7 @@
 FROM ubuntu
 ENV DEBIAN_FRONTEND=noninteractive 
-RUN apt update && echo 'nameserver 8.8.8.8' > /etc/resolv.conf && apt upgrade -y && apt install nala net-tools wget curl chromium-browser firefox openssh-client git novnc tightvncserver websockify sudo nano git gdebi bmon nginx wget curl neofetch cmatrix sddm systemctl kde-full -y 
+
+RUN apt update && echo 'nameserver 8.8.8.8' > /etc/resolv.conf && apt upgrade -y && apt install systemctl && apt install nala net-tools wget curl chromium-browser firefox openssh-client git novnc tightvncserver websockify sudo nano git gdebi bmon nginx wget curl neofetch cmatrix sddm systemctl kde-full -y 
 ENV USER root
 COPY Dockerfile-ubuntu.sh /Dockerfile-ubuntu.sh
 RUN chmod a+x /Dockerfile-ubuntu.sh
