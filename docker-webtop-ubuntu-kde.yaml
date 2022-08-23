@@ -1,11 +1,10 @@
 version: "2.1"
 services:
-  webtop:
+  ubuntu-kde:
     image: linuxserver/webtop:ubuntu-kde
     container_name: webtop-ubuntu-kde
-    volumes:
-      - /home/piragenth/drive-1/:/home/piragenth/drive-1/
-      - /home/piragenth/drive-2/:/home/piragenth/drive-2/
+    ports:
+      - 3001:3000
     shm_size: "5gb" #optional
     restart: unless-stopped
 
