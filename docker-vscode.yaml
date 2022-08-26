@@ -1,0 +1,21 @@
+version: "2.1"
+services:
+  code-server:
+    image: linuxserver/code-server:latest
+    container_name: code-server
+    volumes:
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/London
+      - PASSWORD=3559 #optional
+      - HASHED_PASSWORD= #optional
+      - SUDO_PASSWORD=3559 #optional
+#      - SUDO_PASSWORD_HASH= #optional
+      - PROXY_DOMAIN=code-server.my.domain #optional
+      - DEFAULT_WORKSPACE=/piragenth #optional
+      - /home/piragenth/GitHub/docker-compose/vs-code/:/config
+      - /:/root
+      - /home/piragenth/:/piragenth
+    ports:
+      - 8090:8443
+    restart: unless-stopped
