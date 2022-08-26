@@ -1,0 +1,10 @@
+version: "2.1"
+services:
+  arch-kde:
+    image: linuxserver/webtop:arch-kde
+    container_name: webtop-arch-kde
+    ports:
+      - 3002:3000
+    shm_size: "5gb" #optional
+    restart: unless-stopped
+
