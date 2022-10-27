@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask</title>
+</head>
+<body>
+<h1>User management using python flask & mysql</h1>
+
+<h3>
+    { % with messages = get_flashed_messages() % }
+        { % if messages %}
+            { % for message in messages % }
+                {{ message }}
+            { % endfor % }
+        { % endif % }
+    { %endwith% }
+</h3>
+
+
+<p><a href="{{url_for('adduser')}}">Add user</a></p>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>no</th>
+        <th>City</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    {%for data in datas%}
+    <tr>
+        <td>{{data.id}}</td>
+        <td>{{data.Name}}</td>
+        <td>{{data.contact_no}}</td>
+        <td>{{data.city}}</td>
+        <td><a href="{{url_for('Edit_user',id=data.id)}}">Edit-User</a></td>
+        <td><a onclick="return confirm('are you sure to delete?');" href="{{url_for('delete_user',id=data.id)}}">Delete-User</a></td>
+    </tr>
+    {%endfor%}
+</body>
+</html>
