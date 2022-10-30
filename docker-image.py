@@ -11,29 +11,35 @@ list = []
 
 def saving(choice, docker_images, image, list, counts=0):
     print(docker_images)
-
+    change_list = []
+    num = 0
 #Formating docker_images list and renaming
-
+    change = ''
     for superate in docker_images:
         if superate != '\n':
-            if superate == '/' or superate == ':':
-                superate = '-'
                 image = image + superate
-            else:
-                image = image + superate
+                if superate == '/' or superate == ':':
+                    new = '-'
+                    change = change + new
+                else:
+                    change = change + superate
         else:
             list.append(image)
-            print(list)
+            change_list.append(change)
+            change = ''
             image = ''
             counts += 1
+    print(list)
+    print(change_list)
     print(f'{counts} Images')
     counts=0
-
     for image_name in list:
         counts += 1
         print(counts)
         print(f'Saving: {image_name}')
-        save = f'docker save -o {image_name}.tar {image_name}'
+        save = f'docker save -o {change_list[num]}.tar {image_name}'
+        num += 1
+#        print(save)
         os.system(save)
 
 
