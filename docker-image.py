@@ -10,7 +10,8 @@ list = []
 
 
 def saving(choice, docker_images, image, list, counts=0):
-    print(docker_images)
+    print(os.system('docker images'))
+#    print(docker_images)
     change_list = []
     num = 0
 #Formating docker_images list and renaming
