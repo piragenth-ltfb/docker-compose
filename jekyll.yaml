@@ -10,7 +10,6 @@ services:
     command: 'jekyll serve --incremental --verbose'
     networks:
       - docker-compose_default
-
     restart: unless-stopped
 
 networks:
