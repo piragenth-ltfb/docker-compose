@@ -29,8 +29,8 @@ def saving(choice, docker_images, image, list, counts=0):
             change = ''
             image = ''
             counts += 1
-    print(list)
-    print(change_list)
+#    print(list)
+#    print(change_list)
     print(f'{counts} Images')
     counts=0
     for image_name in list:
