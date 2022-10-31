@@ -54,12 +54,12 @@ def loading(ls, ls_list=[], counts=0):
             ls_list.append(item)
             item=''
             counts += 1
-
-    print(ls_list)
+    print(f'{counts} Images found in this directory')
+#    print(ls_list)
     for i in ls_list:
-        print(i)
+#        print(i)
         print(f'Loading: {i}')
-        os.popen(f'docker load -i {i}')
+        os.system(f'docker load -i {i}')
 
 
 if choice == 'S' or choice == 's':
