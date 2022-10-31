@@ -60,6 +60,7 @@ def loading(ls, ls_list=[], counts=0):
 #        print(i)
         print(f'Loading: {i}')
         os.system(f'docker load -i {i}')
+        print('\n')
 
 
 if choice == 'S' or choice == 's':
