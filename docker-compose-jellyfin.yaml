@@ -5,7 +5,7 @@ services:
     image: linuxserver/jellyfin
     container_name: jellyfin
     volumes:
-      - /home/piragenth/config/emby/:/config
+      - /home/piragenth/config/jellyfin/:/config/
       - /home/piragenth/drive-1/:/home/piragenth/drive-1/
       - /home/piragenth/drive-2/:/home/piragenth/drive-2/
     ports:
