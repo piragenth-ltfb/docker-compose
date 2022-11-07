@@ -1,5 +1,6 @@
 oh-my-bash
 p10k
+lunarvim
 colorls
 bat
 zsh auto suggectoin
