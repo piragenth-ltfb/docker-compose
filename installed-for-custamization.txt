@@ -1,0 +1,7 @@
+oh-my-bash
+p10k
+colorls
+bat
+zsh auto suggectoin
+zsh syntx highlighing
+nano-syntax higliginting
