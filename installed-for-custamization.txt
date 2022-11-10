@@ -6,3 +6,4 @@ bat
 zsh auto suggectoin
 zsh syntx highlighing
 nano-syntax higliginting
+ranger
