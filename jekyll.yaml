@@ -4,7 +4,7 @@ services:
     container_name: jekyll
     image: jekyll/jekyll:latest
     volumes:
-      - "/home/piragenth/Documents/GitHub/piragenth-ltfb.github.io/:/srv/jekyll/"
+      - "/home/piragenth/Documents/GitHub/jekyll-theme-chirpy/:/srv/jekyll/"
     ports:
       - 8082:4000
     command: 'jekyll serve --incremental --verbose'
