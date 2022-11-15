@@ -16,6 +16,10 @@ def formating_pulling(docker_images, image, list, counts=0):
             counts+= 1
     print(f'Total {counts} Images')
     print(list)
+    print(os.system('docker run --rm \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    containrrr/watchtower \
+    --run-once'))
     for images in list:
         print(os.system(f'docker pull {images}'))
 formating_pulling(docker_images,image,list)
