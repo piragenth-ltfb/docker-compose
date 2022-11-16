@@ -21,9 +21,9 @@ services:
       - 67/udp
       - 8080:80
     volumes: # mount our data volumes.
-       - './pihole/etc-pihole/:/etc/pihole/'
-       - './pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/'
-       - './pihole/backups/:/backups/' # backups explained later
+       - '/home/piragenth/Documents/pihole/etc-pihole/:/etc/pihole/'
+       - '/home/piragenth/Documents/pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/'
+       - '/home/piragenth/Documents/pihole/backups/:/backups/' # backups explained later
     environment: # set variables for pihole configuration.
 #      ServerIP: 192.168.1.17 # must match ipv4_address above
       VIRTUAL_HOST: pihole.local  # Must be hostname + domainname from above
