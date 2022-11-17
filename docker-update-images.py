@@ -23,3 +23,8 @@ def formating_pulling(docker_images, image, list, counts=0):
     for images in list:
         print(os.system(f'docker pull {images}'))
 formating_pulling(docker_images,image,list)
+
+print('Remove <none> tagged images')
+
+print(os.system('docker rmi $(docker images --filter "dangling=true" -q --no-trunc)'))
+
