@@ -2,10 +2,10 @@ version: '3'
 services:
   hugo:
     container_name: hugo
-    image: ubuntu:latest
+    image: piragenthdocker/hugo:latest
     volumes:
       - "/home/piragenth/Documents/GitHub/ltfb:/srv/hugo"
     ports:
-      - 8081:1313
-#    command: hugo server    
+      - 1313:1313
+    command: hugo server -s /srv/hugo --disableFastRender  
     restart: unless-stopped
