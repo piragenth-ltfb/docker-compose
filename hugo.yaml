@@ -4,7 +4,7 @@ services:
     container_name: hugo
     image: piragenthdocker/hugo:latest
     volumes:
-      - "/home/piragenth/Documents/GitHub/linuxtutorialforbeginners:/srv/hugo"
+      - "/home/piragenth/Documents/GitHub/piragenth-ltfb.github.io:/srv/hugo"
     ports:
       - 8085:1313
     command: hugo server -s /srv/hugo --disableFastRender -w --bind 0.0.0.0
