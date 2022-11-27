@@ -69,3 +69,4 @@ elif choice == 'L' or choice == 'l':
     loading(ls)
 else:
     print('Wrong Input')
+docker rmi $(docker images --filter "dangling=true" -q --no-trunc)   
