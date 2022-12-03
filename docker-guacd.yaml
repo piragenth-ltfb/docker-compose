@@ -1,9 +1,8 @@
----
 version: "2.1"
 services:
-  guacamole:
+  guacd:
     image: linuxserver/guacd:latest
-    container_name: guacmole
+    container_name: guacd
     ports:
       - 4822:4822
     restart: unless-stopped
