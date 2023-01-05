@@ -185,7 +185,7 @@ class newscard_horizontal_vertical_posts extends WP_Widget {
 	function widget($args, $instance) {
 
 		$category = isset($instance['category']) ? $instance['category'] : '';
-		$style = empty($instance['style']) ? '' : $instance['style'];
+		$style = empty($instance['style']) ? 0 : $instance['style'];
 		$widget_title = apply_filters( 'widget_title', empty( $instance['widget_title'] ) ? '' : $instance['widget_title'], $instance, $this->id_base );
 		$type = ( isset($instance['type']) && is_numeric($instance['type']) ) ? (int) $instance['type'] : 1;
 		global $post;
@@ -202,9 +202,7 @@ class newscard_horizontal_vertical_posts extends WP_Widget {
 		$get_featured_posts = new WP_Query($post_type);
 
 		echo $args['before_widget']; ?>
-		<?php if ( !empty($widget_title) ) {
-			echo $args['before_title'] . $widget_title . $args['after_title'];
-		} ?>
+		<?php newscard_widgets_title($args['before_title'], $category, $type, $widget_title, $args['after_title']) ?>
 		<div class="row gutter-parent-14<?php echo ($style == 0) ? ' post-vertical' : ' post-horizontal' ;?>">
 			<div class="<?php echo ($style == 0) ? 'col-md-6 ' : 'col-12 ' ;?>first-col">
 			<?php
@@ -242,7 +240,7 @@ class newscard_horizontal_vertical_posts extends WP_Widget {
 					<div class="post-boxed inlined clearfix">
 						<?php if ( has_post_thumbnail() ) { ?>
 							<div class="post-img-wrap">
-								<a href="<?php the_permalink(); ?>" class="post-img" style="background-image: url('<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(),'full')); ?>');"></a>
+								<a href="<?php the_permalink(); ?>" class="post-img" style="background-image: url('<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(),'medium')); ?>');"></a>
 							</div>
 						<?php } ?>
 						<div class="post-content">
@@ -351,7 +349,7 @@ class newscard_card_block_posts extends WP_Widget {
 	function widget($args, $instance) {
 
 		$category = isset($instance['category']) ? $instance['category'] : '';
-		$style = empty($instance['style']) ? '' : $instance['style'];
+		$style = empty($instance['style']) ? 0 : $instance['style'];
 		$widget_title = apply_filters( 'widget_title', empty( $instance['widget_title'] ) ? '' : $instance['widget_title'], $instance, $this->id_base );
 		$type = ( isset($instance['type']) && is_numeric($instance['type']) ) ? (int) $instance['type'] : 1;
 		global $post;
@@ -368,9 +366,7 @@ class newscard_card_block_posts extends WP_Widget {
 		$get_featured_posts = new WP_Query($post_type);
 
 		echo $args['before_widget']; ?>
-			<?php if ( !empty($widget_title) ) {
-				echo $args['before_title'] . $widget_title . $args['after_title'];
-			} ?>
+			<?php newscard_widgets_title($args['before_title'], $category, $type, $widget_title, $args['after_title']) ?>
 			<div class="row gutter-parent-14">
 				<?php while ($get_featured_posts->have_posts()):$get_featured_posts->the_post(); ?>
 					<div class="col-sm-6 post-col">
@@ -487,9 +483,7 @@ class newscard_recent_posts extends WP_Widget {
 
 		echo $args['before_widget']; ?>
 
-			<?php if ( !empty($widget_title) ) {
-				echo $args['before_title'] . $widget_title . $args['after_title'];
-			} ?>
+		<?php newscard_widgets_title($args['before_title'], '', 1, $widget_title, $args['after_title']) ?>
 			<div class="row gutter-parent-14">
 				<?php if ($number > 0) {
 					$i = 0;
@@ -498,7 +492,7 @@ class newscard_recent_posts extends WP_Widget {
 							<div class="post-boxed inlined clearfix">
 								<?php if ( has_post_thumbnail() ) { ?>
 									<div class="post-img-wrap">
-										<a href="<?php the_permalink(); ?>" class="post-img" style="background-image: url('<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(),'full')); ?>');"></a>
+										<a href="<?php the_permalink(); ?>" class="post-img" style="background-image: url('<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(),'medium')); ?>');"></a>
 									</div>
 								<?php } ?>
 								<div class="post-content">

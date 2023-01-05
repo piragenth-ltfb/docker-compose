@@ -67,12 +67,12 @@
 					<div class="about-text">
 						<?php printf( esc_html__( '%1$s is now installed and all of the features provided by the theme are now ready to use. Here, we have the following information and helpful links for you and your better experience with %1$s. Thank you very much for installing and activating our theme! Let\'s get start setting up your site now... :)', 'newscard' ), esc_html($this->theme_name) ); ?>
 					</div>
-					<a href="<?php echo esc_url('https://www.themehorse.com/'); ?>" target="_blank" class="wp-badge themehorse-logo"></a>
+					<a href="<?php echo esc_url('https://www.themehorse.com/'); ?>" target="_blank" rel="noopener noreferrer" class="wp-badge themehorse-logo"></a>
 					<p>
-						<a href="<?php echo esc_url('https://www.themehorse.com/themes/newscard/'); ?>" class="button" target="_blank"><?php echo esc_html__('Theme Details', 'newscard'); ?></a>
-						<a href="<?php echo esc_url('https://www.themehorse.com/demos/newscard/'); ?>" class="button" target="_blank"><?php echo esc_html__('View Demo', 'newscard'); ?></a>
-						<a href="<?php echo esc_url('https://wordpress.org/support/theme/newscard/reviews/?filter=5'); ?>" class="button" target="_blank"><?php echo esc_html__('Rate This Theme', 'newscard'); ?></a>
-						<a href="<?php echo esc_url('https://www.themehorse.com/themes/newscard-pro'); ?>" class="button upgrade-button" target="_blank"><?php echo esc_html__('Upgrade to Pro', 'newscard'); ?></a>
+						<a href="<?php echo esc_url('https://www.themehorse.com/themes/newscard/'); ?>" class="button" target="_blank" rel="noopener noreferrer"><?php echo esc_html__('Theme Details', 'newscard'); ?></a>
+						<a href="<?php echo esc_url('https://www.themehorse.com/demos/newscard/'); ?>" class="button" target="_blank" rel="noopener noreferrer"><?php echo esc_html__('View Demo', 'newscard'); ?></a>
+						<a href="<?php echo esc_url('https://wordpress.org/support/theme/newscard/reviews/?filter=5'); ?>" class="button" target="_blank" rel="noopener noreferrer"><?php echo esc_html__('Rate This Theme', 'newscard'); ?></a>
+						<a href="<?php echo esc_url('https://www.themehorse.com/themes/newscard-pro'); ?>" class="button upgrade-button" target="_blank" rel="noopener noreferrer"><?php echo esc_html__('Upgrade to Pro', 'newscard'); ?></a>
 					</p>
 
 					<div class="nav-tab-wrapper clearfix">

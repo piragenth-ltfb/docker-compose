@@ -5,7 +5,7 @@
 			<?php echo esc_html__('Import Demo Content', 'newscard'); ?>
 		</a>
 		<?php echo esc_html__('or', 'newscard'); ?>
-		<a target="_blank" href="<?php echo esc_url( 'https://youtu.be/cFQqkHfA4b4' ); ?>">
+		<a target="_blank" rel="noopener noreferrer" href="<?php echo esc_url( 'https://youtu.be/cFQqkHfA4b4' ); ?>">
 			<?php echo esc_html__('Watch Video Tutorial', 'newscard'); ?>
 		</a>
 		<?php echo esc_html__('or Follow the below steps to setup manually:', 'newscard'); ?>
@@ -18,7 +18,7 @@
 		<li><?php echo esc_html__('Select "Front Page Template" for the option Page Attributes > Template which you can find it from the right section of the page editor.', 'newscard'); ?> </li>
 		<li><?php echo esc_html__('Click on Publish', 'newscard'); ?></li>
 	</ol>
-	<a class="button" target="_blank" href="<?php echo esc_url(admin_url('post-new.php?post_type=page')); ?>"><?php echo esc_html__('Create New Page', 'newscard'); ?></a>
+	<a class="button" target="_blank" rel="noopener noreferrer" href="<?php echo esc_url(admin_url('post-new.php?post_type=page')); ?>"><?php echo esc_html__('Create New Page', 'newscard'); ?></a>
 </div>
 <div class="theme-info-recommended-action-box">
 	<h3><?php echo esc_html__('Step 2: Set "Your homepage displays" to "A Static Page"', 'newscard'); ?></h3>
@@ -28,7 +28,7 @@
 		<li><?php echo esc_html__('Select the page that you have created in the step 1 for "Homepage"', 'newscard'); ?></li>
 		<li><?php echo esc_html__('Click on Publish', 'newscard'); ?></li>
 	</ol>
-	<a class="button" target="_blank" href="<?php echo esc_url(admin_url('options-reading.php')); ?>"><?php echo esc_html__('Assign Static Page', 'newscard'); ?></a>
+	<a class="button" target="_blank" rel="noopener noreferrer" href="<?php echo esc_url(admin_url('options-reading.php')); ?>"><?php echo esc_html__('Assign Static Page', 'newscard'); ?></a>
 </div>
 
 <div class="theme-info-recommended-action-box">
@@ -39,7 +39,7 @@
 		<li><?php echo esc_html__('Set up the content/settings accordingly to the widget options', 'newscard'); ?></li>
 		<li><?php echo esc_html__('Click on Save', 'newscard'); ?></li>
 	</ol>
-	<a class="button" target="_blank" href="<?php echo esc_url(admin_url('widgets.php')); ?>"><?php echo esc_html__('Set Widgets', 'newscard'); ?></a>
+	<a class="button" target="_blank" rel="noopener noreferrer" href="<?php echo esc_url(admin_url('widgets.php')); ?>"><?php echo esc_html__('Set Widgets', 'newscard'); ?></a>
 </div>
 
 <div class="theme-info-recommended-action-box">

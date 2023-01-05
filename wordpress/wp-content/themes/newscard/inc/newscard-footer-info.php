@@ -29,7 +29,7 @@ function newscard_wp_link() {
 	return '<div class="wp-link">' .
 		sprintf(
 			esc_html__('Proudly Powered by: %s', 'newscard'),
-			'<a href="' . esc_url('http://wordpress.org/') . '" target="_blank" title="' . esc_attr__('WordPress', 'newscard') . '">' . esc_html__('WordPress', 'newscard') . '</a>'
+			'<a href="' . esc_url('http://wordpress.org/') . '" target="_blank" rel="noopener noreferrer" title="' . esc_attr__('WordPress', 'newscard') . '">' . esc_html__('WordPress', 'newscard') . '</a>'
 		) . '</div>';
 }
 /**
@@ -40,6 +40,6 @@ function newscard_author_link() {
 	return '<div class="author-link">' .
 		sprintf(
 			esc_html__('Theme by: %s', 'newscard'),
-			'<a href="' . esc_url('https://www.themehorse.com') . '" target="_blank" title="' . esc_attr__('Theme Horse', 'newscard') . '" >' . esc_html__('Theme Horse', 'newscard') . '</a>'
+			'<a href="' . esc_url('https://www.themehorse.com') . '" target="_blank" rel="noopener noreferrer" title="' . esc_attr__('Theme Horse', 'newscard') . '" >' . esc_html__('Theme Horse', 'newscard') . '</a>'
 		) . '</div>';
 }

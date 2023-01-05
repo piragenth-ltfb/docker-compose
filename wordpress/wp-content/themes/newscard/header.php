@@ -90,7 +90,7 @@ $newscard_settings = newscard_get_option_defaults(); ?>
 						<?php if ( $newscard_settings['newscard_header_add_image'] !== '' ) { ?>
 							<div class="col-lg-8 navbar-ad-section">
 								<?php if ( $newscard_settings['newscard_header_add_link'] !== '' ) { ?>
-									<a href="<?php echo esc_url( $newscard_settings['newscard_header_add_link'] ); ?>" class="newscard-ad-728-90" target="_blank">
+									<a href="<?php echo esc_url( $newscard_settings['newscard_header_add_link'] ); ?>" class="newscard-ad-728-90" target="_blank" rel="noopener noreferrer">
 								<?php } ?>
 									<img class="img-fluid" src="<?php echo esc_url( $newscard_settings['newscard_header_add_image'] ); ?>" alt="<?php esc_attr_e('Banner Add', 'newscard'); ?>">
 								<?php if ( $newscard_settings['newscard_header_add_link'] !== '' ) { ?>
@@ -238,9 +238,7 @@ $newscard_settings = newscard_get_option_defaults(); ?>
 								<div class="<?php echo $col_slider_class ?>">
 									<div class="featured-slider post-slider<?php echo ( $newscard_settings['newscard_banner_slider_posts_title'] === '' ) ? " slider-no-title" : ""; ?>">
 										<div class="post-slider-header title-wrap">
-											<?php if ( $newscard_settings['newscard_banner_slider_posts_title'] !== '' ) { ?>
-												<h3 class="stories-title"><?php echo esc_html($newscard_settings['newscard_banner_slider_posts_title']); ?></h3>
-											<?php } ?>
+											<?php newscard_sections_title($newscard_settings['newscard_banner_slider_latest_post'], $newscard_settings['newscard_banner_slider_posts_title'], $newscard_bs_cat); ?>
 										</div>
 										<div class="owl-carousel">
 											<?php while ($newscard_get_banner_slider->have_posts()) {
@@ -291,9 +289,7 @@ $newscard_settings = newscard_get_option_defaults(); ?>
 								<div class="<?php echo $col_mid_class ?>">
 									<div class="featured-post">
 										<div class="title-wrap">
-											<?php if ( $newscard_settings['newscard_banner_featured_posts_1_title'] !== '' ) { ?>
-												<h3 class="stories-title"><?php echo esc_html($newscard_settings['newscard_banner_featured_posts_1_title']); ?></h3>
-											<?php } ?>
+											<?php newscard_sections_title($newscard_settings['newscard_banner_featured_posts_1_latest_post'], $newscard_settings['newscard_banner_featured_posts_1_title'], $newscard_fp_1_cat); ?>
 										</div>
 										<div class="row">
 											<?php while ($newscard_get_featured_post_1->have_posts()) {
@@ -344,9 +340,7 @@ $newscard_settings = newscard_get_option_defaults(); ?>
 								<div class="<?php echo $col_mid_class ?>">
 									<div class="featured-post">
 										<div class="title-wrap">
-											<?php if ( $newscard_settings['newscard_banner_featured_posts_2_title'] !== '' ) { ?>
-												<h3 class="stories-title"><?php echo esc_html($newscard_settings['newscard_banner_featured_posts_2_title']); ?></h3>
-											<?php } ?>
+											<?php newscard_sections_title($newscard_settings['newscard_banner_featured_posts_2_latest_post'], $newscard_settings['newscard_banner_featured_posts_2_title'], $newscard_fp_2_cat); ?>
 										</div>
 										<div class="row">
 											<?php while ($newscard_get_featured_post_2->have_posts()) {
@@ -397,7 +391,7 @@ $newscard_settings = newscard_get_option_defaults(); ?>
 						$header_newscard_get_featured_post = new WP_Query($header_post_type); ?>
 
 						<section class="featured-stories">
-							<h2 class="stories-title"><?php echo esc_html($newscard_settings['newscard_header_featured_posts_title']); ?></h2>
+							<?php newscard_sections_title($newscard_settings['newscard_header_featured_latest_post'], $newscard_settings['newscard_header_featured_posts_title'], $header_newscard_cat); ?>
 							<div class="row gutter-parent-10">
 								<?php while ($header_newscard_get_featured_post->have_posts()) {
 									$header_newscard_get_featured_post->the_post(); ?>
@@ -406,7 +400,7 @@ $newscard_settings = newscard_get_option_defaults(); ?>
 											<?php if ( has_post_thumbnail() ) { ?>
 												<div class="post-img-wrap">
 													<div class="featured-post-img">
-														<a href="<?php the_permalink(); ?>" class="post-img" style="background-image: url('<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(),'full')); ?>');"></a>
+														<a href="<?php the_permalink(); ?>" class="post-img" style="background-image: url('<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(),'large')); ?>');"></a>
 													</div>
 													<div class="entry-meta category-meta">
 														<div class="cat-links"><?php the_category(' '); ?></div>

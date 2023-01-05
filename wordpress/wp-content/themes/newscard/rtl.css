@@ -91,7 +91,7 @@ blockquote:before {
 	right: auto;
 	left: 15px;
 }
-.main-navigation li ul li.menu-item-has-children > a:after, 
+.main-navigation li ul li.menu-item-has-children > a:after,
 .main-navigation li ul li.page_item_has_children > a:after {
 	right: auto;
 	left: 7px;
@@ -115,7 +115,7 @@ blockquote:before {
 .main-navigation ul li ul li ul,
 .headernav .main-navigation ul li ul li ul {
 	left: auto;
-	right: 198px;
+	right: 100%;
 }
 .search-block {
 	right: auto;
@@ -145,7 +145,7 @@ blockquote:before {
 	padding-left: 0;
 	padding-right: 35px;
 }
-.top-stories-bar .top-stories-label .flash-icon { 
+.top-stories-bar .top-stories-label .flash-icon {
 	left: 0;
 	right: 10px;
 }
@@ -164,9 +164,9 @@ blockquote:before {
 .top-stories-bar .js-marquee-wrapper {
 	direction: rtl;
 }
-.no-js .owl-carousel, 
+.no-js .owl-carousel,
 .owl-carousel.owl-loaded {
-    direction: ltr;
+	direction: ltr;
 }
 .featured-slider.slider-no-title .owl-nav {
 	right: auto;
@@ -270,11 +270,6 @@ blockquote:before {
 	padding-left: 0;
 	padding-right: 35px;
 }
-.wp-block-pullquote blockquote:before {
-	margin-right: 0;
-	margin-left: 10px;
-	right: auto;
-}
 
 .post-boxed.inlined .post-img-wrap {
 	float: right;
@@ -294,14 +289,6 @@ blockquote:before {
 	margin-left: 0;
 	margin-right: 1px;
 }
-.post-slider .slick-next {
-	right: auto;
-	left: 0;
-}
-.post-slider .slick-prev {
-	right: auto;
-	left: 29px;
-}
 .stories-title,
 .widget-title {
 	border-left: none;
@@ -310,7 +297,7 @@ blockquote:before {
 	padding-right: 10px;
 	text-align: right;
 }
-.featured-section .post-boxed.inlined .post-img-wrap { 
+.featured-section .post-boxed.inlined .post-img-wrap {
 	margin-right: 0;
 	margin-left: 10px;
 }
@@ -322,6 +309,11 @@ blockquote:before {
 .widget ul ul {
 	padding-left: 0;
 	padding-right: 20px;
+}
+.widget_text ol,
+.widget_text ul {
+	padding-left: 0;
+	padding-right: 25px;
 }
 .widget_tag_cloud a {
 	margin-right: 0;
@@ -390,7 +382,7 @@ blockquote:before {
 	.main-navigation ul li.page_item_has_children > a:after,
 	.main-navigation li ul li.page_item_has_children > a:after {
 		right: auto;
-		left: 30px;	
+		left: 30px;
 		content: "\f107";
 	}
 	.main-navigation li ul,
@@ -528,7 +520,7 @@ blockquote:before {
 		right: auto;
 		left: 20px;
 	}
-	.navbar-brand { 
+	.navbar-brand {
 		margin-left: 0;
 	}
 }
@@ -626,7 +618,7 @@ blockquote:before {
 	}
 }
 
-@media (min-width: 1600px) { 
+@media (min-width: 1600px) {
 	.main-navigation > ul > li.menu-item-has-children > a,
 	.main-navigation > ul > li.page_item_has_children > a {
 		padding-left: 37px;

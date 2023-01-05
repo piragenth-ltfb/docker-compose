@@ -3,8 +3,8 @@
 Contributors: themehorse
 Requires at least: 4.7
 Requires PHP: 5.2
-Tested up to: 5.5
-Stable tag: 1.2.7
+Tested up to: 6.0
+Stable tag: 1.2.9
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Tags: blog, entertainment, news, two-columns, left-sidebar, right-sidebar, custom-background, custom-header, custom-logo, custom-menu, featured-image-header, featured-images, footer-widgets, post-formats, rtl-language-support, sticky-post, theme-options, threaded-comments, translation-ready
@@ -64,6 +64,18 @@ Yes. Theme supports WooCommerce, bbPress, Contact Form 7 and many more.
 * Other all resources, Copyright 2018 Theme Horse, MIT/GPLv3
 
 == Changelog ==
+= 1.2.9 =
+* Feature - Entry Title limit to 2 Lines option added
+* Update - featured image caption added in single page
+* Fix - fixed string to number comparison as of PHP 8.0+
+
+= 1.2.8 =
+* Feature - Anchor tag added on sections and widgets title
+* Update - Added attribute `rel="noopener noreferrer"` in link with `target="_blank"`
+* Update - Gutenberg, WooCommerce, bbPress, Right-To-Left (RTL), styles support updated
+* Tweak - Featured images size on some sections/widgets tweaked for fast browsing experiences
+* Fix - Pagination issue fixed on specific date archive
+
 = 1.2.7 =
 * Update - Gutenberg, WooCommerce and bbPress support updated
 * Update - RTL support for top stories updated

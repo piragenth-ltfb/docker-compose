@@ -52,6 +52,8 @@ function newscard_get_option_defaults() {
 		'newscard_featured_image_page'							=> get_theme_mod('newscard_featured_image_page', 0),
 		'newscard_featured_image_single'						=> get_theme_mod('newscard_featured_image_single', 0),
 		'newscard_archive_title_label_hide'						=> get_theme_mod('newscard_archive_title_label_hide', 0),
+		'newscard_entry_title_limit'							=> get_theme_mod('newscard_entry_title_limit', 0),
+		
 	);
 	return apply_filters( 'newscard_get_option_defaults', $newscard_array_of_default_settings );
 }
@@ -66,7 +68,7 @@ if ( !function_exists( 'newscard_social_profiles' ) ) {
 		<ul class="clearfix">
 			<?php $social_arr = explode(',',$newscard_settings['newscard_social_profiles']);
 			foreach ($social_arr as $value) { ?>
-				<li><a target="_blank" href="<?php echo esc_url(trim($value)); ?>"></a></li>
+				<li><a target="_blank" rel="noopener noreferrer" href="<?php echo esc_url(trim($value)); ?>"></a></li>
 			<?php } ?>
 		</ul>
 	<?php }
@@ -151,6 +153,39 @@ if ( ! function_exists( 'newscard_breadcrumbs' ) ) :
 
 endif;
 
+if ( ! function_exists( 'newscard_sections_title' ) ) {
+	/**
+	 * Prints sections title with category link or blog page.
+	 */
+	function newscard_sections_title($post_opt, $section_title, $post_cat) {
+		if ( $section_title !== '' ) { ?>
+			<h3 class="stories-title">
+				<?php if ( 'latest' == $post_opt) { ?>
+					<a href="<?php the_permalink(get_option( 'page_for_posts')); ?>"><?php echo esc_html($section_title); ?></a>
+				<?php } else { ?>
+					<a href="<?php echo esc_url(get_category_link($post_cat)); ?>"><?php echo esc_html($section_title); ?></a>
+				<?php } ?>
+			</h3>
+		<?php }
+	}
+}
+
+if ( ! function_exists( 'newscard_widgets_title' ) ) {
+	/**
+	 * Prints sections title with category link or blog page.
+	 */
+	function newscard_widgets_title($title_before, $post_cat, $type, $widget_title, $title_after) {
+		if (!empty($widget_title)) {
+			echo $title_before;
+			if ( $type == 1) { ?>
+				<a href="<?php the_permalink(get_option( 'page_for_posts')); ?>"><?php echo esc_html($widget_title); ?></a>
+			<?php } else { ?>
+				<a href="<?php echo esc_url(get_category_link($post_cat)); ?>"><?php echo esc_html($widget_title); ?></a>
+			<?php }
+			echo $title_after;
+		}
+	}
+}
 
 if ( ! function_exists( 'newscard_register_required_plugins' ) ) :
 	/**
@@ -232,3 +267,17 @@ add_action( 'pt-ocdi/after_import', 'newscard_ocdi_after_import' );
 
 // Disable PT branding.
 add_filter( 'pt-ocdi/disable_pt_branding', '__return_true' );
+
+function custom_class( $classes ) {
+	/**
+	 * function to add custom CSS in body_class()
+	 */
+	$newscard_settings = newscard_get_option_defaults();
+
+    if ( $newscard_settings['newscard_entry_title_limit'] !== 0 ) {
+        $classes[] = 'entry-title-ellipsis';
+    }
+
+    return $classes;
+}
+add_filter( 'body_class', 'custom_class' );

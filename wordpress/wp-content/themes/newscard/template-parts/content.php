@@ -31,6 +31,9 @@
 
 					<figure class="post-featured-image page-single-img-wrap">
 						<div class="post-img" style="background-image: url('<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(),'full')); ?>');"></div>
+						<?php if ( get_the_post_thumbnail_caption( get_the_ID() ) ) { ?>
+							<figcaption class="featured-image-caption"><?php echo get_the_post_thumbnail_caption( get_the_ID() ); ?></figcaption>
+						<?php } ?>
 					</figure><!-- .post-featured-image .page-single-img-wrap -->
 
 				<?php } ?>

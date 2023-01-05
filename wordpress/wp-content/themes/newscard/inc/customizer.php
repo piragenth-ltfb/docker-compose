@@ -13,16 +13,16 @@ function newscard_support_register($wp_customize){
 	class NewsCard_Customize_NewsCard_Support extends WP_Customize_Control {
 		public function render_content() { ?>
 		<div class="theme-info">
-			<a title="<?php esc_attr_e( 'Review NewsCard', 'newscard' ); ?>" href="<?php echo esc_url( 'https://wordpress.org/support/theme/newscard/reviews/?filter=5' ); ?>" target="_blank">
+			<a title="<?php esc_attr_e( 'Review NewsCard', 'newscard' ); ?>" href="<?php echo esc_url( 'https://wordpress.org/support/theme/newscard/reviews/?filter=5' ); ?>" target="_blank" rel="noopener noreferrer">
 				<?php esc_html_e( 'Rate NewsCard', 'newscard' ); ?>
 			</a>
-			<a href="<?php echo esc_url( 'https://www.themehorse.com/theme-instruction/newscard/' ); ?>" title="<?php esc_attr_e( 'NewsCard Theme Instructions', 'newscard' ); ?>" target="_blank">
+			<a href="<?php echo esc_url( 'https://www.themehorse.com/theme-instruction/newscard/' ); ?>" title="<?php esc_attr_e( 'NewsCard Theme Instructions', 'newscard' ); ?>" target="_blank" rel="noopener noreferrer">
 			<?php esc_html_e( 'Theme Instructions', 'newscard' ); ?>
 			</a>
-			<a href="<?php echo esc_url( 'https://www.themehorse.com/support-forum/' ); ?>" title="<?php esc_attr_e( 'Support Forum', 'newscard' ); ?>" target="_blank">
+			<a href="<?php echo esc_url( 'https://www.themehorse.com/support-forum/' ); ?>" title="<?php esc_attr_e( 'Support Forum', 'newscard' ); ?>" target="_blank" rel="noopener noreferrer">
 			<?php esc_html_e( 'Support Forum', 'newscard' ); ?>
 			</a>
-			<a href="<?php echo esc_url( 'https://www.themehorse.com/demos/newscard/' ); ?>" title="<?php esc_attr_e( 'NewsCard Demo', 'newscard' ); ?>" target="_blank">
+			<a href="<?php echo esc_url( 'https://www.themehorse.com/demos/newscard/' ); ?>" title="<?php esc_attr_e( 'NewsCard Demo', 'newscard' ); ?>" target="_blank" rel="noopener noreferrer">
 			<?php esc_html_e( 'View Demo', 'newscard' ); ?>
 			</a>
 		</div>
@@ -121,7 +121,7 @@ class NewsCard_Customize_Section_Upsell extends WP_Customize_Section {
 				{{ data.title }}
 
 				<# if ( data.pro_text && data.pro_url ) { #>
-				<a href="{{ data.pro_url }}" class="upgrade-to-pro" target="_blank">{{ data.pro_text }}</a>
+				<a href="{{ data.pro_url }}" class="upgrade-to-pro" target="_blank" rel="noopener noreferrer">{{ data.pro_text }}</a>
 				<# } #>
 			</h3>
 		</li>
@@ -685,6 +685,16 @@ function newscard_customize_register( $wp_customize ) {
 	) );
 	$wp_customize->add_control( 'newscard_archive_title_label_hide', array(
 		'label'					=> __('Hide Archive Title Label', 'newscard'),
+		'section'				=> 'newscard_main_global_settings',
+		'type'					=> 'checkbox',
+	) );
+	$wp_customize->add_setting( 'newscard_entry_title_limit', array(
+		'default'				=> 0,
+		'sanitize_callback'		=> 'newscard_sanitize_integer',
+		'capability' 			=> 'edit_theme_options'
+	) );
+	$wp_customize->add_control( 'newscard_entry_title_limit', array(
+		'label'					=> __('Entry Title Limit to 2 Lines', 'newscard'),
 		'section'				=> 'newscard_main_global_settings',
 		'type'					=> 'checkbox',
 	) );

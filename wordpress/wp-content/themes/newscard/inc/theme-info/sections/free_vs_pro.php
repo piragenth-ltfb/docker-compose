@@ -3,7 +3,7 @@
 		<ul class="clearfix">
 			<li class="ct-feature"><strong><?php esc_html_e('Upgrade to Pro', 'newscard'); ?></strong><p><?php esc_html_e('Unlock all the features with NewsCard Pro', 'newscard'); ?></p></li>
 			<li></li>
-			<li class="ct-pro"><a target="_blank" href="<?php echo esc_url('https://www.themehorse.com/themes/newscard-pro'); ?>"><?php esc_html_e('Upgrade to Pro', 'newscard'); ?></a></li>
+			<li class="ct-pro"><a target="_blank" rel="noopener noreferrer" href="<?php echo esc_url('https://www.themehorse.com/themes/newscard-pro'); ?>"><?php esc_html_e('Upgrade to Pro', 'newscard'); ?></a></li>
 		</ul>
 	</li>
 	<li class="ct-item ct-header">
@@ -171,7 +171,7 @@
 		<ul class="clearfix">
 			<li class="ct-feature"><strong><?php esc_html_e('Upgrade to Pro', 'newscard'); ?></strong><p><?php esc_html_e('Unlock all the features with NewsCard Pro', 'newscard'); ?></p></li>
 			<li></li>
-			<li class="ct-pro"><a target="_blank" href="<?php echo esc_url('https://www.themehorse.com/themes/newscard-pro'); ?>"><?php esc_html_e('Upgrade to Pro', 'newscard'); ?></a></li>
+			<li class="ct-pro"><a target="_blank" rel="noopener noreferrer" href="<?php echo esc_url('https://www.themehorse.com/themes/newscard-pro'); ?>"><?php esc_html_e('Upgrade to Pro', 'newscard'); ?></a></li>
 		</ul>
 	</li>
 </ul>

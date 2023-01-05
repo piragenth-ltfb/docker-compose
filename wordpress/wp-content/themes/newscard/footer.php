@@ -34,7 +34,7 @@
 
 			<div class="container">
 				<section class="featured-stories">
-					<h2 class="stories-title"><?php echo esc_html($newscard_settings['newscard_footer_featured_posts_title']); ?></h2>
+					<?php newscard_sections_title($newscard_settings['newscard_footer_featured_latest_post'], $newscard_settings['newscard_footer_featured_posts_title'], $footer_newscard_cat); ?>
 					<div class="row gutter-parent-14">
 						<?php while ($footer_newscard_get_featured_post->have_posts()) {
 							$footer_newscard_get_featured_post->the_post(); ?>
@@ -43,7 +43,7 @@
 									<?php if ( has_post_thumbnail() ) { ?>
 										<div class="post-img-wrap">
 											<div class="featured-post-img">
-												<a href="<?php the_permalink(); ?>" class="post-img" style="background-image: url('<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(),'full')); ?>');"></a>
+												<a href="<?php the_permalink(); ?>" class="post-img" style="background-image: url('<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(),'large')); ?>');"></a>
 											</div>
 											<div class="entry-meta category-meta">
 												<div class="cat-links"><?php the_category(' '); ?></div>

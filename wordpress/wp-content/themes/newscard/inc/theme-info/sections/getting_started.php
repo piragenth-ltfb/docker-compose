@@ -10,7 +10,7 @@
 		<p><?php printf(
 			/* translators: Theme Name */
 			esc_html__('Read our full documentation for all the detailed information on how to setup and use %s theme.', 'newscard'), esc_html($this->theme_name) ); ?></p>
-		<a class="button button-primary" target="_blank" href="https://www.themehorse.com/theme-instruction/newscard/"><?php echo esc_html__('Read Full Documentation', 'newscard'); ?></a>
+		<a class="button button-primary" target="_blank" rel="noopener noreferrer" href="https://www.themehorse.com/theme-instruction/newscard/"><?php echo esc_html__('Read Full Documentation', 'newscard'); ?></a>
 	</div>
 
 	<div class="col">
@@ -22,7 +22,7 @@
 	<div class="col">
 		<h3><i class="dashicons dashicons-video-alt3"></i><?php echo esc_html__('Video Tutorial', 'newscard'); ?></h3>
 		<p><?php echo esc_html__('Watch video tutorial to manually setup the front page (home page) same like our demo site instead of importing demo content.', 'newscard'); ?></p>
-		<a class="button button-primary" target="_blank" href="<?php echo esc_url( 'https://youtu.be/cFQqkHfA4b4' ); ?>"><?php echo esc_html__('Watch Video Tutorial', 'newscard'); ?></a>
+		<a class="button button-primary" target="_blank" rel="noopener noreferrer" href="<?php echo esc_url( 'https://youtu.be/cFQqkHfA4b4' ); ?>"><?php echo esc_html__('Watch Video Tutorial', 'newscard'); ?></a>
 	</div>
 
 	<div class="col">
