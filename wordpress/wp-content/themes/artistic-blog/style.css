@@ -1,0 +1,454 @@
+/*
+Theme Name: Artistic Blog
+Template: bizberg
+Text Domain: artistic-blog
+Author: bizbergthemes
+Author URI: https://bizbergthemes.com/
+Theme URI: https://bizbergthemes.com/downloads/artistic-blog/
+License: GNU General Public License v3 or later
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
+Description: Artistic Blog Dark is a clean and minimal blog theme for perfect for writers who need to create personal blog site with simple creative features and effects to make readers feel the pleasure of reading blog posts and articles, Artistic Blog theme mixes between modern, classic and minimal styles and will help you create a simple and clean blog, if you are a blogger, then it’s a perfect choice for you if you don’t need to have any experiment to setup your WordPress Artistic Blog, it’s super simple and easy to setup, you will get high quality, responsive, well crafted blog out of the box to make writers only focuses on writing content, and it has great typography to make your fans and followers focus on every word you write. However, the child theme comes with a dark color scheme. Dark color schemes are quite popular and trending nowadays on top charts as it is considered to be a bold design trend and also they’re easy on the eye. If you love dark theme for your blog or corporate site.
+Tags: custom-logo,custom-menu,featured-images,threaded-comments,translation-ready,left-sidebar,right-sidebar,grid-layout,theme-options,blog,news,portfolio
+Version: 0.7
+Tested up to: 5.7
+Requires PHP: 5.6
+*/
+
+p{
+	font-size: 16px;
+}
+
+div#respond h3#reply-title{
+    text-transform: none;
+}
+
+.slicknav_nav a{
+    font-size: 13px;
+}
+
+.navbar-nav li ul li a:hover{
+    font-weight: bold;
+}
+
+.navbar-nav li ul li a{
+    font-size: 13px;
+}
+
+.footer_social_links{
+    display: block !important;
+}
+
+.navbar-default .navbar-nav>li>a{
+    letter-spacing: 0;
+}
+
+.blog-grid .entry-content {
+    margin: 50px 15px;
+}
+
+.navbar-default .has-no-menu-description .navbar-nav>li>a {
+    padding: 15px 20px 17px;
+}
+
+.navbar-default .has-no-menu-description .navbar-nav li ul {
+    top: 60px;
+}
+
+.bizberg_default_page .single_page h3.blog-title{
+	text-transform: capitalize;
+}
+
+@media (max-width: 1023px){
+	#blog .blog-post .entry-meta > span > a, 
+	#blog .blog-post .entry-meta > span.bizberg_read_time {
+	    font-size: 16px;
+	}
+}
+
+@media (max-width: 639px){
+	#blog .blog-post.bizberg-list .entry-content {
+	    margin: 0;
+	}
+}
+
+.artistic-blog-post{
+	position: relative;
+	overflow: hidden;
+}
+
+.artistic-blog-post .mb-3{
+	margin-bottom: 30px;
+}
+
+.artistic-blog-post-item{
+	position: relative;
+	overflow: hidden;
+	background: linear-gradient(to bottom, #dd3333, #5d0606);
+	transition: all ease-in-out 0.5s;
+	height: 310px;
+}
+
+.artistic-blog-post-item:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.4);
+    content: '';
+    z-index: 1;
+    transition: all ease-in-out 0.7s;
+    transform: scale3d(7.9, 6.4, 0) rotate3d(0, 0, 1, 45deg) translate3d(0, -70%, 0);
+}
+
+.artistic-blog-post-item:hover:before {
+    transform: scale3d(1.9, 1.4, 1) rotate3d(0, 0, 1, 45deg) translate3d(0, 110%, 0);
+    transition: all ease-in-out 0.7s;
+}
+
+.artistic-blog-post-bg{
+	background-repeat: no-repeat;
+	background-size: cover;
+	height: 100%;
+    background-position: center;
+}
+
+.artistic-blog-post-item img{
+	width: 100%;
+	transition: all ease-in-out 0.5s;
+}
+
+.artistic-blog-post-item:hover img{
+	transform: scale(1.1);
+	transition: all ease-in-out 0.5s;
+} 
+
+.artistic-blog-post-cats a {
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    font-size: 14px;
+    background: #de3434;
+    padding: 2px 16px 3px;
+    transition: all ease-in-out 0.5s;
+    z-index: 2;
+    color: #fff;
+    border-radius: 3px;
+}
+
+.artistic-blog-post-cats a:hover{
+    color: #fff !important;
+}
+
+.artistic-blog-post-item:hover .artistic-blog-post-cats a{
+	background: #dd3333;
+	color: #fff;
+	transition: all ease-in-out 0.5s;
+}
+
+.artistic-blog-post-content{
+	position: absolute;
+    left: 0;
+    bottom:0;
+    z-index: 1;
+    padding:20px;
+}
+
+.artistic-blog-post-list li {
+    display: inline-block;
+    padding-right: 10px;
+}
+
+.artistic-blog-post-list li:last-child{
+	padding-right:0; 
+}
+
+.featured_posts_wrapper .section-heading-wrapper {
+    margin-bottom: 50px;
+}
+
+.featured_posts_wrapper .section-heading-wrapper .section-title-wrapper{
+    margin-bottom: 10px;
+}
+
+.artistic-blog-post-content a:hover{
+    color: #fff !important;
+}
+
+.artistic-blog-post-cats a:focus,
+.artistic-blog-post-content a:focus {
+    color: #fff !important;
+    outline-color: #fff !important;
+}
+
+.entry-date a:focus,
+.entry-title a:focus,
+.entry-meta a:focus,
+#sidebar a:focus {
+    color: #dd3333 !important;
+}
+
+.entry-date a:focus:after{
+    border-color: #dd3333 !important;
+}
+
+.nav-links a:focus{
+    border-color: #dd3333 !important;
+    background: #dd3333 !important;
+}
+
+.footer_social_links a:focus i{
+    background: #dd3333 !important;
+    color: #fff !important;
+}
+
+#footer .inline-menu a:focus,
+#footer .copyright a:focus {
+    outline-color: #fff !important;
+}
+
+.tagcloud.tags a:focus{
+    background: #dd3333 !important;
+    color: #fff !important;
+}
+
+.navigation.post-navigation a:focus{
+    border-color: #dd3333 !important;
+    color: #dd3333 !important;
+    background: transparent !important;
+}
+
+.footer_social_links {
+    display: block;
+}
+
+.edit_repy_links a{
+    color: #fff !important;
+}
+
+#comments a:focus code{
+    color: #fff;
+}
+
+/* Slider */
+.blog-banner{
+    position: relative;
+    padding: 50px 0 50px;
+}
+
+.blog-banner .container{position: relative; display: grid; }
+
+.blog-banner .container::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70%;
+    background: linear-gradient(30deg, #be3026, #69077a);
+    margin: 0 auto;
+    right: 0;
+}
+
+.blog-banner .slider{
+    background: transparent;
+    padding:0 30px 70px;
+    height: 600px;
+}
+
+.blog-banner .slide-inner .slide-image{
+    width: 50%;
+    animation: none;
+    left: 30px;
+    background-color: #e91e63;
+}
+
+.blog-banner .swiper-content{
+    width: 50%;
+    background: #181d20;
+    padding: 60px;
+    position: absolute;
+    top: 50%;
+    right: 30px;
+    left: auto;
+    margin: 0;
+    transform: translateY(-50%);
+    text-align: left;
+    box-shadow: 0 8px 30px rgb(0 0 0 / 40%);
+}
+
+.blog-banner .swiper-content .content-category a{
+    margin-right: 15px;
+    background: #dd3333;
+    padding: 7px 15px 8px 35px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    font-size: 13px;
+}
+
+.blog-banner .swiper-content .content-category a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border-left: 17px solid #181d20;
+  border-top: 17px solid transparent;
+  border-bottom: 17px solid transparent;
+}
+.blog-banner .swiper-content .content-category a::before {
+  content: "";
+  position: absolute;
+  right: -17px;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border-left: 17px solid #dd3333;
+  border-top: 17px solid transparent;
+  border-bottom: 17px solid transparent;
+}
+
+.blog-banner .swiper-content h2{font-size:70px!important; padding: 30px 0;}
+
+.blog-banner .swiper-content h2 a{
+    background: linear-gradient(to right, #be3026,#69077a);
+    background-position: left 87%;
+    background-repeat: no-repeat;
+    transition: all ease-in-out 0.5s;
+    background-size: 0px 3px;
+    padding-bottom: 8px;
+}
+
+.blog-banner .slide-inner:hover .swiper-content h2 a{
+    text-decoration: none !important;
+    background-size: 100% 3px;
+    transition: all ease-in-out 0.5s;
+}
+
+.blog-banner .swiper-content .entry-meta span{
+    margin-right: 15px;
+}
+
+.blog-banner .swiper-button-prev{
+    left: -20px;
+}
+
+.blog-banner .swiper-button-next{right: -20px;}
+
+.blog-banner .swiper-button-prev, .blog-banner .swiper-button-next{
+    background:#14181b;
+    padding: 24px 22px;
+    transition: all ease 0.5s;
+}
+
+.swiper-button-prev:hover, .swiper-button-next:hover{
+    background:#dd3333;
+    transition: all ease 0.5s;
+}
+
+.blog-banner .swiper-button-prev::after, .blog-banner .swiper-button-next::after{
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.blog-banner .swiper-content .content-category a:hover,
+.blog-banner .swiper-content .entry-meta a:hover,
+.blog-banner .swiper-content h2 a:hover {
+    color: #fff;
+}
+
+.blog-banner .swiper-content .content-category a {
+    font-family: 'MontserratRegular';
+    font-size: 13px;
+    padding-top: 8px;
+    padding-bottom: 10px;
+}
+
+@media (min-width: 1200px){
+    .blog-banner .container {
+        max-width: 1300px;
+    }
+}
+
+@media(min-width: 1600px){
+    .blog-banner .container{width: 1520px; max-width: 1520px;}
+    .blog-banner .slider{
+        height: 700px;
+    }
+}
+
+@media(max-width: 1100px) and (min-width: 1024px){
+    .blog-banner .swiper-content{padding: 30px;}
+    .blog-banner .swiper-button-prev, .blog-banner .swiper-button-next {
+        display: block;
+        height: 70px;
+        width: 60px;
+        line-height: 1;
+    }
+}
+
+@media(max-width: 991px) and (min-width: 768px){
+    .blog-banner .slider{height: calc(90vh - 100px);}
+}
+
+
+@media(max-width: 991px){
+
+    .blog-banner .slide-inner .slide-image{width: 100%; left: 0;}
+
+    .blog-banner .swiper-content{
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+    }
+
+    .blog-banner .container{
+        display: block;
+    }
+}
+
+@media (max-width: 991px) and (min-width: 769px)  and (orientation: landscape) {
+  .blog-banner .slider{height: 600px;}
+}
+
+@media(max-width: 767px){
+    .blog-banner .swiper-content{
+        width: 70%;
+    }
+}
+
+@media(max-width: 639px){
+    .blog-banner{padding:0;}
+    .blog-banner .container{padding: 0;}
+    .blog-banner .slider{padding: 0; overflow: visible;}
+
+    .blog-banner .slide-inner .slide-image{
+        width: 100%;
+        position: relative;
+        top: inherit;
+        left: inherit;
+        right: inherit;
+        transform: none;
+    }
+
+    .blog-banner .swiper-content{
+        padding: 30px; 
+        box-shadow: none; 
+        bottom: 20px;
+        transform: none;
+        top: auto;
+    }
+}
+
+.bizberg_dark_mode.bizberg_woocommerce_shop ul.products li.product .woocommerce-loop-product__title{
+    font-size: 1.5em !important;
+}
+
+.bizberg_dark_mode.bizberg_woocommerce_shop #reviews #comments h2 {
+    margin-bottom: 30px;
+    font-size: 30px;
+    text-transform: capitalize;
+}

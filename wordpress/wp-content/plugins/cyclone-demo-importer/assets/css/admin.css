@@ -1,0 +1,37 @@
+.ocdi__gl-item.js-ocdi-gl-item{
+    position: relative;
+}
+.ocdi__gl.js-ocdi-gl [data-categories^="pro"]:before{
+	background: url(../images/pro-tag.png);
+    content: '';
+    position: absolute;
+    top: 30px;
+    bottom: 0;
+    right: -13px;
+    width: 146px;
+    height: 60px;
+    background-repeat: no-repeat;
+    z-index: 1;
+}
+.ocdi__gl.js-ocdi-gl [data-categories^="pro"] a.button-primary{
+	display: none;
+}
+.ocdi__gl-item-image-container{
+    height: 300px;
+}
+.ocdi__theme-about{
+    display: none !important;
+}
+.ocdi-install-plugins-content-content .plugin-item-wpforms-lite,
+.ocdi-install-plugins-content-content .plugin-item-all-in-one-seo-pack,
+.ocdi-install-plugins-content-content .plugin-item-google-analytics-for-wordpress,
+.ocdi-install-plugins-content-content .ocdi-content-notice--warning{
+    display: none !important;
+}
+@media (min-width: 1670px) {
+  
+    .ocdi__gl-item-image-container{
+        height: 400px;
+    }
+  
+}

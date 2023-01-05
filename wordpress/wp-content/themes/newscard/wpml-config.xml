@@ -1,0 +1,12 @@
+<wpml-config>
+	<admin-texts>
+		<key name="theme_mods_newscard">
+			<key name="newscard_top_stories_title"/>
+			<key name="newscard_banner_slider_posts_title"/>
+			<key name="newscard_banner_featured_posts_1_title"/>
+			<key name="newscard_banner_featured_posts_2_title"/>
+			<key name="newscard_header_featured_posts_title"/>
+			<key name="newscard_footer_featured_posts_title"/>
+		</key>
+	</admin-texts>
+</wpml-config>

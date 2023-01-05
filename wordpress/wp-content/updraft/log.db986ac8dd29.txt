@@ -1,0 +1,7 @@
+0000.000 (0) Opened log file at time: Tue, 08 Jun 2021 10:39:04 +0000 on https://techytel.com
+0000.013 (0) UpdraftPlus WordPress backup plugin (https://updraftplus.com): 1.16.56 WP: 5.7.2 PHP: 7.4.20 (litespeed, Linux techytel 5.4.73-1-pve #1 SMP PVE 5.4.73-1 (Mon, 16 Nov 2020 10:52:16 +0100) x86_64) MySQL: 10.3.29-MariaDB-0ubuntu0.20.04.1 WPLANG: en_US Server: LiteSpeed safe_mode: 0 max_execution_time: 900 memory_limit: 1024M (used: 13M | 4M) multisite: N openssl: OpenSSL 1.1.1f  31 Mar 2020 mcrypt: N LANG:  ZipArchive::addFile: Y
+0000.023 (0) Free space on disk containing Updraft's temporary directory: 17785.7 MB
+0000.032 (0) Tasks: Backup files: 1 (schedule: manual) Backup DB: 1 (schedule: manual)
+0000.050 (0) Requesting semaphore lock (fd) (apparently not via scheduler)
+0000.059 (0) Semaphore lock (fd, wp_options) failed (line 43)
+0000.069 (0) Failed to gain semaphore lock (fd) - another backup of this type is apparently already active - aborting (if this is wrong - i.e. if the other backup crashed without removing the lock, then another can be started after 3 minutes)

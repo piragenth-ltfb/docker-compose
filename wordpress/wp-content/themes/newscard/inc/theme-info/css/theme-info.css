@@ -1,0 +1,214 @@
+/*
+Theme Info Page Styles
+*/
+
+.clearfix:after,
+.clearfix:before {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+}
+.clearfix {
+	display: inline-block;
+}
+/* Commented backslash hack */
+* html .clearfix {
+	height: 1%;
+}
+.clearfix {
+	display: block;
+}
+.theme-info-wrapper .section-wrapper {
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border-top: none;
+}
+.theme-info-wrapper .getting_started,
+.theme-info-wrapper .demo_content,
+.theme-info-wrapper .support {
+	padding: 30px 30px 60px;
+}
+.theme-info-wrapper .info-demo-content {
+	margin-right: 10px;
+	height: 30px;
+	width: 30px;
+	font-size: 30px;
+	vertical-align: middle;
+	color: #f8800c;
+}
+.theme-info-wrapper .wp-badge.themehorse-logo {
+	background-color: #fff;
+	background-image: url(../themehorse-logo.png);
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: 100px;
+}
+.theme-info-wrapper a.upgrade-button,
+.theme-info-wrapper a.upgrade-button:hover {
+	background-color: rgb(110,175,40);
+	color: #fff;
+	border-color: rgb(95,150,35);
+}
+.theme-info-wrapper a.upgrade-button:hover {
+	border-color: rgb(60,95,20);
+}
+.theme-info-wrapper .nav-tab {
+	margin-left: 0;
+	border-top: 4px solid #ccc;
+	padding: 8px 15px;
+	font-size: 15px;
+}
+.theme-info-wrapper .nav-tab + .nav-tab {
+	border-left: none;
+}
+.theme-info-wrapper .nav-tab:hover,
+.theme-info-wrapper .nav-tab:hover {
+	border-top: 4px solid #0085ba;
+	border-bottom-color: #fff;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+}
+.theme-info-wrapper .nav-tab-active {
+	background-color: #fff;
+	border-bottom-color: #fff;
+	border-top: 4px solid #0085ba;
+}
+.theme-info-wrapper .nav-tab.free_vs_pro {
+	background-color: rgb(110,175,40);
+	border-top-color: rgb(95,150,35);
+	color: #fff;
+}
+.theme-info-wrapper .free_vs_pro:hover,
+.theme-info-wrapper .free_vs_pro.nav-tab-active {
+	background-color: #fff;
+	border-top-color: rgb(95,150,35);
+	color: #000;
+}
+.theme-info-wrapper .col-2,
+.theme-info-wrapper .col-3 {
+	margin-right: -15px;
+	margin-left: -15px;
+	box-sizing: border-box;
+}
+.theme-info-wrapper .col {
+	float: left;
+	padding-right: 15px;
+	padding-left: 15px;
+	box-sizing: border-box;
+}
+.theme-info-wrapper .col-2 .col {
+	width: 50%;
+}
+.theme-info-wrapper .col-3 .col {
+	width: 33.3333%;
+}
+.theme-info-wrapper .col i.dashicons {
+	position: relative;
+	top: 5px;
+	margin-right: 10px;
+}
+.theme-info-wrapper .theme-info-recommended-action-box {
+	border-left: 4px solid #f8800c;
+	display: block;
+	padding: 0 30px 30px;
+	overflow: auto;
+	position: relative;
+	-webkit-box-shadow: 0 1px 0 0 rgba(0,0,0,.1);
+	-moz-box-shadow: 0 1px 0 0 rgba(0,0,0,.1);
+	box-shadow: 0 1px 0 0 rgba(0,0,0,.1);
+}
+/* Compare Table Section */
+.ct-parent {
+	overflow-x: auto;
+	margin: 0;
+}
+.ct-item {
+	overflow-x: auto;
+	border-bottom: 1px solid rgba(0,0,0,0.1);
+	min-width: 600px;
+	margin: 0;
+}
+.ct-item a {
+	color: rgb(110,175,40);
+	text-decoration: none;
+}
+.ct-item a:hover {
+	text-decoration: underline;
+}
+.ct-header {
+	color: #000;
+	font-weight: bold;
+	font-size: 15px;
+	background-color: #f4f4f4;
+}
+.ct-item li {
+	float: left;
+	text-align: center;
+	width: 30%;
+	padding: 20px 30px;
+	margin: 0;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.ct-item .ct-feature {
+	text-align: left;
+	width: 40%;
+}
+.ct-item .dashicons {
+	font-size: 30px;
+	height: 18px;
+	width: 18px;
+	position: relative;
+}
+.ct-item .dashicons:before {
+	position: absolute;
+	top: -5px;
+	left: -5px;
+}
+.ct-item .dashicons-yes:before {
+	color: rgb(110,175,40);
+}
+.ct-item .dashicons-no-alt:before {
+	color: #d01511;
+}
+.ct-footer a {
+	display: inline-block;
+	border: 1px solid rgba(0,0,0,0.2);
+	-webkit-border-radius: 50px;
+	-moz-border-radius: 50px;
+	border-radius: 50px;
+	padding: 15px;
+	font-weight: bold;
+}
+.ct-footer .ct-pro a {
+	color: #fff;
+	width: 100%;
+	max-width: 150px;
+	background-color: rgb(110,175,40);
+}
+.ct-footer .ct-pro a:hover {
+	text-decoration: none;
+	background-color: rgb(110,185,40);
+}
+.ct-footer .ct-feature p {
+	margin: 5px 0 0;
+}
+@media screen and (max-width: 768px) {
+	.theme-info-wrapper .col-3 .col {
+		width: 50%;
+	}
+}
+@media only screen and (max-width: 575px) {
+	.theme-info-wrapper .col {
+		float: none;
+	}
+	.theme-info-wrapper .col-2 .col,
+	.theme-info-wrapper .col-3 .col {
+		width: 100%;
+	}
+}

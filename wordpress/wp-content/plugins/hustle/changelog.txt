@@ -1,0 +1,68 @@
+Plugin Name: Hustle
+Author: Danae Millan (Incsub), Leighton Sapir (Incsub)
+
+Change Log:
+----------------------------------------------------------------------
+
+= 4.4.4 ( 2021-04-08 ) =
+
+- Fix: Global Hubspot connection failing to authenticate
+- Fix: Global ConstantContct connection failing to authenticate
+- Fix: jQuery migration warnings
+
+= 4.4.3 ( 2021-02-19 ) =
+
+- Fix: Compiling issues in the free version
+
+= 4.4.2 ( 2021-02-16 ) =
+
+- Fix: Multiple triggers migration in multisites
+
+= 4.4.1 ( 2021-02-11 ) =
+
+- New: Multiple triggers
+- New: Valentine's Day and Chinese New Year templates
+- Enhance: Minor UX and UI details
+- Fix: ConstantContact integration error on activation when Constant Contact Forms for WordPress is enabled
+- Fix: Infusionsoft missing fields on subscriptions under certain conditions
+- Fix: Mautic not accepting valid credentials
+
+= 4.4.0 ( 2020-12-28 ) =
+
+- New: Mailpoet 3 integration
+- New: Mailster integration
+
+= 4.3.7 ( 2020-12-14 ) =
+
+- New: New Year template
+- Enhance: Compatibility with PHP 8
+- Enhance: Compatibility with WordPress 5.6
+
+= 4.3.6 ( 2020-11-20 ) =
+
+- Fix: Compiling issues in the free version.
+
+= 4.3.5 ( 2020-11-20 ) =
+
+- New: Christmas and Holidays templates
+- Enhance: Compatibility with block based widgets
+- Enhance: Minor UX/UI details
+- Fix: Fields gap not working in mobile
+
+= 4.3.4 ( 2020-11-09 ) =
+
+- New: Display the modules' actions within the wizard page
+- New: Add a button to create a new module in the wizard page
+- New: Preview button for templates
+- Enhance: Error handling for Hubspot
+- Enhance: Error handling for iContact
+- Enhance: Error handling of AJAX requests for providers
+- Fix: Inconsistencies in the stored time for tracking data
+- Fix: Animation for embedded modules
+- Fix: Default value for the time field looking off
+- Fix: Emails lists pagination for the last page looking empty after deletion
+- Fix: Disabled scroll functionality with multiple popups
+- Fix: Clicking on the GDPR checkbox in front makes the view jump to the top
+
+
+912346-1617907230-au

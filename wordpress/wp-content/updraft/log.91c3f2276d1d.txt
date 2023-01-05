@@ -1,0 +1,730 @@
+0000.000 (0) Opened log file at time: Tue, 08 Jun 2021 10:45:27 +0000 on https://techytel.com
+0000.018 (0) UpdraftPlus WordPress backup plugin (https://updraftplus.com): 1.16.56 WP: 5.7.2 PHP: 7.4.20 (litespeed, Linux techytel 5.4.73-1-pve #1 SMP PVE 5.4.73-1 (Mon, 16 Nov 2020 10:52:16 +0100) x86_64) MySQL: 10.3.29-MariaDB-0ubuntu0.20.04.1 WPLANG: en_US Server: LiteSpeed safe_mode: 0 max_execution_time: 900 memory_limit: 1024M (used: 13M | 2M) multisite: N openssl: OpenSSL 1.1.1f  31 Mar 2020 mcrypt: N LANG:  ZipArchive::addFile: Y
+0000.037 (0) Free space on disk containing Updraft's temporary directory: 17785.5 MB
+0000.056 (0) Tasks: Backup files: 1 (schedule: manual) Backup DB: 1 (schedule: manual)
+0000.081 (0) Requesting semaphore lock (fd) (apparently not via scheduler)
+0000.130 (0) Set semaphore last lock (fd) time to 2021-06-08 10:45:28
+0000.141 (0) Semaphore lock (fd) complete
+0000.186 (0) Backup run: resumption=0, nonce=91c3f2276d1d, file_nonce=91c3f2276d1d begun at=1623149127 (1s ago), job type=backup
+0000.212 (0) Scheduling a resumption (1) after 300 seconds (1623149428) in case this run gets aborted
+0000.237 (0) Checking if we have a zip executable available
+0000.249 (0) Testing: /usr/bin/zip
+0000.264 (0) Output: zip warning: binziptest/test.zip not found or empty
+0000.279 (0) Output: adding: binziptest/subdir1/	(in=0) (out=0) (stored 0%)
+0000.292 (0) Output: adding: binziptest/subdir1/subdir2/	(in=0) (out=0) (stored 0%)
+0000.303 (0) Output: adding: binziptest/subdir1/subdir2/test.html	(in=131) (out=107) (deflated 18%)
+0000.315 (0) Output: total bytes=131, compressed=107 -> 18% savings
+0000.339 (0) Output: adding: binziptest/subdir1/subdir2/test2.html	(in=138) (out=113) (deflated 18%)
+0000.355 (0) Output: total bytes=269, compressed=220 -> 18% savings
+0000.368 (0) Working binary zip found: /usr/bin/zip
+0000.394 (0) Zip engine: found/will use a binary zip: /usr/bin/zip
+0000.407 (0) Creation of backups of directories: beginning
+0000.449 (0) Beginning creation of dump of plugins (split every: 400 MB)
+0000.928 (0) Total entities for the zip file: 1711 directories, 8558 files (0 skipped as non-modified), 153.9 MB
+0000.949 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 100 files added (on-disk size: 0 KB)
+0000.966 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 200 files added (on-disk size: 0 KB)
+0000.984 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 300 files added (on-disk size: 0 KB)
+0001.000 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 400 files added (on-disk size: 0 KB)
+0001.015 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 500 files added (on-disk size: 0 KB)
+0001.033 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 600 files added (on-disk size: 0 KB)
+0001.718 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 700 files added (on-disk size: 0 KB)
+0001.756 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 800 files added (on-disk size: 0 KB)
+0001.781 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 900 files added (on-disk size: 0 KB)
+0001.810 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 1000 files added (on-disk size: 0 KB)
+0001.823 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (19.7 MB, 8558 files batched, 1001 (1001) added so far); re-opening (prior size: 0 KB)
+0005.314 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: size is now: 5.90 MB
+0005.366 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 1100 files added (on-disk size: 6009 KB)
+0005.405 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 1200 files added (on-disk size: 6009 KB)
+0005.426 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 1300 files added (on-disk size: 6009 KB)
+0005.445 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 1400 files added (on-disk size: 6009 KB)
+0005.463 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 1500 files added (on-disk size: 6009 KB)
+0005.478 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 1600 files added (on-disk size: 6009 KB)
+0005.497 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 1700 files added (on-disk size: 6009 KB)
+0005.514 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 1800 files added (on-disk size: 6009 KB)
+0005.550 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 1900 files added (on-disk size: 6009 KB)
+0005.569 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 2000 files added (on-disk size: 6009 KB)
+0005.594 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (20.3 MB, 8558 files batched, 1001 (2002) added so far); re-opening (prior size: 6009 KB)
+0008.016 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: size is now: 10.00 MB
+0008.046 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 2100 files added (on-disk size: 10227.7 KB)
+0008.078 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 2200 files added (on-disk size: 10227.7 KB)
+0008.091 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 2300 files added (on-disk size: 10227.7 KB)
+0008.104 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 2400 files added (on-disk size: 10227.7 KB)
+0008.119 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 2500 files added (on-disk size: 10227.7 KB)
+0008.137 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 2600 files added (on-disk size: 10227.7 KB)
+0008.154 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 2700 files added (on-disk size: 10227.7 KB)
+0008.171 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 2800 files added (on-disk size: 10227.7 KB)
+0008.193 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 2900 files added (on-disk size: 10227.7 KB)
+0008.205 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 3000 files added (on-disk size: 10227.7 KB)
+0008.217 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (12.1 MB, 8558 files batched, 1001 (3003) added so far); re-opening (prior size: 10227.7 KB)
+0010.303 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: size is now: 12.90 MB
+0010.337 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 3100 files added (on-disk size: 13197.6 KB)
+0010.355 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 3200 files added (on-disk size: 13197.6 KB)
+0010.370 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 3300 files added (on-disk size: 13197.6 KB)
+0010.387 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 3400 files added (on-disk size: 13197.6 KB)
+0010.404 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 3500 files added (on-disk size: 13197.6 KB)
+0010.423 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 3600 files added (on-disk size: 13197.6 KB)
+0010.441 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 3700 files added (on-disk size: 13197.6 KB)
+0010.456 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 3800 files added (on-disk size: 13197.6 KB)
+0010.478 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 3900 files added (on-disk size: 13197.6 KB)
+0010.495 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 4000 files added (on-disk size: 13197.6 KB)
+0010.587 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (18.5 MB, 8558 files batched, 1001 (4004) added so far); re-opening (prior size: 13197.6 KB)
+0014.253 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: size is now: 18.80 MB
+0014.285 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 4100 files added (on-disk size: 19207.6 KB)
+0014.514 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 4200 files added (on-disk size: 19207.6 KB)
+0014.525 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 4300 files added (on-disk size: 19207.6 KB)
+0014.539 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 4400 files added (on-disk size: 19207.6 KB)
+0014.550 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 4500 files added (on-disk size: 19207.6 KB)
+0014.565 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 4600 files added (on-disk size: 19207.6 KB)
+0014.581 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 4700 files added (on-disk size: 19207.6 KB)
+0014.593 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 4800 files added (on-disk size: 19207.6 KB)
+0014.607 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 4900 files added (on-disk size: 19207.6 KB)
+0014.621 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 5000 files added (on-disk size: 19207.6 KB)
+0014.631 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (3.4 MB, 8558 files batched, 1001 (5005) added so far); re-opening (prior size: 19207.6 KB)
+0015.989 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 5100 files added (on-disk size: 20529.1 KB)
+0016.005 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 5200 files added (on-disk size: 20529.1 KB)
+0016.020 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 5300 files added (on-disk size: 20529.1 KB)
+0016.032 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 5400 files added (on-disk size: 20529.1 KB)
+0016.045 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 5500 files added (on-disk size: 20529.1 KB)
+0016.058 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 5600 files added (on-disk size: 20529.1 KB)
+0016.069 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 5700 files added (on-disk size: 20529.1 KB)
+0016.082 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 5800 files added (on-disk size: 20529.1 KB)
+0016.098 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 25 MB added on this batch (27.7 MB, 8558 files batched, 850 (5855) added so far); re-opening (prior size: 20529.1 KB)
+0018.862 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: size is now: 28.80 MB
+0018.882 (0) A useful amount of data was added after this amount of zip processing: 3.8 s (normalised: 3.4 s, rate: 7498.7 KB/s)
+0018.906 (0) Performance is good - will increase the amount of data we attempt to batch (time=3.7758269309998, normalised_time=3.413931962684, max_time=18.893770933151, data points known=1, old_max_bytes=26214400, new_max_bytes=87047230)
+0018.930 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 5900 files added (on-disk size: 29515.1 KB)
+0018.943 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 6000 files added (on-disk size: 29515.1 KB)
+0018.954 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 6100 files added (on-disk size: 29515.1 KB)
+0018.965 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 6200 files added (on-disk size: 29515.1 KB)
+0018.978 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 6300 files added (on-disk size: 29515.1 KB)
+0018.989 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 6400 files added (on-disk size: 29515.1 KB)
+0019.000 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 6500 files added (on-disk size: 29515.1 KB)
+0019.013 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 6600 files added (on-disk size: 29515.1 KB)
+0019.027 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 6700 files added (on-disk size: 29515.1 KB)
+0019.039 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 6800 files added (on-disk size: 29515.1 KB)
+0019.051 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (18.7 MB, 8558 files batched, 1001 (6856) added so far); re-opening (prior size: 29515.1 KB)
+0021.529 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: size is now: 36.50 MB
+0021.553 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 6900 files added (on-disk size: 37326.3 KB)
+0021.566 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 7000 files added (on-disk size: 37326.3 KB)
+0021.578 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 7100 files added (on-disk size: 37326.3 KB)
+0021.590 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 7200 files added (on-disk size: 37326.3 KB)
+0021.602 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 7300 files added (on-disk size: 37326.3 KB)
+0021.614 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 7400 files added (on-disk size: 37326.3 KB)
+0021.629 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 7500 files added (on-disk size: 37326.3 KB)
+0021.642 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 7600 files added (on-disk size: 37326.3 KB)
+0021.655 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 7700 files added (on-disk size: 37326.3 KB)
+0021.668 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 7800 files added (on-disk size: 37326.3 KB)
+0021.679 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (24.6 MB, 8558 files batched, 1001 (7857) added so far); re-opening (prior size: 37326.3 KB)
+0024.596 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 7900 files added (on-disk size: 44536.2 KB)
+0024.609 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 8000 files added (on-disk size: 44536.2 KB)
+0024.624 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 8100 files added (on-disk size: 44536.2 KB)
+0024.640 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 8200 files added (on-disk size: 44536.2 KB)
+0024.656 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 8300 files added (on-disk size: 44536.2 KB)
+0024.672 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 8400 files added (on-disk size: 44536.2 KB)
+0024.687 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip.tmp: 8500 files added (on-disk size: 44536.2 KB)
+0027.711 (0) Created plugins zip (0) - 46579.2 KB in 27.2 s (1709.4 KB/s) (sha1: 1f906000c113088bd5be06358a49809b7c7f410e, sha256: 3e1a149198af3b008c427d7041bab4cf887806ae93dabd894031c42de24e82df)
+0027.734 (0) Beginning creation of dump of themes (split every: 400 MB)
+0027.771 (0) Total entities for the zip file: 94 directories, 339 files (0 skipped as non-modified), 8.8 MB
+0027.782 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-themes.zip.tmp: 100 files added (on-disk size: 0 KB)
+0027.795 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-themes.zip.tmp: 200 files added (on-disk size: 0 KB)
+0027.808 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-themes.zip.tmp: 300 files added (on-disk size: 0 KB)
+0028.558 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-themes.zip.tmp: size is now: 4.30 MB
+0028.711 (0) Created themes zip (0) - 4364.8 KB in 1 s (4537.4 KB/s) (sha1: df301071af0805515c05a6f42e10f5064aafe7e2, sha256: 8bd5e21d220a7f35645b38552a6313ac2c096d5a9240abf4441805d9baf622c4)
+0028.795 (0) Exclusion option setting (uploads): backup*,*backups,backwpup*,wp-clone,snapshots
+0028.814 (0) Looking for candidates to backup in: /home/techytel.com/public_html/wp-content/uploads
+0028.828 (0) finding files: 2021: adding to list (1)
+0028.841 (0) finding files: wc-logs: adding to list (2)
+0028.852 (0) finding files: woocommerce-placeholder-600x600.png.webp: adding to list (3)
+0028.863 (0) finding files: wp-file-manager-pro: adding to list (4)
+0028.876 (0) finding files: woocommerce-placeholder-300x300.png.webp: adding to list (5)
+0028.891 (0) finding files: woocommerce-placeholder-150x150.png.webp: adding to list (6)
+0028.908 (0) finding files: woocommerce-placeholder.png.webp: adding to list (7)
+0028.921 (0) finding files: woocommerce_uploads: adding to list (8)
+0028.936 (0) finding files: woocommerce-placeholder-100x100.png.webp: adding to list (9)
+0028.949 (0) finding files: uag-plugin: adding to list (10)
+0028.967 (0) finding files: wpforms: adding to list (11)
+0028.985 (0) finding files: ithemes-security: adding to list (12)
+0029.000 (0) finding files: mailster: adding to list (13)
+0029.013 (0) finding files: woocommerce-placeholder-1024x1024.png.webp: adding to list (14)
+0029.036 (0) finding files: themeisle-gutenberg: adding to list (15)
+0029.051 (0) finding files: astra-sites: adding to list (16)
+0029.066 (0) finding files: wp-migrate-db: adding to list (17)
+0029.078 (0) finding files: elementor: adding to list (18)
+0029.096 (0) finding files: woocommerce-placeholder-768x768.png.webp: adding to list (19)
+0029.113 (0) finding files: smush-webp-test.png: adding to list (20)
+0029.346 (0) finding files: essential-addons-elementor: adding to list (21)
+0030.013 (0) finding files: nginx-helper: adding to list (22)
+0030.034 (0) Beginning creation of dump of uploads (split every: 400 MB)
+0030.142 (0) Total entities for the zip file: 33 directories, 1863 files (0 skipped as non-modified), 121 MB
+0030.161 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip.tmp: 100 files added (on-disk size: 0 KB)
+0030.179 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip.tmp: 200 files added (on-disk size: 0 KB)
+0030.197 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip.tmp: 300 files added (on-disk size: 0 KB)
+0030.223 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip.tmp: 400 files added (on-disk size: 0 KB)
+0030.239 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip.tmp: 500 files added (on-disk size: 0 KB)
+0030.256 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip.tmp: 600 files added (on-disk size: 0 KB)
+0030.280 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip.tmp: 700 files added (on-disk size: 0 KB)
+0030.296 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip.tmp: 800 files added (on-disk size: 0 KB)
+0030.311 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip.tmp: 900 files added (on-disk size: 0 KB)
+0030.327 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip.tmp: 1000 files added (on-disk size: 0 KB)
+0030.339 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 1000 files added on this batch (37.3 MB, 1863 files batched, 1001 (1001) added so far); re-opening (prior size: 0 KB)
+0034.396 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip.tmp: size is now: 37.40 MB
+0034.420 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip.tmp: 1100 files added (on-disk size: 38338.7 KB)
+0034.434 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip.tmp: 1200 files added (on-disk size: 38338.7 KB)
+0034.448 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip.tmp: 1300 files added (on-disk size: 38338.7 KB)
+0034.461 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip.tmp: 1400 files added (on-disk size: 38338.7 KB)
+0034.474 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip.tmp: 1500 files added (on-disk size: 38338.7 KB)
+0034.487 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip.tmp: 1600 files added (on-disk size: 38338.7 KB)
+0034.503 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip.tmp: 1700 files added (on-disk size: 38338.7 KB)
+0034.514 (0) Zip: backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip.tmp: 1800 files added (on-disk size: 38338.7 KB)
+0034.528 (0) Adding batch to zip file (UpdraftPlus_BinZip): over 83 MB added on this batch (83.7 MB, 1863 files batched, 861 (1862) added so far); re-opening (prior size: 38338.7 KB)
+0038.011 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip.tmp: size is now: 116.10 MB
+0038.032 (0) A useful amount of data was added after this amount of zip processing: 3.9 s (normalised: 3.9 s, rate: 21827.2 KB/s)
+0038.051 (0) Performance is good - will increase the amount of data we attempt to batch (time=3.9255840778351, normalised_time=3.8945422239897, max_time=38.041538000107, data points known=1, old_max_bytes=87047230, new_max_bytes=209715200)
+0041.573 (0) Created uploads zip (0) - 118869.5 KB in 11.5 s (10317.8 KB/s) (sha1: 0f41fcf79821f2385ef71abc44cf02ee71c36cdf, sha256: 8101ba0017b794cde179fc41e034d6ec63c6ec165e816f1004eae517b9b3bf71)
+0041.602 (0) Beginning backup of other directories found in the content directory (index: 0)
+0041.611 (0) Exclusion option setting (others): upgrade,cache,updraft,backup*,*backups,mysql.sql,debug.log
+0041.620 (0) Looking for candidates to backup in: /home/techytel.com/public_html/wp-content
+0041.628 (0) finding files: index.php-old-old: adding to list (1)
+0041.636 (0) finding files: litespeed: adding to list (2)
+0041.644 (0) finding files: plugins: skipping: this is the plugins directory
+0041.653 (0) finding files: mu-plugins: adding to list (3)
+0041.660 (0) finding files: uploads-old: adding to list (4)
+0041.671 (0) finding files: fonts: adding to list (5)
+0041.680 (0) finding files: plugins-old: adding to list (6)
+0041.688 (0) finding files: ai1wm-backups: skipping: excluded by options (glob)
+0041.698 (0) finding files: index.php: adding to list (7)
+0041.706 (0) finding files: updraft: skipping: this is the updraft directory
+0041.715 (0) finding files: index.php-old: adding to list (8)
+0041.729 (0) finding files: themes: skipping: this is the themes directory
+0041.736 (0) finding files: upgrade: skipping: excluded by options
+0041.765 (0) finding files: uploads: skipping: this is the uploads directory
+0041.773 (0) finding files: themes-old: adding to list (9)
+0041.784 (0) finding files: smush-webp: adding to list (10)
+0041.805 (0) Total entities for the zip file: 9 directories, 50 files (0 skipped as non-modified), 0.9 MB
+0041.927 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-others.zip.tmp: size is now: 0.80 MB
+0041.975 (0) Created others zip (0) - 866.8 KB in 0.2 s (4740.2 KB/s) (sha1: a4aa15ab0a63a948ffdc87b89a9c4a64aee3f428, sha256: 70ca1c6c2f520ec714604e5c41049d0efd1c1c1897332622fb97aa4862f38e54)
+0042.009 (0) Saving backup status to database (elements: 8)
+0042.030 (0) Beginning creation of database dump (WordPress DB)
+0042.037 (0) SQL compatibility mode is: ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+0042.057 (0) Testing potential mysqldump binary: /usr/bin/mysqldump
+0042.119 (0) Binary mysqldump: error (code: 2)
+0042.151 (0) Table wp_options: Total expected rows (approximate): 1213
+0042.387 (0) Table wp_options: Rows added in this batch (next record: 81974): 1227 (uncompressed bytes in this segment=5046131) in 0.20 seconds
+0042.436 (0) Table wp_options: finishing file(s) (2, 573.4 KB)
+0042.455 (0) Table wp_users: Total expected rows (approximate): 2
+0042.470 (0) Table wp_users: Rows added in this batch (next record: 2): 2 (uncompressed bytes in this segment=1538) in 0.00 seconds
+0042.501 (0) Table wp_users: finishing file(s) (2, 0.6 KB)
+0042.520 (0) Table wp_usermeta: Total expected rows (approximate): 168
+0042.539 (0) Table wp_usermeta: Rows added in this batch (next record: 619): 158 (uncompressed bytes in this segment=31941) in 0.00 seconds
+0042.575 (0) Table wp_usermeta: finishing file(s) (2, 8.2 KB)
+0042.597 (0) Table wp_commentmeta: Total expected rows (approximate): 0
+0042.611 (0) Table wp_commentmeta: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=684) in 0.00 seconds
+0042.642 (0) Table wp_commentmeta: finishing file(s) (2, 0.4 KB)
+0042.663 (0) Table wp_comments: Total expected rows (approximate): 11
+0042.704 (0) Table wp_comments: Rows added in this batch (next record: 37): 13 (uncompressed bytes in this segment=6909) in 0.00 seconds
+0042.783 (0) Table wp_comments: finishing file(s) (2, 2 KB)
+0042.808 (0) Table wp_links: Total expected rows (approximate): 0
+0042.821 (0) Table wp_links: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1266) in 0.00 seconds
+0042.849 (0) Table wp_links: finishing file(s) (2, 0.5 KB)
+0042.873 (0) Table wp_postmeta: Total expected rows (approximate): 6859
+0043.798 (0) Table wp_postmeta: Rows added in this batch (next record: 38355): 6660 (uncompressed bytes in this segment=12158978) in 0.92 seconds
+0043.831 (0) Table wp_postmeta: finishing file(s) (2, 1506.6 KB)
+0043.853 (0) Table wp_posts: Total expected rows (approximate): 546
+0044.073 (0) Table wp_posts: Rows added in this batch (next record: 7325): 564 (uncompressed bytes in this segment=4757124) in 0.21 seconds
+0044.118 (0) Table wp_posts: finishing file(s) (2, 734.7 KB)
+0044.135 (0) Table wp_term_relationships: Total expected rows (approximate): 49
+0044.153 (0) Table wp_term_relationships: Rows added in this batch (next record: 100000): 48 (uncompressed bytes in this segment=1427) in 0.01 seconds
+0044.181 (0) Table wp_term_relationships: finishing file(s) (2, 0.5 KB)
+0044.199 (0) Table wp_term_taxonomy: Total expected rows (approximate): 32
+0044.221 (0) Table wp_term_taxonomy: Rows added in this batch (next record: 39): 33 (uncompressed bytes in this segment=2098) in 0.01 seconds
+0044.249 (0) Table wp_term_taxonomy: finishing file(s) (2, 0.7 KB)
+0044.266 (0) Table wp_termmeta: Total expected rows (approximate): 38
+0044.276 (0) Table wp_termmeta: Rows added in this batch (next record: 52): 38 (uncompressed bytes in this segment=5490) in 0.00 seconds
+0044.305 (0) Table wp_termmeta: finishing file(s) (2, 1.1 KB)
+0044.327 (0) Table wp_terms: Total expected rows (approximate): 32
+0044.337 (0) Table wp_terms: Rows added in this batch (next record: 39): 33 (uncompressed bytes in this segment=1941) in 0.00 seconds
+0044.369 (0) Table wp_terms: finishing file(s) (2, 0.8 KB)
+0044.390 (0) Table wp_actionscheduler_actions: Total expected rows (approximate): 25
+0044.401 (0) Table wp_actionscheduler_actions: Rows added in this batch (next record: 141): 25 (uncompressed bytes in this segment=12209) in 0.00 seconds
+0044.434 (0) Table wp_actionscheduler_actions: finishing file(s) (2, 1.8 KB)
+0044.453 (0) Table wp_actionscheduler_claims: Total expected rows (approximate): 0
+0044.465 (0) Table wp_actionscheduler_claims: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=630) in 0.00 seconds
+0044.496 (0) Table wp_actionscheduler_claims: finishing file(s) (2, 0.4 KB)
+0044.516 (0) Table wp_actionscheduler_groups: Total expected rows (approximate): 3
+0044.527 (0) Table wp_actionscheduler_groups: Rows added in this batch (next record: 3): 3 (uncompressed bytes in this segment=720) in 0.00 seconds
+0044.578 (0) Table wp_actionscheduler_groups: finishing file(s) (2, 0.4 KB)
+0044.596 (0) Table wp_actionscheduler_logs: Total expected rows (approximate): 73
+0044.608 (0) Table wp_actionscheduler_logs: Rows added in this batch (next record: 375): 73 (uncompressed bytes in this segment=7107) in 0.00 seconds
+0044.637 (0) Table wp_actionscheduler_logs: finishing file(s) (2, 1.2 KB)
+0044.658 (0) Table wp_hustle_entries: Total expected rows (approximate): 6
+0044.668 (0) Table wp_hustle_entries: Rows added in this batch (next record: 9): 6 (uncompressed bytes in this segment=1007) in 0.00 seconds
+0044.697 (0) Table wp_hustle_entries: finishing file(s) (2, 0.5 KB)
+0044.717 (0) Table wp_hustle_entries_meta: Total expected rows (approximate): 39
+0044.725 (0) Table wp_hustle_entries_meta: Rows added in this batch (next record: 54): 42 (uncompressed bytes in this segment=4738) in 0.00 seconds
+0044.753 (0) Table wp_hustle_entries_meta: finishing file(s) (2, 0.9 KB)
+0044.772 (0) Table wp_hustle_modules: Total expected rows (approximate): 2
+0044.780 (0) Table wp_hustle_modules: Rows added in this batch (next record: 20): 2 (uncompressed bytes in this segment=902) in 0.00 seconds
+0044.872 (0) Table wp_hustle_modules: finishing file(s) (2, 0.5 KB)
+0044.889 (0) Table wp_hustle_modules_meta: Total expected rows (approximate): 17
+0044.909 (0) Table wp_hustle_modules_meta: Rows added in this batch (next record: 170): 17 (uncompressed bytes in this segment=149436) in 0.01 seconds
+0044.941 (0) Table wp_hustle_modules_meta: finishing file(s) (2, 18.6 KB)
+0044.979 (0) Table wp_hustle_tracking: Total expected rows (approximate): 0
+0044.998 (0) Table wp_hustle_tracking: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1172) in 0.00 seconds
+0045.028 (0) Table wp_hustle_tracking: finishing file(s) (2, 0.5 KB)
+0045.050 (0) Table wp_litespeed_cssjs: Total expected rows (approximate): 40
+0045.149 (0) Table wp_litespeed_cssjs: Rows added in this batch (next record: 42): 42 (uncompressed bytes in this segment=989603) in 0.09 seconds
+0045.185 (0) Table wp_litespeed_cssjs: finishing file(s) (2, 144.1 KB)
+0045.249 (0) Table wp_mailster_actions: Total expected rows (approximate): 0
+0045.266 (0) Table wp_mailster_actions: Rows added in this batch (next record: 0): 0 (uncompressed bytes in this segment=833) in 0.00 seconds
+0045.339 (0) Table wp_mailster_actions: finishing file(s) (2, 0.4 KB)
+0045.360 (0) Table wp_mailster_form_fields: Total expected rows (approximate): 6
+0045.373 (0) Table wp_mailster_form_fields: Rows added in this batch (next record: 1000): 7 (uncompressed bytes in this segment=1078) in 0.00 seconds
+0045.410 (0) Table wp_mailster_form_fields: finishing file(s) (2, 0.5 KB)
+0045.434 (0) Table wp_mailster_forms: Total expected rows (approximate): 2
+0045.496 (0) Table wp_mailster_forms: Rows added in this batch (next record: 3): 3 (uncompressed bytes in this segment=3409) in 0.00 seconds
+0045.563 (0) Table wp_mailster_forms: finishing file(s) (2, 1 KB)
+0045.604 (0) Table wp_mailster_forms_lists: Total expected rows (approximate): 2
+0045.632 (0) Table wp_mailster_forms_lists: Rows added in this batch (next record: 1000): 2 (uncompressed bytes in this segment=703) in 0.00 seconds
+0045.695 (0) Table wp_mailster_forms_lists: finishing file(s) (2, 0.4 KB)
+0045.734 (0) Table wp_mailster_links: Total expected rows (approximate): 0
+0045.756 (0) Table wp_mailster_links: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=530) in 0.00 seconds
+0045.816 (0) Table wp_mailster_links: finishing file(s) (2, 0.3 KB)
+0045.853 (0) Table wp_mailster_lists: Total expected rows (approximate): 0
+0045.873 (0) Table wp_mailster_lists: Rows added in this batch (next record: 1): 1 (uncompressed bytes in this segment=919) in 0.00 seconds
+0045.938 (0) Table wp_mailster_lists: finishing file(s) (2, 0.5 KB)
+0045.985 (0) Table wp_mailster_lists_subscribers: Total expected rows (approximate): 0
+0046.003 (0) Table wp_mailster_lists_subscribers: Rows added in this batch (next record: 1000): 1 (uncompressed bytes in this segment=748) in 0.00 seconds
+0046.058 (0) Table wp_mailster_lists_subscribers: finishing file(s) (2, 0.4 KB)
+0046.086 (0) Table wp_mailster_queue: Total expected rows (approximate): 0
+0046.111 (0) Table wp_mailster_queue: Rows added in this batch (next record: 0): 0 (uncompressed bytes in this segment=1346) in 0.00 seconds
+0046.178 (0) Table wp_mailster_queue: finishing file(s) (2, 0.5 KB)
+0046.421 (0) Table wp_mailster_subscriber_fields: Total expected rows (approximate): 2
+0046.441 (0) Table wp_mailster_subscriber_fields: Rows added in this batch (next record: 1000): 2 (uncompressed bytes in this segment=838) in 0.00 seconds
+0046.480 (0) Table wp_mailster_subscriber_fields: finishing file(s) (2, 0.4 KB)
+0046.499 (0) Table wp_mailster_subscriber_meta: Total expected rows (approximate): 0
+0046.511 (0) Table wp_mailster_subscriber_meta: Rows added in this batch (next record: 1000): 1 (uncompressed bytes in this segment=889) in 0.00 seconds
+0046.557 (0) Table wp_mailster_subscriber_meta: finishing file(s) (2, 0.4 KB)
+0046.683 (0) Table wp_mailster_subscribers: Total expected rows (approximate): 0
+0046.710 (0) Table wp_mailster_subscribers: Rows added in this batch (next record: 1): 1 (uncompressed bytes in this segment=1429) in 0.00 seconds
+0046.804 (0) Table wp_mailster_subscribers: finishing file(s) (2, 0.6 KB)
+0046.853 (0) Table wp_post_views: Total expected rows (approximate): 153
+0046.873 (0) Table wp_post_views: Rows added in this batch (next record: 1000): 153 (uncompressed bytes in this segment=4765) in 0.00 seconds
+0047.018 (0) Table wp_post_views: finishing file(s) (2, 1 KB)
+0047.081 (0) Table wp_prli_clicks: Total expected rows (approximate): 782
+0047.145 (0) Table wp_prli_clicks: Rows added in this batch (next record: 858): 848 (uncompressed bytes in this segment=187946) in 0.04 seconds
+0047.221 (0) Table wp_prli_clicks: finishing file(s) (2, 17.7 KB)
+0047.269 (0) Table wp_prli_link_metas: Total expected rows (approximate): 12
+0047.290 (0) Table wp_prli_link_metas: Rows added in this batch (next record: 14): 12 (uncompressed bytes in this segment=1375) in 0.00 seconds
+0047.346 (0) Table wp_prli_link_metas: finishing file(s) (2, 0.6 KB)
+0047.391 (0) Table wp_prli_links: Total expected rows (approximate): 12
+0047.410 (0) Table wp_prli_links: Rows added in this batch (next record: 14): 12 (uncompressed bytes in this segment=4257) in 0.00 seconds
+0047.462 (0) Table wp_prli_links: finishing file(s) (2, 1.2 KB)
+0047.493 (0) Table wp_rsssl_csp_log: Total expected rows (approximate): 0
+0047.513 (0) Table wp_rsssl_csp_log: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=713) in 0.00 seconds
+0047.561 (0) Table wp_rsssl_csp_log: finishing file(s) (2, 0.4 KB)
+0047.589 (0) Table wp_smush_dir_images: Total expected rows (approximate): 0
+0047.830 (0) Table wp_smush_dir_images: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1078) in 0.00 seconds
+0048.765 (0) Table wp_smush_dir_images: finishing file(s) (2, 0.5 KB)
+0048.858 (0) Table wp_wc_admin_note_actions: Total expected rows (approximate): 29
+0048.883 (0) Table wp_wc_admin_note_actions: Rows added in this batch (next record: 1005): 29 (uncompressed bytes in this segment=5077) in 0.00 seconds
+0049.169 (0) Table wp_wc_admin_note_actions: finishing file(s) (2, 1.6 KB)
+0049.205 (0) Table wp_wc_admin_notes: Total expected rows (approximate): 27
+0049.228 (0) Table wp_wc_admin_notes: Rows added in this batch (next record: 27): 27 (uncompressed bytes in this segment=12536) in 0.00 seconds
+0049.274 (0) Table wp_wc_admin_notes: finishing file(s) (2, 3.8 KB)
+0049.296 (0) Table wp_wc_category_lookup: Total expected rows (approximate): 0
+0049.309 (0) Table wp_wc_category_lookup: Rows added in this batch (next record: 1000): 1 (uncompressed bytes in this segment=585) in 0.00 seconds
+0049.342 (0) Table wp_wc_category_lookup: finishing file(s) (2, 0.3 KB)
+0049.376 (0) Table wp_wc_customer_lookup: Total expected rows (approximate): 0
+0049.389 (0) Table wp_wc_customer_lookup: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1230) in 0.00 seconds
+0049.433 (0) Table wp_wc_customer_lookup: finishing file(s) (2, 0.5 KB)
+0049.465 (0) Table wp_wc_download_log: Total expected rows (approximate): 0
+0049.483 (0) Table wp_wc_download_log: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=739) in 0.00 seconds
+0049.545 (0) Table wp_wc_download_log: finishing file(s) (2, 0.4 KB)
+0049.569 (0) Table wp_wc_order_coupon_lookup: Total expected rows (approximate): 0
+0049.585 (0) Table wp_wc_order_coupon_lookup: Rows added in this batch (next record: 0): 0 (uncompressed bytes in this segment=711) in 0.00 seconds
+0049.661 (0) Table wp_wc_order_coupon_lookup: finishing file(s) (2, 0.4 KB)
+0049.684 (0) Table wp_wc_order_product_lookup: Total expected rows (approximate): 0
+0049.705 (0) Table wp_wc_order_product_lookup: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1211) in 0.00 seconds
+0049.746 (0) Table wp_wc_order_product_lookup: finishing file(s) (2, 0.5 KB)
+0049.767 (0) Table wp_wc_order_stats: Total expected rows (approximate): 0
+0049.780 (0) Table wp_wc_order_stats: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1102) in 0.00 seconds
+0049.820 (0) Table wp_wc_order_stats: finishing file(s) (2, 0.5 KB)
+0049.848 (0) Table wp_wc_order_tax_lookup: Total expected rows (approximate): 0
+0049.862 (0) Table wp_wc_order_tax_lookup: Rows added in this batch (next record: 0): 0 (uncompressed bytes in this segment=789) in 0.00 seconds
+0049.983 (0) Table wp_wc_order_tax_lookup: finishing file(s) (2, 0.4 KB)
+0050.014 (0) Table wp_wc_product_meta_lookup: Total expected rows (approximate): 0
+0050.044 (0) Table wp_wc_product_meta_lookup: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1329) in 0.00 seconds
+0050.094 (0) Table wp_wc_product_meta_lookup: finishing file(s) (2, 0.5 KB)
+0050.118 (0) Table wp_wc_reserved_stock: Total expected rows (approximate): 0
+0050.134 (0) Table wp_wc_reserved_stock: Rows added in this batch (next record: 0): 0 (uncompressed bytes in this segment=659) in 0.00 seconds
+0050.198 (0) Table wp_wc_reserved_stock: finishing file(s) (2, 0.4 KB)
+0050.227 (0) Table wp_wc_tax_rate_classes: Total expected rows (approximate): 2
+0050.246 (0) Table wp_wc_tax_rate_classes: Rows added in this batch (next record: 2): 2 (uncompressed bytes in this segment=800) in 0.00 seconds
+0050.288 (0) Table wp_wc_tax_rate_classes: finishing file(s) (2, 0.4 KB)
+0050.314 (0) Table wp_wc_webhooks: Total expected rows (approximate): 0
+0050.328 (0) Table wp_wc_webhooks: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1202) in 0.00 seconds
+0050.378 (0) Table wp_wc_webhooks: finishing file(s) (2, 0.5 KB)
+0050.406 (0) Table wp_woocommerce_api_keys: Total expected rows (approximate): 0
+0050.419 (0) Table wp_woocommerce_api_keys: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1031) in 0.00 seconds
+0050.461 (0) Table wp_woocommerce_api_keys: finishing file(s) (2, 0.4 KB)
+0050.489 (0) Table wp_woocommerce_attribute_taxonomies: Total expected rows (approximate): 0
+0050.502 (0) Table wp_woocommerce_attribute_taxonomies: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=939) in 0.00 seconds
+0050.538 (0) Table wp_woocommerce_attribute_taxonomies: finishing file(s) (2, 0.4 KB)
+0050.563 (0) Table wp_woocommerce_downloadable_product_permissions: Total expected rows (approximate): 0
+0050.587 (0) Table wp_woocommerce_downloadable_product_permissions: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1514) in 0.00 seconds
+0050.657 (0) Table wp_woocommerce_downloadable_product_permissions: finishing file(s) (2, 0.5 KB)
+0050.684 (0) Table wp_woocommerce_log: Total expected rows (approximate): 0
+0050.698 (0) Table wp_woocommerce_log: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=719) in 0.00 seconds
+0050.735 (0) Table wp_woocommerce_log: finishing file(s) (2, 0.4 KB)
+0050.756 (0) Table wp_woocommerce_order_itemmeta: Total expected rows (approximate): 0
+0050.770 (0) Table wp_woocommerce_order_itemmeta: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=772) in 0.00 seconds
+0050.809 (0) Table wp_woocommerce_order_itemmeta: finishing file(s) (2, 0.4 KB)
+0050.834 (0) Table wp_woocommerce_order_items: Total expected rows (approximate): 0
+0050.852 (0) Table wp_woocommerce_order_items: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=727) in 0.00 seconds
+0050.892 (0) Table wp_woocommerce_order_items: finishing file(s) (2, 0.4 KB)
+0050.924 (0) Table wp_woocommerce_payment_tokenmeta: Total expected rows (approximate): 0
+0050.943 (0) Table wp_woocommerce_payment_tokenmeta: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=799) in 0.00 seconds
+0050.986 (0) Table wp_woocommerce_payment_tokenmeta: finishing file(s) (2, 0.4 KB)
+0051.014 (0) Table wp_woocommerce_payment_tokens: Total expected rows (approximate): 0
+0051.028 (0) Table wp_woocommerce_payment_tokens: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=821) in 0.00 seconds
+0051.062 (0) Table wp_woocommerce_payment_tokens: finishing file(s) (2, 0.4 KB)
+0051.090 (0) Table wp_woocommerce_sessions: Total expected rows (approximate): 2
+0051.104 (0) Table wp_woocommerce_sessions: Rows added in this batch (next record: 12): 2 (uncompressed bytes in this segment=2929) in 0.00 seconds
+0051.139 (0) Table wp_woocommerce_sessions: finishing file(s) (2, 0.9 KB)
+0051.179 (0) Table wp_woocommerce_shipping_zone_locations: Total expected rows (approximate): 0
+0051.193 (0) Table wp_woocommerce_shipping_zone_locations: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=862) in 0.00 seconds
+0051.250 (0) Table wp_woocommerce_shipping_zone_locations: finishing file(s) (2, 0.4 KB)
+0051.270 (0) Table wp_woocommerce_shipping_zone_methods: Total expected rows (approximate): 0
+0051.282 (0) Table wp_woocommerce_shipping_zone_methods: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=765) in 0.00 seconds
+0051.315 (0) Table wp_woocommerce_shipping_zone_methods: finishing file(s) (2, 0.4 KB)
+0051.338 (0) Table wp_woocommerce_shipping_zones: Total expected rows (approximate): 0
+0051.348 (0) Table wp_woocommerce_shipping_zones: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=625) in 0.00 seconds
+0051.381 (0) Table wp_woocommerce_shipping_zones: finishing file(s) (2, 0.3 KB)
+0051.410 (0) Table wp_woocommerce_tax_rate_locations: Total expected rows (approximate): 0
+0051.425 (0) Table wp_woocommerce_tax_rate_locations: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=836) in 0.00 seconds
+0051.463 (0) Table wp_woocommerce_tax_rate_locations: finishing file(s) (2, 0.4 KB)
+0051.488 (0) Table wp_woocommerce_tax_rates: Total expected rows (approximate): 0
+0051.528 (0) Table wp_woocommerce_tax_rates: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=1273) in 0.00 seconds
+0051.577 (0) Table wp_woocommerce_tax_rates: finishing file(s) (2, 0.4 KB)
+0051.602 (0) Table wp_wpfm_backup: Total expected rows (approximate): 0
+0051.837 (0) Table wp_wpfm_backup: Rows added in this batch (next record: 1): 1 (uncompressed bytes in this segment=645) in 0.00 seconds
+0051.888 (0) Table wp_wpfm_backup: finishing file(s) (2, 0.4 KB)
+0051.926 (0) Table wp_wpforms_entries: Total expected rows (approximate): 0
+0051.946 (0) Table wp_wpforms_entries: Rows added in this batch (next record: 1): 1 (uncompressed bytes in this segment=1641) in 0.00 seconds
+0051.996 (0) Table wp_wpforms_entries: finishing file(s) (2, 0.7 KB)
+0052.017 (0) Table wp_wpforms_entry_fields: Total expected rows (approximate): 2
+0052.034 (0) Table wp_wpforms_entry_fields: Rows added in this batch (next record: 2): 2 (uncompressed bytes in this segment=931) in 0.00 seconds
+0052.082 (0) Table wp_wpforms_entry_fields: finishing file(s) (2, 0.5 KB)
+0052.103 (0) Table wp_wpforms_entry_meta: Total expected rows (approximate): 0
+0052.120 (0) Table wp_wpforms_entry_meta: Rows added in this batch (next record: 1): 1 (uncompressed bytes in this segment=926) in 0.00 seconds
+0052.162 (0) Table wp_wpforms_entry_meta: finishing file(s) (2, 0.5 KB)
+0052.189 (0) Table wp_wpforms_tasks_meta: Total expected rows (approximate): 39
+0052.205 (0) Table wp_wpforms_tasks_meta: Rows added in this batch (next record: 42): 42 (uncompressed bytes in this segment=3934) in 0.00 seconds
+0052.257 (0) Table wp_wpforms_tasks_meta: finishing file(s) (2, 0.9 KB)
+0052.294 (0) Table wp_wpil_broken_links: Total expected rows (approximate): 0
+0052.311 (0) Table wp_wpil_broken_links: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=907) in 0.00 seconds
+0052.358 (0) Table wp_wpil_broken_links: finishing file(s) (2, 0.4 KB)
+0052.395 (0) Table wp_wpil_keyword_links: Total expected rows (approximate): 6
+0052.413 (0) Table wp_wpil_keyword_links: Rows added in this batch (next record: 72): 6 (uncompressed bytes in this segment=945) in 0.00 seconds
+0052.455 (0) Table wp_wpil_keyword_links: finishing file(s) (2, 0.4 KB)
+0052.477 (0) Table wp_wpil_keywords: Total expected rows (approximate): 2
+0052.493 (0) Table wp_wpil_keywords: Rows added in this batch (next record: 2): 2 (uncompressed bytes in this segment=1086) in 0.00 seconds
+0052.536 (0) Table wp_wpil_keywords: finishing file(s) (2, 0.5 KB)
+0052.557 (0) Table wp_wpil_report_links: Total expected rows (approximate): 407
+0052.583 (0) Table wp_wpil_report_links: Rows added in this batch (next record: 23455): 407 (uncompressed bytes in this segment=74334) in 0.01 seconds
+0052.630 (0) Table wp_wpil_report_links: finishing file(s) (2, 9.5 KB)
+0052.653 (0) Table wp_wpil_target_keyword_data: Total expected rows (approximate): 2
+0052.668 (0) Table wp_wpil_target_keyword_data: Rows added in this batch (next record: 67): 2 (uncompressed bytes in this segment=1402) in 0.00 seconds
+0052.710 (0) Table wp_wpil_target_keyword_data: finishing file(s) (2, 0.6 KB)
+0052.733 (0) Table wp_wpil_url_links: Total expected rows (approximate): 0
+0052.749 (0) Table wp_wpil_url_links: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=632) in 0.00 seconds
+0052.790 (0) Table wp_wpil_url_links: finishing file(s) (2, 0.3 KB)
+0052.810 (0) Table wp_wpil_urls: Total expected rows (approximate): 0
+0052.823 (0) Table wp_wpil_urls: Rows added in this batch (next record: -1): 0 (uncompressed bytes in this segment=517) in 0.00 seconds
+0052.862 (0) Table wp_wpil_urls: finishing file(s) (2, 0.3 KB)
+0052.884 (0) Table wp_wpmailsmtp_tasks_meta: Total expected rows (approximate): 0
+0052.928 (0) Table wp_wpmailsmtp_tasks_meta: Rows added in this batch (next record: 1): 1 (uncompressed bytes in this segment=754) in 0.00 seconds
+0053.037 (0) Table wp_wpmailsmtp_tasks_meta: finishing file(s) (2, 0.4 KB)
+0053.062 (0) Table wp_yoast_indexable: Total expected rows (approximate): 229
+0053.099 (0) Table wp_yoast_indexable: Rows added in this batch (next record: 392): 229 (uncompressed bytes in this segment=120396) in 0.02 seconds
+0053.159 (0) Table wp_yoast_indexable: finishing file(s) (2, 13.2 KB)
+0053.186 (0) Table wp_yoast_indexable_hierarchy: Total expected rows (approximate): 106
+0053.201 (0) Table wp_yoast_indexable_hierarchy: Rows added in this batch (next record: 1000): 106 (uncompressed bytes in this segment=2596) in 0.00 seconds
+0053.246 (0) Table wp_yoast_indexable_hierarchy: finishing file(s) (2, 0.7 KB)
+0053.277 (0) Table wp_yoast_migrations: Total expected rows (approximate): 21
+0053.295 (0) Table wp_yoast_migrations: Rows added in this batch (next record: 21): 21 (uncompressed bytes in this segment=1141) in 0.00 seconds
+0053.339 (0) Table wp_yoast_migrations: finishing file(s) (2, 0.6 KB)
+0053.361 (0) Table wp_yoast_primary_term: Total expected rows (approximate): 13
+0053.587 (0) Table wp_yoast_primary_term: Rows added in this batch (next record: 25): 13 (uncompressed bytes in this segment=1926) in 0.00 seconds
+0053.661 (0) Table wp_yoast_primary_term: finishing file(s) (2, 0.7 KB)
+0053.689 (0) Table wp_yoast_seo_links: Total expected rows (approximate): 584
+0053.747 (0) Table wp_yoast_seo_links: Rows added in this batch (next record: 50075): 584 (uncompressed bytes in this segment=84207) in 0.02 seconds
+0053.801 (0) Table wp_yoast_seo_links: finishing file(s) (2, 9.9 KB)
+0053.818 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_options.table.tmpr81975.gz (1/84): adding to final database dump
+0054.213 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_options.table.gz (2/84): adding to final database dump
+0054.232 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_users.table.tmpr3.gz (3/84): adding to final database dump
+0054.243 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_users.table.gz (4/84): adding to final database dump
+0054.255 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_usermeta.table.tmpr620.gz (5/84): adding to final database dump
+0054.272 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_usermeta.table.gz (6/84): adding to final database dump
+0054.284 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_commentmeta.table.tmpr0.gz (7/84): adding to final database dump
+0054.297 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_commentmeta.table.gz (8/84): adding to final database dump
+0054.307 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_comments.table.tmpr38.gz (9/84): adding to final database dump
+0054.319 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_comments.table.gz (10/84): adding to final database dump
+0054.333 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_links.table.tmpr0.gz (11/84): adding to final database dump
+0054.343 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_links.table.gz (12/84): adding to final database dump
+0054.358 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_postmeta.table.tmpr38356.gz (13/84): adding to final database dump
+0055.044 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_postmeta.table.gz (14/84): adding to final database dump
+0055.057 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_posts.table.tmpr7326.gz (15/84): adding to final database dump
+0055.276 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_posts.table.gz (16/84): adding to final database dump
+0055.287 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_term_relationships.table.tmpr100001.gz (17/84): adding to final database dump
+0055.298 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_term_relationships.table.gz (18/84): adding to final database dump
+0055.309 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_term_taxonomy.table.tmpr40.gz (19/84): adding to final database dump
+0055.319 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_term_taxonomy.table.gz (20/84): adding to final database dump
+0055.330 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_termmeta.table.tmpr53.gz (21/84): adding to final database dump
+0055.339 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_termmeta.table.gz (22/84): adding to final database dump
+0055.350 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_terms.table.tmpr40.gz (23/84): adding to final database dump
+0055.361 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_terms.table.gz (24/84): adding to final database dump
+0055.372 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_actionscheduler_actions.table.tmpr142.gz (25/84): adding to final database dump
+0055.384 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_actionscheduler_actions.table.gz (26/84): adding to final database dump
+0056.264 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_actionscheduler_claims.table.tmpr0.gz (27/84): adding to final database dump
+0056.373 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_actionscheduler_claims.table.gz (28/84): adding to final database dump
+0056.387 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_actionscheduler_groups.table.tmpr4.gz (29/84): adding to final database dump
+0056.397 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_actionscheduler_groups.table.gz (30/84): adding to final database dump
+0056.417 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_actionscheduler_logs.table.tmpr376.gz (31/84): adding to final database dump
+0056.427 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_actionscheduler_logs.table.gz (32/84): adding to final database dump
+0056.439 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_hustle_entries.table.tmpr10.gz (33/84): adding to final database dump
+0056.453 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_hustle_entries.table.gz (34/84): adding to final database dump
+0056.465 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_hustle_entries_meta.table.tmpr55.gz (35/84): adding to final database dump
+0056.475 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_hustle_entries_meta.table.gz (36/84): adding to final database dump
+0056.485 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_hustle_modules.table.tmpr21.gz (37/84): adding to final database dump
+0056.495 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_hustle_modules.table.gz (38/84): adding to final database dump
+0056.505 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_hustle_modules_meta.table.tmpr171.gz (39/84): adding to final database dump
+0056.527 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_hustle_modules_meta.table.gz (40/84): adding to final database dump
+0056.539 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_hustle_tracking.table.tmpr0.gz (41/84): adding to final database dump
+0056.551 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_hustle_tracking.table.gz (42/84): adding to final database dump
+0056.797 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_litespeed_cssjs.table.tmpr43.gz (43/84): adding to final database dump
+0057.562 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_litespeed_cssjs.table.gz (44/84): adding to final database dump
+0057.599 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_actions.table.tmpr1.gz (45/84): adding to final database dump
+0057.618 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_actions.table.gz (46/84): adding to final database dump
+0057.629 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_form_fields.table.tmpr1001.gz (47/84): adding to final database dump
+0057.639 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_form_fields.table.gz (48/84): adding to final database dump
+0057.648 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_forms.table.tmpr4.gz (49/84): adding to final database dump
+0057.662 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_forms.table.gz (50/84): adding to final database dump
+0057.672 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_forms_lists.table.tmpr1001.gz (51/84): adding to final database dump
+0057.683 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_forms_lists.table.gz (52/84): adding to final database dump
+0057.693 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_links.table.tmpr0.gz (53/84): adding to final database dump
+0057.705 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_links.table.gz (54/84): adding to final database dump
+0057.715 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_lists.table.tmpr2.gz (55/84): adding to final database dump
+0057.725 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_lists.table.gz (56/84): adding to final database dump
+0057.735 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_lists_subscribers.table.tmpr1001.gz (57/84): adding to final database dump
+0057.747 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_lists_subscribers.table.gz (58/84): adding to final database dump
+0057.760 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_queue.table.tmpr1.gz (59/84): adding to final database dump
+0057.772 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_queue.table.gz (60/84): adding to final database dump
+0057.786 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_subscriber_fields.table.tmpr1001.gz (61/84): adding to final database dump
+0057.806 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_subscriber_fields.table.gz (62/84): adding to final database dump
+0057.819 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_subscriber_meta.table.tmpr1001.gz (63/84): adding to final database dump
+0057.831 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_subscriber_meta.table.gz (64/84): adding to final database dump
+0057.843 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_subscribers.table.tmpr2.gz (65/84): adding to final database dump
+0057.855 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_mailster_subscribers.table.gz (66/84): adding to final database dump
+0057.868 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_post_views.table.tmpr1001.gz (67/84): adding to final database dump
+0057.882 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_post_views.table.gz (68/84): adding to final database dump
+0057.895 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_prli_clicks.table.tmpr859.gz (69/84): adding to final database dump
+0057.918 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_prli_clicks.table.gz (70/84): adding to final database dump
+0057.930 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_prli_link_metas.table.tmpr15.gz (71/84): adding to final database dump
+0057.942 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_prli_link_metas.table.gz (72/84): adding to final database dump
+0057.954 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_prli_links.table.tmpr15.gz (73/84): adding to final database dump
+0057.969 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_prli_links.table.gz (74/84): adding to final database dump
+0057.982 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_rsssl_csp_log.table.tmpr0.gz (75/84): adding to final database dump
+0057.994 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_rsssl_csp_log.table.gz (76/84): adding to final database dump
+0058.009 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_smush_dir_images.table.tmpr0.gz (77/84): adding to final database dump
+0058.023 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_smush_dir_images.table.gz (78/84): adding to final database dump
+0058.046 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_admin_note_actions.table.tmpr1006.gz (79/84): adding to final database dump
+0058.059 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_admin_note_actions.table.gz (80/84): adding to final database dump
+0058.074 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_admin_notes.table.tmpr28.gz (81/84): adding to final database dump
+0058.092 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_admin_notes.table.gz (82/84): adding to final database dump
+0058.109 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_category_lookup.table.tmpr1001.gz (83/84): adding to final database dump
+0058.127 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_category_lookup.table.gz (84/84): adding to final database dump
+0058.148 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_customer_lookup.table.tmpr0.gz (85/84): adding to final database dump
+0058.161 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_customer_lookup.table.gz (86/84): adding to final database dump
+0058.178 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_download_log.table.tmpr0.gz (87/84): adding to final database dump
+0058.196 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_download_log.table.gz (88/84): adding to final database dump
+0058.207 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_order_coupon_lookup.table.tmpr1.gz (89/84): adding to final database dump
+0058.218 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_order_coupon_lookup.table.gz (90/84): adding to final database dump
+0058.231 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_order_product_lookup.table.tmpr0.gz (91/84): adding to final database dump
+0058.243 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_order_product_lookup.table.gz (92/84): adding to final database dump
+0058.255 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_order_stats.table.tmpr0.gz (93/84): adding to final database dump
+0058.267 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_order_stats.table.gz (94/84): adding to final database dump
+0058.280 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_order_tax_lookup.table.tmpr1.gz (95/84): adding to final database dump
+0058.295 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_order_tax_lookup.table.gz (96/84): adding to final database dump
+0058.310 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_product_meta_lookup.table.tmpr0.gz (97/84): adding to final database dump
+0058.322 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_product_meta_lookup.table.gz (98/84): adding to final database dump
+0058.335 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_reserved_stock.table.tmpr1.gz (99/84): adding to final database dump
+0058.361 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_reserved_stock.table.gz (100/84): adding to final database dump
+0058.374 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_tax_rate_classes.table.tmpr3.gz (101/84): adding to final database dump
+0058.388 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_tax_rate_classes.table.gz (102/84): adding to final database dump
+0058.402 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_webhooks.table.tmpr0.gz (103/84): adding to final database dump
+0058.418 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wc_webhooks.table.gz (104/84): adding to final database dump
+0058.434 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_api_keys.table.tmpr0.gz (105/84): adding to final database dump
+0058.446 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_api_keys.table.gz (106/84): adding to final database dump
+0058.458 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_attribute_taxonomies.table.tmpr0.gz (107/84): adding to final database dump
+0058.471 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_attribute_taxonomies.table.gz (108/84): adding to final database dump
+0058.483 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_downloadable_product_permissions.table.tmpr0.gz (109/84): adding to final database dump
+0058.496 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_downloadable_product_permissions.table.gz (110/84): adding to final database dump
+0058.533 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_log.table.tmpr0.gz (111/84): adding to final database dump
+0058.545 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_log.table.gz (112/84): adding to final database dump
+0058.556 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_order_itemmeta.table.tmpr0.gz (113/84): adding to final database dump
+0058.571 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_order_itemmeta.table.gz (114/84): adding to final database dump
+0058.583 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_order_items.table.tmpr0.gz (115/84): adding to final database dump
+0058.593 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_order_items.table.gz (116/84): adding to final database dump
+0058.613 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_payment_tokenmeta.table.tmpr0.gz (117/84): adding to final database dump
+0058.628 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_payment_tokenmeta.table.gz (118/84): adding to final database dump
+0058.649 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_payment_tokens.table.tmpr0.gz (119/84): adding to final database dump
+0058.662 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_payment_tokens.table.gz (120/84): adding to final database dump
+0058.674 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_sessions.table.tmpr13.gz (121/84): adding to final database dump
+0058.692 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_sessions.table.gz (122/84): adding to final database dump
+0058.708 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_shipping_zone_locations.table.tmpr0.gz (123/84): adding to final database dump
+0058.723 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_shipping_zone_locations.table.gz (124/84): adding to final database dump
+0058.743 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_shipping_zone_methods.table.tmpr0.gz (125/84): adding to final database dump
+0058.760 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_shipping_zone_methods.table.gz (126/84): adding to final database dump
+0058.777 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_shipping_zones.table.tmpr0.gz (127/84): adding to final database dump
+0058.791 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_shipping_zones.table.gz (128/84): adding to final database dump
+0058.844 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_tax_rate_locations.table.tmpr0.gz (129/84): adding to final database dump
+0058.894 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_tax_rate_locations.table.gz (130/84): adding to final database dump
+0058.911 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_tax_rates.table.tmpr0.gz (131/84): adding to final database dump
+0058.929 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_woocommerce_tax_rates.table.gz (132/84): adding to final database dump
+0058.949 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpfm_backup.table.tmpr2.gz (133/84): adding to final database dump
+0058.965 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpfm_backup.table.gz (134/84): adding to final database dump
+0058.982 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpforms_entries.table.tmpr2.gz (135/84): adding to final database dump
+0059.001 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpforms_entries.table.gz (136/84): adding to final database dump
+0059.018 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpforms_entry_fields.table.tmpr3.gz (137/84): adding to final database dump
+0059.036 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpforms_entry_fields.table.gz (138/84): adding to final database dump
+0059.058 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpforms_entry_meta.table.tmpr2.gz (139/84): adding to final database dump
+0059.073 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpforms_entry_meta.table.gz (140/84): adding to final database dump
+0059.086 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpforms_tasks_meta.table.tmpr43.gz (141/84): adding to final database dump
+0059.103 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpforms_tasks_meta.table.gz (142/84): adding to final database dump
+0059.117 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpil_broken_links.table.tmpr0.gz (143/84): adding to final database dump
+0059.132 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpil_broken_links.table.gz (144/84): adding to final database dump
+0059.149 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpil_keyword_links.table.tmpr73.gz (145/84): adding to final database dump
+0059.164 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpil_keyword_links.table.gz (146/84): adding to final database dump
+0059.180 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpil_keywords.table.tmpr3.gz (147/84): adding to final database dump
+0059.193 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpil_keywords.table.gz (148/84): adding to final database dump
+0059.209 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpil_report_links.table.tmpr23456.gz (149/84): adding to final database dump
+0059.230 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpil_report_links.table.gz (150/84): adding to final database dump
+0059.250 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpil_target_keyword_data.table.tmpr68.gz (151/84): adding to final database dump
+0059.263 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpil_target_keyword_data.table.gz (152/84): adding to final database dump
+0059.279 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpil_url_links.table.tmpr0.gz (153/84): adding to final database dump
+0059.293 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpil_url_links.table.gz (154/84): adding to final database dump
+0059.305 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpil_urls.table.tmpr0.gz (155/84): adding to final database dump
+0059.319 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpil_urls.table.gz (156/84): adding to final database dump
+0059.336 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpmailsmtp_tasks_meta.table.tmpr2.gz (157/84): adding to final database dump
+0059.357 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_wpmailsmtp_tasks_meta.table.gz (158/84): adding to final database dump
+0059.377 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_yoast_indexable.table.tmpr393.gz (159/84): adding to final database dump
+0059.399 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_yoast_indexable.table.gz (160/84): adding to final database dump
+0059.418 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_yoast_indexable_hierarchy.table.tmpr1001.gz (161/84): adding to final database dump
+0059.434 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_yoast_indexable_hierarchy.table.gz (162/84): adding to final database dump
+0059.452 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_yoast_migrations.table.tmpr22.gz (163/84): adding to final database dump
+0059.470 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_yoast_migrations.table.gz (164/84): adding to final database dump
+0059.487 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_yoast_primary_term.table.tmpr26.gz (165/84): adding to final database dump
+0059.505 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_yoast_primary_term.table.gz (166/84): adding to final database dump
+0059.521 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_yoast_seo_links.table.tmpr50076.gz (167/84): adding to final database dump
+0059.553 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db-table-wp_yoast_seo_links.table.gz (168/84): adding to final database dump
+0059.575 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db.gz: finished writing out complete database file (3040 KB)
+0059.751 (0) Total database tables backed up: 84 (backup_2021-06-08-1045_Techytel_91c3f2276d1d-db.gz, size: 3131975, sha1: 21126459402f572896a86c18e2e08f7ee8342d28, sha256: 46b790f388ad81c7b109bafa7024c8afc42e44076cc820bdc1cfa5c957f2e9ff)
+0059.803 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip: plugins: This file has not yet been successfully uploaded: will queue
+0059.814 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-themes.zip: themes: This file has not yet been successfully uploaded: will queue
+0059.824 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip: uploads: This file has not yet been successfully uploaded: will queue
+0059.836 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-others.zip: others: This file has not yet been successfully uploaded: will queue
+0059.846 (0) backup_2021-06-08-1045_Techytel_91c3f2276d1d-db.gz: db: This file has not yet been successfully uploaded: will queue
+0059.858 (0) Saving backup history. Total backup size: 169.7 MB
+0059.884 (0) Requesting upload of the files that have not yet been successfully uploaded (5)
+0059.922 (0) Cloud backup selection (1/1): googledrive with instance (1/1) (last)
+0059.934 (0) Beginning dispatch of backup to remote (googledrive) (instance identifier s-1b92c77e37a0b87f232ceb70bcd7a9f1)
+0060.673 (0) Google Drive: quota usage: used=2605.6 MB, total=15360 MB, available=12754.4 MB
+0060.712 (0) Google Drive: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip: Attempting to upload to Google Drive (into folder id: 1eglRq72T9_MQU_-3utUX2wFIMAr6It-Q)
+0061.392 (0) Googledrive chunked upload: 2.2 % uploaded (1048576 - increasing chunk size to 2048 KB - memory usage: 13.8 / 18)
+0061.775 (0) Googledrive chunked upload: 6.6 % uploaded (3145728 - increasing chunk size to 4096 KB - memory usage: 13.8 / 18)
+0062.221 (0) Googledrive chunked upload: 15.4 % uploaded (7340032 - increasing chunk size to 8192 KB - memory usage: 13.8 / 18)
+0063.048 (0) Googledrive chunked upload: 33 % uploaded (15728640 - increasing chunk size to 16384 KB - memory usage: 13.8 / 18)
+0064.485 (0) Googledrive chunked upload: 68.2 % uploaded (32505856 - increasing chunk size to 32768 KB - memory usage: 13.8 / 18)
+0066.635 (0) Googledrive chunked upload: 100 % uploaded (32505856)
+0066.668 (0) Google Drive: OK: Archive backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip uploaded in 5.9 seconds
+0066.681 (0) Recording as successfully uploaded: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip
+0066.724 (0) Deleting local file: backup_2021-06-08-1045_Techytel_91c3f2276d1d-plugins.zip: OK
+0066.972 (0) Google Drive: quota usage: used=2651.1 MB, total=15360 MB, available=12708.9 MB
+0066.985 (0) Google Drive: backup_2021-06-08-1045_Techytel_91c3f2276d1d-themes.zip: Attempting to upload to Google Drive (into folder id: 1eglRq72T9_MQU_-3utUX2wFIMAr6It-Q)
+0067.779 (0) Googledrive chunked upload: 23.5 % uploaded (1048576 - increasing chunk size to 2048 KB - memory usage: 13.8 / 18)
+0068.204 (0) Googledrive chunked upload: 70.4 % uploaded (3145728 - increasing chunk size to 4096 KB - memory usage: 13.8 / 18)
+0069.358 (0) Googledrive chunked upload: 100 % uploaded (3145728)
+0069.416 (0) Google Drive: OK: Archive backup_2021-06-08-1045_Techytel_91c3f2276d1d-themes.zip uploaded in 2.42 seconds
+0069.436 (0) Recording as successfully uploaded: backup_2021-06-08-1045_Techytel_91c3f2276d1d-themes.zip
+0069.460 (0) Deleting local file: backup_2021-06-08-1045_Techytel_91c3f2276d1d-themes.zip: OK
+0069.723 (0) Google Drive: quota usage: used=2655.3 MB, total=15360 MB, available=12704.7 MB
+0069.734 (0) Google Drive: backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip: Attempting to upload to Google Drive (into folder id: 1eglRq72T9_MQU_-3utUX2wFIMAr6It-Q)
+0070.381 (0) Googledrive chunked upload: 0.9 % uploaded (1048576 - increasing chunk size to 2048 KB - memory usage: 13.8 / 18)
+0070.768 (0) Googledrive chunked upload: 2.6 % uploaded (3145728 - increasing chunk size to 4096 KB - memory usage: 13.8 / 18)
+0071.258 (0) Googledrive chunked upload: 6 % uploaded (7340032 - increasing chunk size to 8192 KB - memory usage: 13.8 / 18)
+0072.040 (0) Googledrive chunked upload: 12.9 % uploaded (15728640 - increasing chunk size to 16384 KB - memory usage: 13.8 / 18)
+0073.508 (0) Googledrive chunked upload: 26.7 % uploaded (32505856 - increasing chunk size to 32768 KB - memory usage: 13.8 / 18)
+0076.663 (0) Googledrive chunked upload: 54.3 % uploaded (66060288)
+0079.679 (0) Googledrive chunked upload: 81.8 % uploaded (99614720)
+0082.375 (0) Googledrive chunked upload: 100 % uploaded (99614720)
+0082.409 (0) Google Drive: OK: Archive backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip uploaded in 12.66 seconds
+0082.420 (0) Recording as successfully uploaded: backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip
+0082.478 (0) Deleting local file: backup_2021-06-08-1045_Techytel_91c3f2276d1d-uploads.zip: OK
+0082.781 (0) Google Drive: quota usage: used=2771.4 MB, total=15360 MB, available=12588.6 MB
+0082.793 (0) Google Drive: backup_2021-06-08-1045_Techytel_91c3f2276d1d-others.zip: Attempting to upload to Google Drive (into folder id: 1eglRq72T9_MQU_-3utUX2wFIMAr6It-Q)
+0084.255 (0) Googledrive chunked upload: 100 % uploaded
+0084.291 (0) Google Drive: OK: Archive backup_2021-06-08-1045_Techytel_91c3f2276d1d-others.zip uploaded in 1.48 seconds
+0084.303 (0) Recording as successfully uploaded: backup_2021-06-08-1045_Techytel_91c3f2276d1d-others.zip
+0084.326 (0) Deleting local file: backup_2021-06-08-1045_Techytel_91c3f2276d1d-others.zip: OK
+0084.584 (0) Google Drive: quota usage: used=2772.3 MB, total=15360 MB, available=12587.7 MB
+0084.597 (0) Google Drive: backup_2021-06-08-1045_Techytel_91c3f2276d1d-db.gz: Attempting to upload to Google Drive (into folder id: 1eglRq72T9_MQU_-3utUX2wFIMAr6It-Q)
+0085.310 (0) Googledrive chunked upload: 33.5 % uploaded (1048576 - increasing chunk size to 2048 KB - memory usage: 13.8 / 18)
+0086.677 (0) Googledrive chunked upload: 100 % uploaded (1048576)
+0086.716 (0) Google Drive: OK: Archive backup_2021-06-08-1045_Techytel_91c3f2276d1d-db.gz uploaded in 2.1 seconds
+0086.729 (0) Recording as successfully uploaded: backup_2021-06-08-1045_Techytel_91c3f2276d1d-db.gz
+0086.756 (0) Deleting local file: backup_2021-06-08-1045_Techytel_91c3f2276d1d-db.gz: OK
+0086.790 (0) Retain: beginning examination of existing backup sets; user setting: retain_files=2, retain_db=2
+0086.804 (0) These backup set(s) were imported from a remote location, so will not be counted or pruned. Skipping: 1621520760
+0086.816 (0) Number of backup sets in history: 4; groups (db): 1
+0086.833 (0) Examining (for databases) backup set with group_id=0, nonce=91c3f2276d1d, datestamp=1623149127 (Jun 08 2021 10:45:27)
+0086.848 (0) This backup set is the backup set just made, so will not be deleted.
+0086.848 (0) Examining (for databases) backup set with group_id=0, nonce=c722652c69d7, datestamp=1623148904 (Jun 08 2021 10:41:44)
+0086.848 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0086.863 (0) Examining (for databases) backup set with group_id=0, nonce=aff93bb42372, datestamp=1623148743 (Jun 08 2021 10:39:03)
+0086.863 (0) 1623148743: db: this set includes a database (backup_2021-06-08-1039_Techytel_aff93bb42372-db.gz); db count is now 2
+0086.863 (0) 1623148743: db: over retain limit (2); will delete this database
+0086.863 (0) Delete file: backup_2021-06-08-1039_Techytel_aff93bb42372-db.gz, service=googledrive
+0087.962 (0) Google Drive: backup_2021-06-08-1039_Techytel_aff93bb42372-db.gz: Deletion successful
+0087.993 (0) This backup set remains non-empty (f=1/d=0); will retain in history
+0088.046 (0) Number of backup sets in history: 4; groups (files): 1
+0088.096 (0) Examining (for files) backup set with nonce=91c3f2276d1d, datestamp=1623149127 (Jun 08 2021 10:45:27)
+0088.096 (0) This backup set is the backup set just made, so will not be deleted.
+0088.111 (0) This backup set is the backup set just made, so will not be deleted.
+0088.144 (0) This backup set is the backup set just made, so will not be deleted.
+0088.145 (0) This backup set is the backup set just made, so will not be deleted.
+0088.145 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0088.160 (0) Examining (for files) backup set with nonce=c722652c69d7, datestamp=1623148904 (Jun 08 2021 10:41:44)
+0088.160 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0088.160 (0) Examining (for files) backup set with nonce=aff93bb42372, datestamp=1623148743 (Jun 08 2021 10:39:03)
+0088.160 (0) plugins: over retain limit (2); will delete this file entity
+0088.160 (0) themes: over retain limit (2); will delete this file entity
+0088.160 (0) uploads: over retain limit (2); will delete this file entity
+0088.160 (0) others: over retain limit (2); will delete this file entity
+0088.160 (0) Delete file: backup_2021-06-08-1039_Techytel_aff93bb42372-plugins.zip, service=googledrive
+0088.185 (0) Delete file: backup_2021-06-08-1039_Techytel_aff93bb42372-themes.zip, service=googledrive
+0088.196 (0) Delete file: backup_2021-06-08-1039_Techytel_aff93bb42372-uploads.zip, service=googledrive
+0088.210 (0) Delete file: backup_2021-06-08-1039_Techytel_aff93bb42372-others.zip, service=googledrive
+0088.938 (0) Google Drive: backup_2021-06-08-1039_Techytel_aff93bb42372-others.zip: Deletion successful
+0089.404 (0) Google Drive: backup_2021-06-08-1039_Techytel_aff93bb42372-uploads.zip: Deletion successful
+0089.939 (0) Google Drive: backup_2021-06-08-1039_Techytel_aff93bb42372-themes.zip: Deletion successful
+0090.368 (0) Google Drive: backup_2021-06-08-1039_Techytel_aff93bb42372-plugins.zip: Deletion successful
+0090.392 (0) This backup set is now empty; will remove from history
+0090.404 (0) Deleting log file (log.aff93bb42372.txt)
+0090.416 (0) Retain: saving new backup history (sets now: 3) and finishing retain operation
+0090.665 (0) Resume backup (91c3f2276d1d, 0): finish run
+0091.412 (0) Decremented the semaphore (fd) by 1
+0091.454 (0) Semaphore (fd) unlocked
+0091.468 (0) There were no errors in the uploads, so the 'resume' event (1) is being unscheduled
+0091.521 (0) No email will/can be sent - the user has not configured an email address.
+0091.537 (0) The backup apparently succeeded and is now complete

@@ -1,0 +1,227 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: "i2-pros-cons";
+  src:url("fonts/i2-pros-cons.eot");
+  src:url("fonts/i2-pros-cons.eot?#iefix") format("embedded-opentype"),
+    url("fonts/i2-pros-cons.woff") format("woff"),
+    url("fonts/i2-pros-cons.ttf") format("truetype"),
+    url("fonts/i2-pros-cons.svg#i2-pros-cons") format("svg");
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+.i2-pros-cons-icons [data-icon]:before, .iconpicker [data-icon]:before{
+  font-family: "i2-pros-cons" !important;
+  content: attr(data-icon);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.iconpicker [class^="icon-"]:before,
+.iconpicker [class*=" icon-"]:before,
+.i2-pros-cons-icons [class^="icon-"]:before,
+.i2-pros-cons-icons [class*=" icon-"]:before {
+  font-family: "i2-pros-cons" !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-check-1:before {
+  content: "\61";
+}
+.icon-check-2:before {
+  content: "\62";
+}
+.icon-check-3:before {
+  content: "\63";
+}
+.icon-square-1:before {
+  content: "\6c";
+}
+.icon-square-2:before {
+  content: "\6d";
+}
+.icon-ban-1:before {
+  content: "\6e";
+}
+.icon-square-3:before {
+  content: "\6f";
+}
+.icon-thumbs-down:before {
+  content: "\66";
+}
+.icon-thumbs-up:before {
+  content: "\67";
+}
+.icon-thumbs-o-up:before {
+  content: "\68";
+}
+.icon-thumbs-o-down:before {
+  content: "\69";
+}
+.icon-thumbs-s-down:before {
+  content: "\6a";
+}
+.icon-thumbs-s-up:before {
+  content: "\6b";
+}
+.icon-check-4:before {
+  content: "\64";
+}
+.icon-check-5:before {
+  content: "\65";
+}
+.icon-cancle-2:before {
+  content: "\70";
+}
+.icon-ban-3:before {
+  content: "\71";
+}
+.icon-cancle:before {
+  content: "\72";
+}
+.icon-ban-2:before {
+  content: "\73";
+}
+.icon-ban-5:before {
+  content: "\74";
+}
+.icon-ban-4:before {
+  content: "\75";
+}
+.icon-cancle-3:before {
+  content: "\76";
+}
+.icon-link-3:before {
+  content: "\77";
+}
+.icon-cart-7:before {
+  content: "\41";
+}
+.icon-cart-1:before {
+  content: "\42";
+}
+.icon-cart-2:before {
+  content: "\43";
+}
+.icon-cart-3:before {
+  content: "\44";
+}
+.icon-cart-4:before {
+  content: "\45";
+}
+.icon-cart-5:before {
+  content: "\46";
+}
+.icon-star-2:before {
+  content: "\47";
+}
+.icon-star-4:before {
+  content: "\48";
+}
+.icon-star-3:before {
+  content: "\49";
+}
+.icon-star-1:before {
+  content: "\4a";
+}
+.icon-cercle-1:before {
+  content: "\4b";
+}
+.icon-ban-7:before {
+  content: "\4c";
+}
+.icon-alert:before {
+  content: "\4f";
+}
+.icon-plus-5:before {
+  content: "\51";
+}
+.icon-minus-3:before {
+  content: "\57";
+}
+.icon-check-6:before {
+  content: "\36";
+}
+.icon-hand-o-right:before {
+  content: "\24";
+}
+.icon-hand-o-left:before {
+  content: "\25";
+}
+.icon-hand-paper-o:before {
+  content: "\27";
+}
+.icon-hand-peace-o:before {
+  content: "\28";
+}
+.icon-hand-scissors-o:before {
+  content: "\29";
+}
+.icon-heart-5:before {
+  content: "\2b";
+}
+.icon-heart-4:before {
+  content: "\2c";
+}
+.icon-heart-break-1:before {
+  content: "\2d";
+}
+.icon-shopping-cart-1:before {
+  content: "\3c";
+}
+.icon-unlock:before {
+  content: "\3e";
+}
+.icon-unlock-alt:before {
+  content: "\3f";
+}
+.icon-trophy:before {
+  content: "\40";
+}
+.icon-issue-opened:before {
+  content: "\7d";
+}
+.icon-issue-closed:before {
+  content: "\7e";
+}
+.icon-gift:before {
+  content: "\5c";
+}
+.icon-heart-1:before {
+  content: "\e000";
+}
+.icon-heart-3:before {
+  content: "\e004";
+}
+.icon-happy:before {
+  content: "\e005";
+}
+.icon-ban-9:before {
+  content: "\e020";
+}
+.icon-minus-thin:before {
+  content: "\78";
+}
+.icon-minus-thick:before {
+  content: "\79";
+}
+.icon-plus-thin:before {
+  content: "\7a";
+}
+.icon-plus-thick:before {
+  content: "\4d";
+}

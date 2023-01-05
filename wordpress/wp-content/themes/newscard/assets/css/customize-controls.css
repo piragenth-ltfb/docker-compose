@@ -1,0 +1,39 @@
+.theme-info {
+	margin-right: -12px;
+	margin-left: -12px;
+}
+.theme-info a {
+	padding: 10px 10px 11px 14px;
+	font-size: 14px;
+	line-height: 21px;
+	font-weight: 600;
+	background: #fff;
+	color: #555d66;
+	display: block;
+	text-decoration: none;
+	border-left: 4px solid #fff;
+	border-bottom: 1px solid #ddd;
+}
+.theme-info a:hover {
+	color: #0073aa;
+	background: #f3f3f5;
+	border-left-color: #0073aa;
+}
+.theme-info a:focus {
+	box-shadow : none;
+}
+.accordion-section-title .upgrade-to-pro {
+	padding: 5px 15px;
+	margin: -4px -4px 0 0;
+	display: inline-block;
+	background-color: rgb(110,175,40);
+	-webkit-border-radius: 50px;
+	-moz-border-radius:50px;
+	border-radius: 50px;
+	color: #fff;
+	text-decoration: none;
+	float: right;
+}
+.accordion-section-title .upgrade-to-pro:hover {
+	background-color: rgb(110,185,40);
+}
