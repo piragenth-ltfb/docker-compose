@@ -77,11 +77,31 @@ class Compatibility_Tag_Report extends Base {
 			$this->plugins_to_check
 		);
 
-		if ( 'html' === $this->_properties['format'] ) {
-			$compatibility_status = $this->get_html_from_compatibility_status( $compatibility_status );
-		} elseif ( 'raw' === $this->_properties['format'] ) {
-			$compatibility_status = $this->get_raw_from_compatibility_status( $compatibility_status );
-		}
+		return [
+			'value' => $compatibility_status,
+		];
+	}
+
+	public function get_html_report_data() {
+		$compatibility_status = $this->compatibility_tag_service->check(
+			$this->plugin_version,
+			$this->plugins_to_check
+		);
+
+		$compatibility_status = $this->get_html_from_compatibility_status( $compatibility_status );
+
+		return [
+			'value' => $compatibility_status,
+		];
+	}
+
+	public function get_raw_report_data() {
+		$compatibility_status = $this->compatibility_tag_service->check(
+			$this->plugin_version,
+			$this->plugins_to_check
+		);
+
+		$compatibility_status = $this->get_raw_from_compatibility_status( $compatibility_status );
 
 		return [
 			'value' => $compatibility_status,
@@ -100,7 +120,7 @@ class Compatibility_Tag_Report extends Base {
 
 		$compatibility_status = ( new Collection( $compatibility_status ) )
 			->map( function ( $value ) use ( $labels ) {
-				$status = isset( $labels[ $value ] ) ? $labels[ $value ] : __( 'Unknown', 'elementor' );
+				$status = isset( $labels[ $value ] ) ? $labels[ $value ] : esc_html__( 'Unknown', 'elementor' );
 
 				return [ 'compatibility_status' => $status ];
 			} );
@@ -146,11 +166,11 @@ class Compatibility_Tag_Report extends Base {
 	 */
 	private function get_report_labels() {
 		return [
-			Compatibility_Tag::COMPATIBLE   => __( 'Compatible', 'elementor' ),
-			Compatibility_Tag::INCOMPATIBLE => __( 'Incompatible', 'elementor' ),
-			Compatibility_Tag::HEADER_NOT_EXISTS => __( 'Compatibility not specified', 'elementor' ),
-			Compatibility_Tag::INVALID_VERSION => __( 'Compatibility unknown', 'elementor' ),
-			Compatibility_Tag::PLUGIN_NOT_EXISTS => __( 'Error', 'elementor' ),
+			Compatibility_Tag::COMPATIBLE   => esc_html__( 'Compatible', 'elementor' ),
+			Compatibility_Tag::INCOMPATIBLE => esc_html__( 'Incompatible', 'elementor' ),
+			Compatibility_Tag::HEADER_NOT_EXISTS => esc_html__( 'Compatibility not specified', 'elementor' ),
+			Compatibility_Tag::INVALID_VERSION => esc_html__( 'Compatibility unknown', 'elementor' ),
+			Compatibility_Tag::PLUGIN_NOT_EXISTS => esc_html__( 'Error', 'elementor' ),
 		];
 	}
 }

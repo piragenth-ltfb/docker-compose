@@ -2,17 +2,21 @@
 
 namespace Essential_Addons_Elementor\Traits;
 
+use Elementor\Plugin;
+
 if (!defined('ABSPATH')) {
     exit;
 } // Exit if accessed directly
 
 trait Library
 {
+	public $a;
     /**
      *  Return array of registered elements.
      *
      * @todo filter output
      */
+
     public function get_registered_elements()
     {
         return array_keys($this->registered_elements);
@@ -105,21 +109,20 @@ trait Library
         return true;
     }
 
-    /**
-     * Remove files
-     *
-     * @since 3.0.0
-     */
-    public function remove_files($uid = null, $ext = ['css', 'js'])
-    {
-        foreach ($ext as $e) {
-            $path = EAEL_ASSET_PATH . DIRECTORY_SEPARATOR . ($uid ? $uid : 'eael') . '.min.' . $e;
-
-            if (file_exists($path)) {
-                unlink($path);
-            }
-        }
-    }
+	/**
+	 * Remove files
+	 *
+	 * @since 3.0.0
+	 */
+	public function remove_files( $post_id = null, $ext = [ 'css', 'js' ] ) {
+		foreach ( $ext as $e ) {
+			$path = EAEL_ASSET_PATH . DIRECTORY_SEPARATOR . 'eael' . ( $post_id ? '-' . $post_id : '' ) . '.' . $e;
+			if ( file_exists( $path ) ) {
+				unlink( $path );
+			}
+		}
+		do_action( 'eael_remove_assets', $post_id, $ext );
+	}
 
     /**
      * Remove files in dir
@@ -146,27 +149,7 @@ trait Library
      *
      * @since 3.0.0
      */
-    public function clear_cache_files()
-    {
-        check_ajax_referer('essential-addons-elementor', 'security');
 
-        if(!current_user_can('manage_options')){
-            wp_send_json_error(__('you are not allowed to do this action', 'essential-addons-for-elementor-lite'));
-        }
-
-        if (isset($_REQUEST['posts'])) {
-            if (!empty($_POST['posts'])) {
-                foreach (json_decode($_POST['posts']) as $post) {
-                    $this->remove_files('post-' . $post);
-                }
-            }
-        } else {
-            // clear cache files
-            $this->empty_dir(EAEL_ASSET_PATH);
-        }
-
-        wp_send_json(true);
-    }
 
     /**
      * Check if wp running in background
@@ -183,7 +166,7 @@ trait Library
             return true;
         }
         
-        if (!empty($_REQUEST['action']) && !$this->check_background_action($_REQUEST['action'])) {
+        if (!empty($_REQUEST['action']) && !$this->check_background_action( sanitize_text_field( $_REQUEST['action'] ) )) {
             return true;
         }
 
@@ -215,9 +198,10 @@ trait Library
             return false;
         }
 
-        if (!empty($_REQUEST['action']) && !$this->check_background_action($_REQUEST['action'])) {
+        if (!empty($_REQUEST['action']) && !$this->check_background_action( sanitize_text_field( $_REQUEST['action'] ) )) {
             return false;
         }
+
 
         return true;
     }
@@ -296,6 +280,9 @@ trait Library
 	        'home',
 	        'subscriptions',
 	        'payments',
+	        'newpassword',
+	        'manage_sub_accounts',
+	        'ppw_postpass',
         ];
         if (in_array($action_name, $allow_action)){
             return true;
@@ -303,39 +290,31 @@ trait Library
         return false;
     }
 
-	/**
-	 * Remove some old options value from wp_options table which are not use any more
-	 *
-	 * @since 4.7.4
-	 */
-	public function remove_old_options_cache() {
-		$status = get_option( "eael_remove_old_cache" );
-		if ( !$status ) {
-			update_option("eael_remove_old_cache",true);
-			global $wpdb;
-			$sql     = "from {$wpdb->options} as options_tb 
-    				inner join (SELECT option_id FROM {$wpdb->options} 
-    				WHERE ((option_name like '%\_elements' and LENGTH(option_name) = 18 and option_name not like '%\_eael_elements') 
-    				           or (option_name like '%\_custom_js' and LENGTH(option_name) = 19 and option_name not like '%\_eael_custom_js' and (option_value IS NULL or option_value = ''))) 
-    				  and autoload = 'yes') AS options_tb2 
-    				    ON options_tb2.option_id = options_tb.option_id";
-			$selection_sql  = "select count(options_tb.option_id) as total ".$sql;
-			$results = $wpdb->get_var( $selection_sql );
-			if ( $results > 1 ) {
-				$deletiation_sql  = "delete options_tb ".$sql;
-				$wpdb->query($deletiation_sql);
-			}
-		}
-	}
-
 	/*
 	 * Check some other cookie for solve asset loading issue
 	 */
-	public function check_third_party_cookie_status() {
+	public function check_third_party_cookie_status($id='') {
 		global $Password_Protected;
 		if ( is_object( $Password_Protected ) && method_exists( $Password_Protected, 'cookie_name' ) && isset( $_COOKIE[ $Password_Protected->cookie_name() ] ) ) {
 			return true;
 		}
 		return false;
 	}
+
+	/**
+	 * check_protected_content_status
+	 *
+	 * check EaeL Protected content cookie set or not
+	 *
+	 * @return bool
+	 */
+	public function check_protected_content_status(){
+		if(!empty($_POST['eael_protected_content_id'])){
+			if(!empty($_POST['protection_password_'.$_POST['eael_protected_content_id']])){
+				return true;
+			}
+		}
+		return false;
+	}
+
 }

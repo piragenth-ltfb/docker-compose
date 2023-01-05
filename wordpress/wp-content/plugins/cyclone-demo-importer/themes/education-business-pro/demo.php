@@ -22,23 +22,23 @@ function cdi_import_files() {
             'preview_url' => 'https://bizbergthemes.com/education-business-pro/homepage-pro/'
         ),
         array(
-            'import_file_name'=> __('Homepage Slider 1','cdi'),
+            'import_file_name'=> __('Higher Education Business PRO','cdi'),
             'categories'      =>  array( 'Homepage' ),
             'local_import_file'=> CDI_PLUGIN_DIR_PATH . '/themes/education-business-pro/inc/content.xml',
             'local_import_customizer_file' => CDI_PLUGIN_DIR_PATH . '/themes/education-business-pro/inc/options.dat',
             'local_import_widget_file'     => CDI_PLUGIN_DIR_PATH . '/themes/education-business-pro/inc/widgets.wie',
-            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/homepage-slider-1.jpg',
-            'preview_url' => 'https://bizbergthemes.com/education-business-pro/homepage-slider-1/'
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/homepage-higher-education.jpg',
+            'preview_url' => 'https://bizbergthemes.com/education-business-pro/higher-education-business-pro/'
         ),
         array(
-            'import_file_name'=> __('Homepage Slider 2','cdi'),
+            'import_file_name'=> __('Education Shop PRO','cdi'),
             'categories'      =>  array( 'Homepage' ),
             'local_import_file'=> CDI_PLUGIN_DIR_PATH . '/themes/education-business-pro/inc/content.xml',
             'local_import_customizer_file' => CDI_PLUGIN_DIR_PATH . '/themes/education-business-pro/inc/options.dat',
             'local_import_widget_file'     => CDI_PLUGIN_DIR_PATH . '/themes/education-business-pro/inc/widgets.wie',
-            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/homepage-slider-2.jpg',
-            'preview_url' => 'https://bizbergthemes.com/education-business-pro/homepage-slider-2/'
-        )
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/homepage-pro-shop.jpg',
+            'preview_url' => 'https://bizbergthemes.com/education-business-pro/education-shop-pro/'
+        ),
     );
 }
 
@@ -65,12 +65,12 @@ function cdi_after_import_setup( $selected_import ) {
             $front_page_id = get_page_by_path( 'homepage-pro' );
             break;
 
-        case 'Homepage Slider 1':
-            $front_page_id = get_page_by_path( 'homepage-slider-1' );
+        case 'Higher Education Business PRO':
+            $front_page_id = get_page_by_path( 'higher-education-business-pro' );
             break;
 
-        case 'Homepage Slider 2':
-            $front_page_id = get_page_by_path( 'homepage-slider-2' );
+        case 'Education Shop PRO':
+            $front_page_id = get_page_by_path( 'education-shop-pro' );
             break;
         
         default:
@@ -122,6 +122,41 @@ function cdi_register_plugins( $plugins ) {
         [ 
           'name'     => 'Essential Addons for Elementor', 
           'slug'     => 'essential-addons-for-elementor-lite', 
+          'required' => true,             
+        ],
+        [ 
+          'name'     => 'Education Addon for Elementor', 
+          'slug'     => 'education-addon', 
+          'required' => true,             
+        ],
+        [ 
+          'name'     => 'LearnPress – WordPress LMS Plugin', 
+          'slug'     => 'learnpress', 
+          'required' => true,             
+        ],
+        [ 
+          'name'     => 'LearnPress – Course Review', 
+          'slug'     => 'learnpress-course-review', 
+          'required' => true,             
+        ],
+        [ 
+          'name'     => 'The Events Calendar', 
+          'slug'     => 'the-events-calendar', 
+          'required' => true,             
+        ],
+        [ 
+          'name'     => 'WooCommerce', 
+          'slug'     => 'woocommerce', 
+          'required' => true,             
+        ],
+        [ 
+          'name'     => 'YITH WooCommerce Quick View',
+          'slug'     => 'yith-woocommerce-quick-view',
+          'required' => true,             
+        ],
+        [ 
+          'name'     => 'YITH WooCommerce Wishlist', 
+          'slug'     => 'yith-woocommerce-wishlist', 
           'required' => true,             
         ],
     ];

@@ -269,8 +269,9 @@ class Notification extends Abstract_Module {
 			],
 		];
 		$notification_details = wp_parse_args( $notification_details, $default );
-
-		$notification_html = '<div class="notice notice-success is-dismissible themeisle-sdk-notice" data-notification-id="' . esc_attr( $notification_details['id'] ) . '" id="' . esc_attr( $notification_details['id'] ) . '-notification"> <div class="themeisle-sdk-notification-box">';
+		global $pagenow;
+		$notification_details['ctas']['cancel']['link'] = wp_nonce_url( add_query_arg( [ 'nid' => $notification_details['id'] ], admin_url( $pagenow ) ), $notification_details['id'], 'tsdk_dismiss_nonce' );
+		$notification_html                              = '<div class="notice notice-success is-dismissible themeisle-sdk-notice" data-notification-id="' . esc_attr( $notification_details['id'] ) . '" id="' . esc_attr( $notification_details['id'] ) . '-notification"> <div class="themeisle-sdk-notification-box">';
 
 		if ( ! empty( $notification_details['heading'] ) ) {
 			$notification_html .= sprintf( '<h4>%s</h4>', wp_kses_post( $notification_details['heading'] ) );
@@ -343,16 +344,18 @@ class Notification extends Abstract_Module {
 								'nonce': '<?php echo esc_attr( wp_create_nonce( (string) __CLASS__ ) ); ?>',
 								'action': 'themeisle_sdk_dismiss_notice',
 								'id': notification_id,
-								'confirm': confirm
-							}
-						);
+								'confirm': confirm,
+							},
+						).fail(function() {
+							location.href = encodeURI(link.attr('href'));
+						});
 						if (confirm === 'yes') {
 							$(this).trigger('themeisle-sdk:confirmed');
 						} else {
 							$(this).trigger('themeisle-sdk:canceled');
 						}
 						container.hide();
-						if (link.attr('href') === '#') {
+						if (confirm === 'no' || link.attr('href') === '#') {
 							return false;
 						}
 					});
@@ -382,6 +385,31 @@ class Notification extends Abstract_Module {
 		update_option( $id, $confirm );
 		do_action( $id . '_process_confirm', $confirm );
 		wp_send_json( [] );
+	}
+	/**
+	 * Dismiss the notification.
+	 */
+	public static function dismiss_get() {
+		$is_nonce_dismiss = sanitize_text_field( isset( $_GET['tsdk_dismiss_nonce'] ) ? $_GET['tsdk_dismiss_nonce'] : '' );
+		if ( strlen( $is_nonce_dismiss ) < 5 ) {
+			return;
+		}
+		$id = sanitize_text_field( isset( $_GET['nid'] ) ? $_GET['nid'] : '' );
+		if ( empty( $id ) ) {
+			return;
+		}
+		$nonce = wp_verify_nonce( sanitize_text_field( $_GET['tsdk_dismiss_nonce'] ), $id );
+		if ( $nonce !== 1 ) {
+			return;
+		}
+		$ids = wp_list_pluck( self::$notifications, 'id' );
+		if ( ! in_array( $id, $ids, true ) ) {
+			return;
+		}
+		$confirm = 'no';
+		self::set_last_active_notification_timestamp();
+		update_option( $id, $confirm );
+		do_action( $id . '_process_confirm', $confirm );
 	}
 
 	/**
@@ -456,6 +484,7 @@ class Notification extends Abstract_Module {
 		self::$notifications = $notifications;
 		add_action( 'admin_notices', array( __CLASS__, 'show_notification' ) );
 		add_action( 'wp_ajax_themeisle_sdk_dismiss_notice', array( __CLASS__, 'dismiss' ) );
+		add_action( 'admin_head', array( __CLASS__, 'dismiss_get' ) );
 		add_action( 'admin_head', array( __CLASS__, 'setup_notifications' ) );
 
 		return $this;

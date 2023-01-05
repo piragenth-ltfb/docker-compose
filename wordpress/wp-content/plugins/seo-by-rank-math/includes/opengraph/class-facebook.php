@@ -10,11 +10,9 @@
 
 namespace RankMath\OpenGraph;
 
-use DateInterval;
 use RankMath\Helper;
 use RankMath\Paper\Paper;
 use MyThemeShop\Helpers\Str;
-use MyThemeShop\Helpers\Conditional;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -47,7 +45,7 @@ class Facebook extends OpenGraph {
 	}
 
 	/**
-	 * Hooks
+	 * Hooks.
 	 */
 	private function hooks() {
 		if ( isset( $GLOBALS['fb_ver'] ) || class_exists( 'Facebook_Loader', false ) ) {
@@ -208,14 +206,14 @@ class Facebook extends OpenGraph {
 	}
 
 	/**
-	 * Outputs the canonical URL as OpenGraph URL, which consolidates likes and shares.
-	 *
-	 * @copyright Copyright (C) 2008-2019, Yoast BV
-	 * The following code is a derivative work of the code from the Yoast(https://github.com/Yoast/wordpress-seo/), which is licensed under GPL v3.
+	 * Output the canonical URL for the OpenGraph URL.
 	 *
 	 * @link https://developers.facebook.com/docs/reference/opengraph/object-type/article/
 	 */
 	public function url() {
+		/**
+		 * Filter the OpenGraph URL.
+		 */
 		$url = $this->do_filter( 'opengraph/url', esc_url( Paper::get()->get_canonical() ) );
 		$this->tag( 'og:url', $url );
 	}
@@ -224,7 +222,7 @@ class Facebook extends OpenGraph {
 	 * Output the site name straight from the blog info.
 	 */
 	public function site_name() {
-		$this->tag( 'og:site_name', get_bloginfo( 'name' ) );
+		$this->tag( 'og:site_name', Helper::get_settings( 'titles.website_name', get_bloginfo( 'name' ) ) );
 	}
 
 	/**
@@ -314,7 +312,7 @@ class Facebook extends OpenGraph {
 		$pub  = mysql2date( DATE_W3C, $post->post_date, false );
 		$mod  = mysql2date( DATE_W3C, $post->post_modified, false );
 
-		if ( $mod !== $pub ) {
+		if ( strtotime( $mod ) > strtotime( $pub ) ) {
 			$this->tag( 'og:updated_time', $mod );
 		}
 	}
@@ -344,6 +342,6 @@ class Facebook extends OpenGraph {
 	 * @return bool
 	 */
 	private function is_product() {
-		return function_exists( 'is_woocommerce' ) && is_product();
+		return function_exists( 'is_woocommerce' ) && function_exists('is_product') && is_product();
 	}
 }

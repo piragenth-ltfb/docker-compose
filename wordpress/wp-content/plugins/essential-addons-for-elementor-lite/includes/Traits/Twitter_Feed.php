@@ -2,12 +2,15 @@
 
 namespace Essential_Addons_Elementor\Traits;
 
+use function Better_Payment\Lite\Classes\better_payment_dd;
+
 if (!defined('ABSPATH')) {
     exit;
 } // Exit if accessed directly
 
 trait Twitter_Feed
 {
+    public static $twitter_feed_fetched_count = 0;
     /**
      * Twitter Feed
      *
@@ -16,7 +19,8 @@ trait Twitter_Feed
     public function twitter_feed_render_items($id, $settings, $class = '')
     {
         $token = get_option($id . '_' . $settings['eael_twitter_feed_ac_name'] . '_tf_token');
-        $cache_key = $id . '_' . $settings['eael_twitter_feed_ac_name'].$settings['eael_twitter_feed_data_cache_limit'] . '_tf_cache';
+	    $expiration = ! empty( $settings['eael_auto_clear_cache'] ) && ! empty( $settings['eael_twitter_feed_cache_limit'] ) ? absint( $settings['eael_twitter_feed_cache_limit'] ) * MINUTE_IN_SECONDS : DAY_IN_SECONDS;
+	    $cache_key = $settings['eael_twitter_feed_ac_name'] . '_' . $expiration . '_' . md5( $settings['eael_twitter_feed_hashtag_name'] . $settings['eael_twitter_feed_consumer_key'] . $settings['eael_twitter_feed_consumer_secret'] ) . '_tf_cache';
         $items = get_transient( $cache_key );
         $html = '';
 
@@ -49,14 +53,6 @@ trait Twitter_Feed
                 }
             }
 
-            $args = array(
-                'httpversion' => '1.1',
-                'blocking' => true,
-                'headers' => array(
-                    'Authorization' => "Bearer $token",
-                ),
-            );
-
             add_filter('https_ssl_verify', '__return_false');
 
             $response = wp_remote_get('https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=' . $settings['eael_twitter_feed_ac_name'] . '&count=999&tweet_mode=extended', [
@@ -67,15 +63,19 @@ trait Twitter_Feed
                 ],
             ]);
 
-            if (!is_wp_error($response)) {
-                $items = json_decode(wp_remote_retrieve_body($response), true);
-                set_transient( $cache_key, $items, $settings['eael_twitter_feed_data_cache_limit'] * MINUTE_IN_SECONDS);
-            }
+	        if ( is_wp_error( $response ) ) {
+		        return $html;
+	        }
+
+	        if ( ! empty( $response['response'] ) && $response['response']['code'] == 200 ) {
+		        $items      = json_decode( wp_remote_retrieve_body( $response ), true );
+		        set_transient( $cache_key, $items, $expiration );
+	        }
         }
 
-        if (empty($items)) {
-            return;
-        }
+	    if ( empty( $items ) ) {
+		    return $html;
+	    }
 
         if ($settings['eael_twitter_feed_hashtag_name']) {
             foreach ($items as $key => $item) {
@@ -96,11 +96,45 @@ trait Twitter_Feed
         }
 
         $items = array_splice($items, 0, $settings['eael_twitter_feed_post_limit']);
-
+        $post_per_page = ! empty($settings['eael_twitter_feed_posts_per_page']) ? $settings['eael_twitter_feed_posts_per_page'] : 10;
+        $counter = 0;
+        $current_page = 1;
+        self::$twitter_feed_fetched_count = count($items);
+            
         foreach ($items as $item) {
+            $counter++;
+            if ($post_per_page > 0) {
+                $current_page = ceil($counter / $post_per_page);
+            }
+
+            $is_reply = !empty($item['in_reply_to_status_id']) ? true : false;
+            $show_reply = ( !empty($settings['eael_twitter_feed_show_replies']) && 'true' === $settings['eael_twitter_feed_show_replies'] ) ? true : false;
+
+            if($is_reply && !$show_reply){
+                continue;
+            }
+
             $delimeter = strlen($item['full_text']) > $settings['eael_twitter_feed_content_length'] ? '...' : '';
 
-            $html .= '<div class="eael-twitter-feed-item ' . $class . '">
+	        $media = isset( $item['extended_entities']['media'] ) ? $item['extended_entities']['media'] :
+		        ( isset( $item['retweeted_status']['entities']['media'] ) ? $item['retweeted_status']['entities']['media'] :
+			        ( isset( $item['quoted_status']['entities']['media'] ) ? $item['quoted_status']['entities']['media'] :
+				        [] ) );
+
+            $show_pagination = ! empty($settings['pagination']) && 'yes' === $settings['pagination'] ? true : false;
+            
+            if($show_pagination){
+                $pagination_class = ' page-' . $current_page;
+                $pagination_class .= 1 === intval( $current_page ) ? ' eael-d-block' : ' eael-d-none';
+            } else {
+                $pagination_class = 'page-1 eael-d-block';
+            }
+
+            if ($counter == count($items)) {
+                $pagination_class .= ' eael-last-twitter-feed-item';
+            }
+
+            $html .= '<div class="eael-twitter-feed-item ' . esc_attr( $class ) . ' ' . esc_attr( $pagination_class ) . ' ">
 				<div class="eael-twitter-feed-item-inner">
 				    <div class="eael-twitter-feed-item-header clearfix">';
                         if ($settings['eael_twitter_feed_show_avatar'] == 'true') {
@@ -108,14 +142,14 @@ trait Twitter_Feed
                                 <img src="' . $item['user']['profile_image_url_https'] . '">
                             </a>';
                         }
-                        
+
                         $html .= '<a class="eael-twitter-feed-item-meta" href="//twitter.com/' . $settings['eael_twitter_feed_ac_name'] . '" target="_blank">';
                             if ($settings['eael_twitter_feed_show_icon'] == 'true') {
                                 $html .= '<i class="fab fa-twitter eael-twitter-feed-item-icon"></i>';
                             }
                             $html .= '<span class="eael-twitter-feed-item-author">' . $item['user']['name'] . '</span>
                         </a>';
-            
+
                         if ($settings['eael_twitter_feed_show_date'] == 'true') {
                             $html .= '<span class="eael-twitter-feed-item-date">' . sprintf(__('%s ago', 'essential-addons-for-elementor-lite'), human_time_diff(strtotime($item['created_at']))) . '</span>';
                         }
@@ -129,7 +163,7 @@ trait Twitter_Feed
                             $html .= '<a href="//twitter.com/' . $item['user']['screen_name'] . '/status/' . $item['id_str'] . '" target="_blank" class="read-more-link">'.$read_more.' <i class="fas fa-angle-double-right"></i></a>';
                         }
                     $html .= '</div>
-                    ' . (isset($item['extended_entities']['media'][0]) && $settings['eael_twitter_feed_media'] == 'true' ? ($item['extended_entities']['media'][0]['type'] == 'photo' ? '<img src="' . $item['extended_entities']['media'][0]['media_url_https'] . '">' : '') : '') . '
+                    ' . ( isset( $media[0] ) && $settings['eael_twitter_feed_media'] == 'true' ? ( $media[0]['type'] == 'photo' ? '<img src="' . $media[0]['media_url_https'] . '">' : '' ) : '' ) . '
                 </div>
 			</div>';
         }

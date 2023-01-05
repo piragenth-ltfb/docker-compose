@@ -57,6 +57,7 @@ class Util
     public static function has_method_been_called($method, $stack = null)
     {
         if (empty($stack)) {
+            // phpcs:ignore
             $stack = debug_backtrace();
         }
 
@@ -440,9 +441,9 @@ class Util
      *
      * @return string URL to rest_api_base, e.g. http://example.com/wp-json/mdb-api/vi
      */
-    public function rest_url() 
+    public function rest_url()
     {
-        if (is_plugin_active( 'sitepress-multilingual-cms/sitepress.php') || defined('ICL_SITEPRESS_VERSION')) {
+        if ((is_plugin_active('sitepress-multilingual-cms/sitepress.php') || defined('ICL_SITEPRESS_VERSION')) && !empty(get_option('permalink_structure'))) {
             return get_option('home') . '/' . rest_get_url_prefix() . '/' . $this->props->rest_api_base;
         }
         return get_rest_url(null, $this->props->rest_api_base);
@@ -481,9 +482,10 @@ class Util
         }
     }
 
-    function set_time_limit()
-    {
-        @set_time_limit(0);
+    function set_time_limit() {
+        if ( function_exists( 'set_time_limit' ) ) {
+            @\set_time_limit( 0 );
+        }
     }
 
     function display_errors()
@@ -639,6 +641,7 @@ class Util
      */
     public function get_caller_function()
     {
+        // phpcs:ignore
         list(, , $caller) = debug_backtrace(false);
 
         if (!empty($caller['function'])) {
@@ -734,29 +737,31 @@ class Util
 
     /**
      * Returns an associative array of html escaped useful information about the site.
-     *
+     * @param array $state_data
      * @return array
      */
-    public function site_details()
+    public function site_details($state_data = [])
     {
         global $wpdb;
         $table_prefix = $wpdb->base_prefix;
         $uploads      = wp_upload_dir();
 
         $site_details = array(
-            'is_multisite'         => esc_html(is_multisite() ? 'true' : 'false'),
-            'site_url'             => esc_html(addslashes(site_url())),
-            'home_url'             => esc_html(addslashes(home_url())),
-            'prefix'               => esc_html($table_prefix),
-            'uploads_baseurl'      => esc_html(addslashes(trailingslashit($uploads['baseurl']))),
-            'uploads'              => $this->uploads_info(),
-            'uploads_dir'          => esc_html(addslashes($this->get_short_uploads_dir())),
-            'subsites'             => $this->subsites_list(),
-            'subsites_info'        => $this->subsites_info(),
-            'is_subdomain_install' => esc_html((is_multisite() && is_subdomain_install()) ? 'true' : 'false'),
+            'is_multisite'                  => esc_html(is_multisite() ? 'true' : 'false'),
+            'site_url'                      => esc_html(addslashes(site_url())),
+            'home_url'                      => esc_html(addslashes(Util::home_url())),
+            'prefix'                        => esc_html($table_prefix),
+            'uploads_baseurl'               => esc_html(addslashes(trailingslashit($uploads['baseurl']))),
+            'uploads'                       => $this->uploads_info(),
+            'uploads_dir'                   => esc_html(addslashes($this->get_short_uploads_dir())),
+            'subsites'                      => $this->subsites_list(),
+            'subsites_info'                 => $this->subsites_info(),
+            'is_subdomain_install'          => esc_html((is_multisite() && is_subdomain_install()) ? 'true' : 'false'),
+            'high_performance_transfers'    => (bool)Settings::get_setting('high_performance_transfers'),
+            'theoreticalTransferBottleneck' => apply_filters('wpmdb_theoretical_transfer_bottleneck', 0)
         );
 
-        $site_details = apply_filters('wpmdb_site_details', $site_details);
+        $site_details = apply_filters('wpmdb_site_details', $site_details, $state_data);
 
         return $site_details;
     }
@@ -883,9 +888,9 @@ class Util
      */
     public function is_muplugin_writable()
     {
-        //Assumes by default we can create the mu-plugins folder and compatibility plugin if they don't exist
-        $mu_folder_writable = true;
-        $mu_plugin_writable = true;
+        //Assumes by default we cannot create the mu-plugins folder and compatibility plugin if they don't exist
+        $mu_folder_writable = false;
+        $mu_plugin_writable = false;
 
         //If the mu-plugins folder exists, make sure it's writable.
         if (true === $this->filesystem->is_dir($this->props->mu_plugin_dir)) {
@@ -897,11 +902,7 @@ class Util
             $mu_plugin_writable = $this->filesystem->is_writable($this->props->mu_plugin_dest);
         }
 
-        if (false === $mu_folder_writable || false === $mu_plugin_writable) {
-            return false;
-        }
-
-        return true;
+        return true === $mu_folder_writable || true === $mu_plugin_writable;
     }
 
     function get_plugin_details($plugin_path, $prefix = '')
@@ -1214,5 +1215,143 @@ class Util
         return add_query_arg(array(
             'page' => 'wp-migrate-db-pro#settings',
         ), network_admin_url($page));
+    }
+
+    public static function is_regex_pattern_valid($pattern) {
+        return @preg_match($pattern, '') !== false;
+    }
+
+    /**
+     * Returns an array of table names with a new prefix.
+     *
+     * @param array  $tables
+     *
+     * @param string $old_prefix
+     *
+     * @param string $new_prefix
+     *
+     * @return array
+     */
+    public static function change_tables_prefix($tables, $old_prefix, $new_prefix)
+    {
+        $new_tables = [];
+        foreach($tables as $table) {
+            $new_tables[] = self::prefix_updater($table, $old_prefix, $new_prefix);
+        }
+        return $new_tables;
+    }
+
+    /**
+     * Modifies of table name to have a new prefix.
+     *
+     * @param string $table
+     *
+     * @param string $old_prefix
+     *
+     * @param string $new_prefix
+     *
+     * @return array
+     */
+    public static function prefix_updater($prefixed, $old_prefix, $new_prefix)
+    {
+        if (substr($prefixed, 0, strlen($old_prefix)) == $old_prefix) {
+            $str = substr($prefixed, strlen($old_prefix));
+            return $new_prefix . $str;
+        }
+        return $prefixed;
+    }
+
+    /**
+     * Removes WPML home_url_filters if present.
+     *
+     * @return string
+     */
+    public static function home_url() {
+        global $wpml_url_filters;
+        if($wpml_url_filters) {
+            remove_filter('home_url', array($wpml_url_filters, 'home_url_filter'), -10, 4);
+        }
+        $home_url = home_url();
+        if($wpml_url_filters) {
+            add_filter('home_url', array($wpml_url_filters, 'home_url_filter'), -10, 4);
+        }
+        return $home_url;
+    }
+
+    public static function is_addon_registered($addon) {
+        return apply_filters('wpmdb_addon_registered_'.$addon, false);
+    }
+
+    /**
+     * Deactivates legacy addons on upgrade
+     *
+     * @return void
+     */
+    public static function disable_legacy_addons() {
+        deactivate_plugins([
+            'wp-migrate-db-pro-media-files/wp-migrate-db-pro-media-files.php',
+            'wp-migrate-db-pro-cli/wp-migrate-db-pro-cli.php',
+            'wp-migrate-db-pro-multisite-tools/wp-migrate-db-pro-multisite-tools.php',
+            'wp-migrate-db-pro-theme-plugin-files/wp-migrate-db-pro-theme-plugin-files.php',
+        ]);
+    }
+
+    /**
+     * Checks if a directory is empty
+     *
+     * @return bool
+     */
+    public static function is_empty_dir($dir)
+    {
+        $res = scandir($dir);
+        if ($res === false) {
+            return false;
+        }
+        //do not include directories with only '.' '..'
+        return count(array_diff($res, ['.', '..'])) === 0;
+    }
+
+    /**
+     * Checks if a request was initiated from a frontend page.
+     *
+     * @return bool
+     */
+    public static function is_frontend() {
+        return  !(defined('WP_CLI') && WP_CLI) && !self::is_doing_mdb_rest() && !self::wpmdb_is_ajax() && !is_admin();
+    }
+
+    /**
+     * Checks if a REST request is being made to a migrate endpoint.
+     *
+     * @return bool
+     */
+    public static function is_doing_mdb_rest() {
+        $rest_endpoint = 'mdb-api';
+
+        return isset( $_SERVER['REQUEST_URI'] ) && false !== strpos( $_SERVER['REQUEST_URI'], $rest_endpoint );
+    }
+
+    /**
+     * Checks if an AJAX request is being made to a migrate endpoint.
+     *
+     * @return bool
+     */
+    public static function wpmdb_is_ajax() {
+        // must be doing AJAX the WordPress way
+        if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) {
+            return false;
+        }
+
+        // must be one of our actions -- e.g. core plugin (wpmdb_*), media files (wpmdbmf_*)
+        if ( ! isset( $_POST['action'] ) || 0 !== strpos( $_POST['action'], 'wpmdb' ) ) {
+            return false;
+        }
+
+        // must be on blog #1 (first site) if multisite
+        if ( is_multisite() && 1 != get_current_site()->id ) {
+            return false;
+        }
+
+        return true;
     }
 }

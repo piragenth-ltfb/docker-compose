@@ -15,6 +15,7 @@ use DeliciousBrains\WPMDB\Common\Sql\Table;
 use DeliciousBrains\WPMDB\Common\Util\Util;
 use DeliciousBrains\WPMDB\Container;
 use DeliciousBrains\WPMDB\Common\MigrationPersistence\Persistence;
+use function WP_CLI\Utils\make_progress_bar;
 
 class Cli
 {
@@ -87,6 +88,8 @@ class Cli
 	 */
 	private $dynamic_properties;
 
+	private $wpmdb_cli;
+
 	function __construct(
 		FormData $form_data,
 		Util $util,
@@ -117,6 +120,7 @@ class Cli
 	public function register()
 	{
 		add_filter('wpmdb_cli_finalize_migration_response', array($this, 'finalize_ajax'), 10, 2);
+        add_filter('wpmdb_cli_tables_to_migrate', array($this, 'filter_non_database_migration_tables'), 99, 2);
 	}
 
 	/**
@@ -244,6 +248,7 @@ class Cli
 			return $this->profile;
 		}
 
+		$this->profile = apply_filters('wpmdb_cli_filter_before_migration', $this->profile, $this->post_data);
 		do_action('wpmdb_cli_before_migration', $this->post_data, $this->profile);
 		$this->migration = $this->cli_initiate_migration();
 
@@ -258,8 +263,8 @@ class Cli
 				$tables_to_process = $this->get_tables_to_migrate();
 			}
 		} else {
-			$tables_to_process = $this->migrate_tables();
-		}
+            $tables_to_process = $this->migrate_tables();
+        }
 
 		if (is_wp_error($tables_to_process)) {
 			return $tables_to_process;
@@ -409,6 +414,10 @@ class Cli
 	function get_progress_bar($tables, $stage)
 	{
 
+        if($this->is_non_database_migration($this->profile)) {
+            return null;
+        }
+
 		$progress_label = __('Exporting tables', 'wp-migrate-db-cli');
 
 		if ('find_replace' === $this->profile['action']) {
@@ -477,6 +486,9 @@ class Cli
 	 */
 	function migrate_tables()
 	{
+		if($this->is_non_database_migration($this->profile)) {
+			return [];
+		}
 		$tables_to_migrate                   = $this->get_tables_to_migrate();
 		$this->dynamic_properties->post_data = $this->post_data;
 
@@ -493,7 +505,7 @@ class Cli
 			extract($filtered_vars, EXTR_OVERWRITE);
 		}
 
-		if (empty($tables)) {
+		if (empty($tables) && !$this->is_non_database_migration($this->profile)) {
 			return $this->cli_error(__('No tables selected for migration.', 'wp-migrate-db'));
 		}
 
@@ -557,11 +569,15 @@ class Cli
 
 					$increment = $migration_progress - $last_migration_progress;
 
-					$notify->tick($increment);
+                    if (null !== $notify) {
+                        $notify->tick($increment);
+                    }
 				} while (-1 != $current_row);
 			}
 
-			$notify->finish();
+            if (null !== $notify) {
+                $notify->finish();
+            }
 
 			++$stage_iterator;
 			$args['stage'] = 'migrate';
@@ -596,7 +612,9 @@ class Cli
 	{
 		do_action('wpmdb_cli_before_finalize_migration', $this->profile, $this->migration);
 
-		\WP_CLI::log(__('Cleaning up...', 'wp-migrate-db-cli'));
+        if (!$this->is_non_database_migration($this->profile)) {
+            \WP_CLI::log(__('Cleaning up...', 'wp-migrate-db-cli'));
+        }
 
 		$finalize = apply_filters('wpmdb_cli_finalize_migration', true, $this->profile, $this->migration);
 		if (is_wp_error($finalize)) {
@@ -663,6 +681,9 @@ class Cli
 	 */
 	function  finalize_ajax($response, $post_data)
 	{
+		if (is_wp_error($response)) {
+			return $response;
+		}
 		// don't send redundant POST variables
 		$args = $this->http_helper->filter_post_elements($post_data, array('action', 'migration_state_id', 'prefix', 'tables', 'profileID', 'profileType'));
 		$_POST    = $args;
@@ -716,17 +737,20 @@ class Cli
 			'export_dest',
 			'find',
 			'replace',
+			'regex-find',
+			'regex-replace',
+			'case-sensitive-find',
+			'case-sensitive-replace',
 			'exclude-spam',
 			'gzip-file',
 			'exclude-post-revisions',
 			'skip-replace-guids',
 			'include-transients',
+            'exclude-database'
 		);
 
 		$known_args   = apply_filters('wpmdb_cli_filter_get_extra_args', $known_args);
-		$unknown_args = array_diff(array_keys($assoc_args), $known_args);
-
-		return $unknown_args;
+		return array_diff(array_keys($assoc_args), $known_args);
 	}
 
 	/**
@@ -746,11 +770,11 @@ class Cli
 
 		//load correct cli class
 		if (function_exists('wp_migrate_db_pro_cli_addon') && function_exists('wp_migrate_db_pro')) {
-			$wpmdb_cli = wp_migrate_db_pro_cli_addon();
+			$this->wpmdb_cli = wp_migrate_db_pro_cli_addon();
 		} elseif (function_exists('wpmdb_pro_cli')) {
-			$wpmdb_cli = wpmdb_pro_cli();
+			$this->wpmdb_cli = wpmdb_pro_cli();
 		} else {
-			$wpmdb_cli = wpmdb_cli();
+			$this->wpmdb_cli = wpmdb_cli();
 		}
 
 		$unknown_args = $this->get_unknown_args($assoc_args);
@@ -761,14 +785,8 @@ class Cli
 				$message .= "\n " . sprintf(__('unknown %s parameter', 'wp-migrate-db-cli'), '--' . $unknown_arg);
 			}
 
-			if (
-				is_a($wpmdb_cli, '\DeliciousBrains\WPMDB\Pro\Cli\Export') ||
-				is_a($wpmdb_cli, '\DeliciousBrains\WPMDBCli\Cli')
-			) {
-				$message .= "\n" . __('Please make sure that you have activated the appropriate addons for WP Migrate DB Pro.', 'wp-migrate-db-cli');
-			}
 
-			return $wpmdb_cli->cli_error($message);
+			return $this->wpmdb_cli->cli_error($message);
 		}
 
 		foreach ($assoc_args as $key => $value) {
@@ -778,7 +796,7 @@ class Cli
 		}
 
 		if (empty($assoc_args['action'])) {
-			return $wpmdb_cli->cli_error(__('Missing action parameter', 'wp-migrate-db-cli'));
+			return $this->wpmdb_cli->cli_error(__('Missing action parameter', 'wp-migrate-db-cli'));
 		}
 
 		if ('savefile' === $assoc_args['action'] && !empty($assoc_args['export_dest'])) {
@@ -787,29 +805,80 @@ class Cli
 
 		$action = $assoc_args['action'];
 
-		// --find=<old> and --replace=<new>
-		$replace_old = array();
-		$replace_new = array();
-		if (!empty($assoc_args['find'])) {
-			$replace_old = str_getcsv($assoc_args['find']);
-		} else {
-			if ('find_replace' === $assoc_args['action']) {
-				if (empty($assoc_args['replace'])) {
-					return $wpmdb_cli->cli_error(__('Missing find and replace values.', 'wp-migrate-db-cli'));
-				}
+		// --find=<old> and --replace=<new> and --regex-find=<regex> and --regex-replace=<string>
+		$replace_old   = array();
+		$replace_new   = array();
+		$regex = array();
+		$case_sensitive = array();
 
-				return $wpmdb_cli->cli_error(__('Find value is required.', 'wp-migrate-db-cli'));
-			}
-		}
-		if (!empty($assoc_args['replace'])) {
-			$replace_new = str_getcsv($assoc_args['replace']);
-		} else {
-			if ('find_replace' === $assoc_args['action']) {
-				return $wpmdb_cli->cli_error(__('Replace value is required.', 'wp-migrate-db-cli'));
-			}
-		}
+        if(!empty($assoc_args['regex-find'])) {
+            $regex_search = $assoc_args['regex-find'];
+
+            if(!Util::is_regex_pattern_valid($regex_search)){
+                return $this->wpmdb_cli->cli_error(__('Please make sure Regular Expression find & replace pattern is valid', 'wp-migrate-db-cli'));
+            }
+
+            if (('find_replace' === $assoc_args['action']) && empty($assoc_args['regex-replace'])) {
+                return $this->wpmdb_cli->cli_error(__('Missing Regex find and replace values.', 'wp-migrate-db-cli'));
+            }
+
+            $replace_old[] = $regex_search;
+            $regex[count($replace_old)] = true;
+        }
+
+        if (!empty($assoc_args['regex-replace'])) {
+            $regex_replace = $assoc_args['regex-replace'];
+            if (('find_replace' === $assoc_args['action']) && empty($assoc_args['regex-find'])) {
+                return $this->wpmdb_cli->cli_error(__('Missing Regex find and replace values.', 'wp-migrate-db-cli'));
+            }
+            $replace_new[] = $regex_replace;
+        }
+
+        if (!empty($assoc_args['case-sensitive-find'])) {
+            $case_sensitive_search = $this->extract_argument('case-sensitive-find', $assoc_args);
+            if (('find_replace' === $assoc_args['action']) && empty($assoc_args['case-sensitive-replace'])) {
+                return $this->wpmdb_cli->cli_error(__('Missing case sensitive find and replace values.', 'wp-migrate-db-cli'));
+            }
+
+            $replace_old_count = count($replace_old);
+            $i = $replace_old_count === 0 ? 1 : $replace_old_count+1;
+            $replace_old = array_merge($replace_old, $case_sensitive_search);
+
+            foreach ($case_sensitive_search as $value) {
+                $case_sensitive[$i] = true;
+                $i++;
+            }
+        }
+
+        if (!empty($assoc_args['case-sensitive-replace'])) {
+            $case_sensitive_replace = $this->extract_argument('case-sensitive-replace', $assoc_args);
+            if (('find_replace' === $assoc_args['action']) && empty($assoc_args['case-sensitive-find'])) {
+                return $this->wpmdb_cli->cli_error(__('Missing case sensitive find and replace values.', 'wp-migrate-db-cli'));
+            }
+            $replace_new = array_merge($replace_new, $case_sensitive_replace);
+        }
+
+        if (!empty($assoc_args['find'])) {
+            $replace_old = array_merge($replace_old, str_getcsv($assoc_args['find']));
+        } else if (('find_replace' === $assoc_args['action']) && empty($regex_replace) && empty($regex_search) && empty($case_sensitive_search) && empty($case_sensitive_replace)) {
+            if (empty($assoc_args['replace'])) {
+
+                return $this->wpmdb_cli->cli_error(__('Missing find and replace values.', 'wp-migrate-db-cli'));
+            }
+
+            return $this->wpmdb_cli->cli_error(__('Find value is required.', 'wp-migrate-db-cli'));
+        }
+
+        if (!empty($assoc_args['replace'])) {
+            $replace_new = array_merge($replace_new, str_getcsv($assoc_args['replace']));
+        } else {
+            if ('find_replace' === $assoc_args['action'] && empty($regex_replace) && empty($regex_search) && empty($case_sensitive_search) && empty($case_sensitive_replace)) {
+                return $this->wpmdb_cli->cli_error(__('Replace value is required.', 'wp-migrate-db-cli'));
+            }
+        }
+
 		if (count($replace_old) !== count($replace_new)) {
-			return $wpmdb_cli->cli_error(sprintf(__('%1$s and %2$s must contain the same number of values', 'wp-migrate-db-cli'), '--find', '--replace'));
+			return $this->wpmdb_cli->cli_error(sprintf(__('%1$s and %2$s must contain the same number of values', 'wp-migrate-db-cli'), '--find', '--replace'));
 		}
 
 		// --exclude-spam
@@ -855,11 +924,16 @@ class Cli
 
 			// ensure export destination is writable
 			if (!@touch($export_dest)) {
-				return $wpmdb_cli->cli_error(sprintf(__('Cannot write to file "%1$s". Please ensure that the specified directory exists and is writable.', 'wp-migrate-db-cli'), $export_dest));
+				return $this->wpmdb_cli->cli_error(sprintf(__('Cannot write to file "%1$s". Please ensure that the specified directory exists and is writable.', 'wp-migrate-db-cli'), $export_dest));
 			}
 		}
 
-		$profile = compact(
+        $databaseEnabled = true;
+        if ( ! empty($assoc_args['exclude-database'])) {
+            $databaseEnabled = false;
+        }
+
+            $profile = compact(
 			'action',
 			'replace_old',
 			'table_migrate_option',
@@ -874,7 +948,10 @@ class Cli
 			'export_dest',
 			'create_backup',
 			'name',
-			'cli_profile'
+			'cli_profile',
+			'regex',
+			'case_sensitive',
+            'databaseEnabled'
 		);
 
 		$home        = preg_replace('/^https?:/', '', home_url());
@@ -887,7 +964,45 @@ class Cli
 		}
 
 		$new_profile = $this->profile_importer->profileFormat($old_profile, $home, $path);
-
 		return array_merge($old_profile, $new_profile);
 	}
+
+	private function extract_argument($argument, $assoc_args) {
+	    if(!empty($assoc_args[$argument])) {
+	        return str_getcsv($assoc_args[$argument]);
+        }
+	    return null;
+    }
+
+
+    /**
+     * Checks if a database migration is turned off for the current migration profile.
+     *
+     * @param array $profile
+     *
+     * @return bool
+     */
+    public function is_non_database_migration($profile)
+    {
+        return $profile['current_migration']['databaseEnabled'] === false  && in_array($profile['action'], ['push', 'pull']);
+    }
+
+
+    /**
+     * If the current migration is a non database migration, it filters the provided tables and returns an empty array.
+     * hooks on: wpmdb_cli_tables_to_migrate.
+     *
+     * @param string[] $tables
+     * @param array $profile
+     *
+     * @return array
+     */
+    public function filter_non_database_migration_tables($tables, $profile)
+    {
+        if ($this->is_non_database_migration($profile)) {
+            return [];
+        }
+
+        return $tables;
+    }
 }

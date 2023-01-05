@@ -1,3 +1,75 @@
+##### [Version 2.10.22](https://github.com/Codeinwp/themeisle-companion/compare/v2.10.21...v2.10.22) (2022-11-30)
+
+- [Fix] Customizer not opening when Neve is installed
+
+##### [Version 2.10.21](https://github.com/Codeinwp/themeisle-companion/compare/v2.10.20...v2.10.21) (2022-11-24)
+
+* Fix - update dependencies
+
+##### [Version 2.10.20](https://github.com/Codeinwp/themeisle-companion/compare/v2.10.19...v2.10.20) (2022-10-17)
+
+* Fix fatal errors on PHP 5.6 on newsletter widget.
+
+##### [Version 2.10.19](https://github.com/Codeinwp/themeisle-companion/compare/v2.10.18...v2.10.19) (2022-09-15)
+
+* Fix for Bedrock installs.
+
+##### [Version 2.10.18](https://github.com/Codeinwp/themeisle-companion/compare/v2.10.17...v2.10.18) (2022-09-13)
+
+* Update depencies
+* Fix usage of outdated php-http/discovery package may break some sites running PHP 7.4 or higher
+
+##### [Version 2.10.17](https://github.com/Codeinwp/themeisle-companion/compare/v2.10.16...v2.10.17) (2022-09-05)
+
+* Remove deprecated Gutenberg blocks module
+
+##### [Version 2.10.16](https://github.com/Codeinwp/themeisle-companion/compare/v2.10.15...v2.10.16) (2022-09-02)
+
+* Fix fatal error due to late function registering.
+
+##### [Version 2.10.15](https://github.com/Codeinwp/themeisle-companion/compare/v2.10.14...v2.10.15) (2022-09-02)
+
+* Update dependencies
+* Fix Hestia client section image problem
+* Improve security validation
+
+##### [Version 2.10.14](https://github.com/Codeinwp/themeisle-companion/compare/v2.10.13...v2.10.14) (2022-08-23)
+
+* Update dependencies
+* Fix Elementor's Post Grid widget responsiveness on mobile by stacking the images.
+
+##### [Version 2.10.13](https://github.com/Codeinwp/themeisle-companion/compare/v2.10.12...v2.10.13) (2022-07-01)
+
+- [Fix] Add the "srcset" property for Hestia's free sections
+- [Fix] Missing desktop position option from the social sharing module
+
+##### [Version 2.10.12](https://github.com/Codeinwp/themeisle-companion/compare/v2.10.11...v2.10.12) (2022-05-27)
+
+- [Fix] Accessibility issue on social links.
+- [Fix] PHP 8 deprecation warning from uksort function.
+- [Fix] The policy notice can't be dismissed on cached website.
+
+##### [Version 2.10.11](https://github.com/Codeinwp/themeisle-companion/compare/v2.10.10...v2.10.11) (2022-02-17)
+
+- Replace the templates module with the one based on Neve and Cloud Templates & Patterns collection
+- Fix warnings with PHP 8
+- Update recommended plugins
+
+##### [Version 2.10.10](https://github.com/Codeinwp/themeisle-companion/compare/v2.10.9...v2.10.10) (2021-12-23)
+
+- Fix error with gutenberg-blocks
+
+##### [Version 2.10.9](https://github.com/Codeinwp/themeisle-companion/compare/v2.10.8...v2.10.9) (2021-12-23)
+
+- Improve cookie policy loading
+- Improve upsells when the plugin is used with Neve theme to better inform the possibilities from pro
+
+##### [Version 2.10.8](https://github.com/Codeinwp/themeisle-companion/compare/v2.10.7...v2.10.8) (2021-09-29)
+
+- [Feat] Refactor the dashboard.
+- [Feat] Add Telegram social sharing icon.
+- [Fix] HomePage reverts to FrontPage if you have Orbit Fox Hestia Enhancements active and switch theme
+
 ##### [Version 2.10.7](https://github.com/Codeinwp/themeisle-companion/compare/v2.10.6...v2.10.7) (2021-08-02)
 
 [Fix] Widgets with repeater fields are generating errors

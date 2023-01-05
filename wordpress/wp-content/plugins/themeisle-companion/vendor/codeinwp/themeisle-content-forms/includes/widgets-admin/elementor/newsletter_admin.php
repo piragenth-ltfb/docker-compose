@@ -80,17 +80,19 @@ class Newsletter_Admin extends Elementor_Widget_Base {
 	 * Add specific settings for Newsletter widget.
 	 */
 	function add_specific_settings_controls() {
-
+		$providers = array(
+			'mailchimp'  => esc_html__( 'MailChimp', 'themeisle-companion' ),
+			'sendinblue' => esc_html__( 'Sendinblue ', 'themeisle-companion' )
+		);
+		if ( version_compare( '7.1', phpversion() ) !== 1 ) {
+			$providers['mailerlite'] = esc_html__( 'MailerLite', 'themeisle-companion' );
+		}
 		$this->add_control(
 			'provider',
 			array(
 				'type'      => 'select',
 				'label'     => esc_html__( 'Subscribe to', 'themeisle-companion' ),
-				'options'   => array(
-					'mailchimp'  => esc_html__( 'MailChimp', 'themeisle-companion' ),
-					'sendinblue' => esc_html__( 'Sendinblue ', 'themeisle-companion' ),
-					'mailerlite' => esc_html__( 'MailerLite', 'themeisle-companion' ),
-				),
+				'options'   => $providers,
 				'default'   => 'mailchimp',
 				'separator' => 'after',
 			)

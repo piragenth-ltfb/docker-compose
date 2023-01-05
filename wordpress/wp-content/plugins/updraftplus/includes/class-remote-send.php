@@ -442,7 +442,11 @@ abstract class UpdraftPlus_RemoteSend {
 
 			global $updraftplus_admin;
 
-			$ret .= '<label class="updraft_checkbox" for="remotesend_backupnow_db"><input type="checkbox" checked="checked" id="remotesend_backupnow_db">'.__("Database", 'updraftplus').'</label>';
+			$ret .= '<label class="updraft_checkbox" for="remotesend_backupnow_db"><input type="checkbox" checked="checked" id="remotesend_backupnow_db">'.__("Database", 'updraftplus').'(<a href="#" id="backupnow_database_showmoreoptions">...</a>)</label>';
+			$ret .= '<div id="backupnow_database_moreoptions" class="updraft-hidden" style="display:none;">';
+			$ret .= apply_filters('updraftplus_migration_additional_ui', $ret, '');
+			$ret .= '</div>';
+
 			$ret .= $updraftplus_admin->files_selector_widgetry('remotesend_', false, false);
 
 			$service = $updraftplus->just_one(UpdraftPlus_Options::get_updraft_option('updraft_service'));
@@ -655,7 +659,7 @@ abstract class UpdraftPlus_RemoteSend {
 				$ret .= '<option value="'.esc_attr($k).'">'.htmlspecialchars($rsite['url']).'</option>';
 			}
 			$ret .= '</select>';
-			$ret .= ' <button class="button-primary" id="updraft_migrate_send_button" onclick="updraft_migrate_send_backup();">'.__('Send', 'updraftplus').'</button>';
+			$ret .= ' <button class="button-primary" id="updraft_migrate_send_button" onclick="updraft_migrate_send_backup_options();">'.__('Send', 'updraftplus').'</button>';
 			$ret .= '</p>';
 		}
 
@@ -689,7 +693,7 @@ abstract class UpdraftPlus_RemoteSend {
 				$ret .= '<p><strong>'.__('Existing keys', 'updraftplus').'</strong><br>';
 			}
 			$ret .= htmlspecialchars($key['name']);
-			$ret .= ' - <a href="'.UpdraftPlus::get_current_clean_url().'" onclick="updraft_migrate_local_key_delete(\''.esc_attr($k).'\'); return false;" class="updraft_migrate_local_key_delete" data-keyid="'.esc_attr($k).'">'.__('Delete', 'updraftplus').'</a>';
+			$ret .= ' - <a href="'.esc_url(UpdraftPlus::get_current_clean_url()).'" onclick="updraft_migrate_local_key_delete(\''.esc_attr($k).'\'); return false;" class="updraft_migrate_local_key_delete" data-keyid="'.esc_attr($k).'">'.__('Delete', 'updraftplus').'</a>';
 			$ret .= '<br>';
 		}
 

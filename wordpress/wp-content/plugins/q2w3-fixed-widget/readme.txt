@@ -1,40 +1,49 @@
-=== Q2W3 Fixed Widget for WordPress ===
+=== Fixed Widget and Sticky Elements for WordPress ===
 Contributors: webzunft, max-bond, advancedads
-Tags: fixed widget, sticky widget, sidebar, ads, widget
+Tags: fixed widget, sticky widget, sidebar, ads, widget, fixed, sticky, floating, sticky block, adsense
 Requires at least: 5.0
-Tested up to: 5.7
-Stable tag: 5.3.0
+Tested up to: 6.1
+Requires PHP: 7.2
+Stable tag: 6.2.3
 
 More attention and a higher ad performance with fixed sticky widgets.
 
 == Description ==
 
-Use the fixed widget plugin to create sticky widgets that stay in the visible screen area when the page is scrolled up or down. 
+Use Fixed Widget to create sticky widgets, sticky blocks, and other elements that stay in the visible screen area when a user scrolls the page up or down.
 
-Sticky widgets are perceived much better by your visitors than unfixed widgets and therefore have a significantly higher click-through rate. Therefore, this option is especially useful for ads or other items that visitors want to interact with.
+Sticky widgets are more visible than unfixed widgets and therefore have a significantly higher click-through rate.
 
-The recommended solution for integrating ads in WordPress is the free ad management plugin [Advanced Ads](https://wordpress.org/plugins/advanced-ads/).
+That's why this option is worthwhile for ads or other elements that visitors should interact with. Meanwhile, Google also allows the integration of [sticky AdSense ads](https://wpadvancedads.com/google-adsense-sticky-ads/).
 
 * [Manual and demo](https://wpadvancedads.com/fixed-widget-wordpress/)
 
+= Features =
+
+Fixed Widget is completely free of charge.
+
+* **Sticky Widgets** Use the Fixed Widget option on any widget and blocks in the sidebar
+* **Sticky Elements** Choose any element on your site and make it sticky
+* **Margin Top** allows you to stop sticky elements to cover floating menu bars
+* **Margin Bottom** pushes sticky elements up before they reach a certain distance towards the bottom window
+* **Stop Elements** push sticky elements up when they are scrolling into view
+* **Stop Blocks** defines blocks in your sidebar that push fixed blocks out of the page
+* **Minimum Screen Width** and **Minimum Screen Height** allow you to disable sticky behavior on small screens
+* Written in plain JavaScript for better performance
+
 = Compatibility = 
 
-The plugin is not working with all themes! Theme requirements:
+Theme requirements:
 
-* jQuery 1.7 is required, jQuery 1.8.3 (or later) is recommended.
-* No JavaScript errors caused by other plugins and scripts.
-* `wp_head()` and `wp_footer()` functions in header.php and footer.php files.
-* Widgets must have an ID attribute.
-
-In some themes fixed widgets „jump“ during scrolling, etc. Some CSS changes at your theme will be required in this case.
+* `wp_head()` and `wp_footer()` functions in `header.php` and `footer.php` files
+* JavaScript errors could break sticky widgets
 
 == Installation ==
 
 1. Follow the standard WordPress plugin installation procedure
 2. Activate the plugin through the plugins menu in WordPress
 3. Go to Appearance -> Widgets, enable the "Fixed Widget" option on any active widget
-4. Fine tune plugin parameters on Appearance -> Fixed Widget Options page
-
+4. Fine tune plugin parameters on Appearance -> Fixed Widget page
 
 == Frequently Asked Questions ==
 
@@ -51,27 +60,111 @@ There are several reasons:
 
 Yes, it is possible to fix more than one widget even if they are located in different sidebars.
 
-= Why is the plugin not working in Chrome (and other Webkit based browsers)? =
+= How can I style a fixed element only while it is sticky? =
 
-Check your CSS files for these two instructions:
-`-webkit-backface-visibility:hidden;
--webkit-transform: translate3d(0,0,0);`
-
-If found, disable them and see the result.
+Fixed elements carry the `FixedWidget__fixed_widget__pinned` class, which allows developers to change the styling only while the element is fixed.
 
 = How to prevent overlapping with the footer? =
 
-Go to WP admin area, Appearance -> Fixed Widget Options. Here you can define the top and bottom margins. Set bottom margin value >= footer height. Check the result, please.
-If your footer height is changing from page to page it is better to use the `Stop ID` option. Here you need to provide the HTML tag ID. The position of that HTML element will determine the margin bottom value. For example, let's take the Twenty Sixteen default theme. The theme's footer container has an id="colophon". In the `Stop ID` option I need to enter just the colophon, without any other symbols!
+Go to WP admin area, Appearance -> Fixed Widget. Here you can define the top and bottom margins. Set bottom margin value >= footer height. Check the result, please.
+If your footer height is changing from page to page it is better to use the `Stop ID` option. Here you need to provide the HTML tag ID. The position of that HTML element will determine the margin bottom value. For example, let's take the Twenty Sixteen default theme. The theme's footer container has an ID="colophon". In the `Stop Element Selectors` option I need to enter `#colophon`.
 
 = How to disable the plugin on mobile devices? = 
-There are two options: `Disable Width` and `Disable Height`. They works the same way. If the browser window width/height is less then or equals specified value, the plugin is disabled. You can also use the [visitor conditions of Advanced Ads](https://wpadvancedads.com/manual/visitor-conditions/) to target specific user groups.
+
+Use the options `Minimum Screen Width` and `Minimum Screen Height` to disable sticky features when the browser window is too small. You can also use the [visitor conditions of Advanced Ads](https://wpadvancedads.com/manual/visitor-conditions/) to target specific devices.
 
 == Screenshots ==
 
-1. The Fixed Widget for WordPress plugin in action
+1. A fixed widget and a stop widget in action
+2. Fixed Widget plugin options
+3. Fixed Widget options for blocks in the widget editor
+3. Fixed Widget option for legacy widgets
 
 == Changelog ==
+
+= 6.2.3 =
+
+- Fix: fixed widget might increase its height when scrolling
+
+= 6.2.2 =
+
+- Fix: improve bottom offset calculation when scrolling up
+
+= 6.2.1 =
+
+- Fix: widget height increasing
+- Fix: widget scrolling align position
+- Fix: compatibility with existing CSS transition rules
+
+= 6.2.0 =
+
+- Improvement: requires PHP 7.2
+- Fix: various improvements in cases where the fixed widget flickered, or the height was could not be determined correctly
+
+= 6.1.1 =
+
+- Improvement: reposition the fixed widget when the screen is resized, e.g., a mobile device turned into landscape mode
+- Improvement: various optimizations for specific themes and setups reported by users
+
+= 6.1.0 =
+
+- Feature: Add the `FixedWidget__fixed_widget__pinned` class to the fixed widget while it is sticky and remove it when it is unfixed. This allows users to apply their own styling only during a fixed state.
+- Improvement: rename "Test new version" option into "Improved version" and changed the option description to make it more clear that both script versions will be kept.
+- Improvement: change "Fixed Widget Options" menu item into "Fixed Widget"
+- Improvement: Handle edge cases where the Minimum Width option doesn’t work for specific themes
+
+= 6.0.7 =
+
+- Improvement: Compatibility with relative padding values
+
+= 6.0.6 =
+
+- Improvement: Compatibility with dynamically loaded content pages, i.e., infinite scroll
+- Improvement: Compatibility with widgets that have large offsets
+- Fix: Prevent padding from increasing on scroll
+
+= 6.0.5 =
+
+- Fix: Prevent overlapping of fixed widgets with non-fixed widgets when scrolling up
+
+= 6.0.4 =
+
+- Fix: Prevent fixed widgets overlapping non-fixed elements in certain themes
+- Fix: Class selectors saved under the Custom Elements were wrongly prefixed with '#'
+
+= 6.0.3 =
+
+- Improvement: Check lazy elements and stop elements for changing their size and recalculate fixed position
+- Improvement: Lower check interval from 1000 to 500 ms
+
+= 6.0.2 =
+
+- Improvement: Fall back to previous version when the theme does not support the new script – mainly because of using float instead of flex
+- Improvement: Stop Elements work also when they are in a different column or sidebar than the fixed element
+- Improvement: Recalculate Fixed Widget height on scroll
+
+= 6.0.1 =
+
+- Fix: use the previous Stop ID value in the new Stop Elements section
+
+= 6.0.0 =
+
+Version 6.0.0 is a full rewrite of the frontend script. It fixes many edge cases like jumping, reloading, or resizing widgets.
+The rewrite also resolves bad Cumulative Layout Shifts.
+
+Most changes are available when you enable "Improved version" under Appearance > Fixed Widget.
+
+Please test and [let us know](https://wordpress.org/support/plugin/q2w3-fixed-widget/) if you discover any issues.
+
+- added new (and optional) script version that uses `position: sticky` instead of `position: fixed`
+- the frontend script does not need jQuery anymore
+- removed unneeded options that previously helped resolving edge cases
+- "Stop Elements" and "Custom Fixed Elements" now accept any selector, including IDs, Class, and Type selectors.
+- fixed blocks in sidebars as introduced in WordPress 5.8
+- define stop blocks in sidebars that move up fixed blocks on scrolling
+- improved option descriptions on the admin page
+- improved behavior for elements higher than the screen – they first stick at the top and scroll to the bottom later
+- removed duplicating widget code
 
 = 5.3.0 =
 
@@ -206,7 +299,7 @@ There are two options: `Disable Width` and `Disable Height`. They works the same
 * Fixed javascript error when no sidebars exists on a page.
 
 = 2.0 =
-* Fixed footer overlapping problem! Now users can customize top and bottom margins for the fixed widgets from the admin area (Appearance -> Fixed Widget Options).
+* Fixed footer overlapping problem! Now users can customize top and bottom margins for the fixed widgets from the admin area (Appearance -> Fixed Widget).
 * Added localization support
 
 = 1.0.3 =
@@ -222,3 +315,9 @@ There are two options: `Disable Width` and `Disable Height`. They works the same
 
 = 1.0 =
 * First public release.
+
+== Upgrade Notice ==
+
+= 6.0.0 =
+
+Major rewrite of the frontend JavaScript with fixes for a lot of edge cases. Does not need jQuery anymore. See more details in the Changelog.

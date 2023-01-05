@@ -18,16 +18,46 @@ function cdi_import_files() {
             'preview_url' => 'https://bizbergthemes.com/green-eco-planet-pro/homepage-pro/'
         ),
         array(
-            'import_file_name'=> __('Homepage Slider 1','cdi'),
+            'import_file_name'=> __('Homepage PRO 2','cdi'),
             'categories'      =>  array( 'PRO' , 'Homepage' ),
-            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/green-eco-planet/homepage-slider-1.jpg',
-            'preview_url' => 'https://bizbergthemes.com/green-eco-planet-pro/homepage-slider-1/'
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/green-eco-planet/green-globe-pro.jpg',
+            'preview_url' => 'https://bizbergthemes.com/green-eco-planet-pro/green-globe-pro/'
         ),
         array(
-            'import_file_name'=> __('Homepage Slider 2','cdi'),
+            'import_file_name'=> __('Fully Green Homepage PRO','cdi'),
             'categories'      =>  array( 'PRO' , 'Homepage' ),
-            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/green-eco-planet/homepage-slider-2.jpg',
-            'preview_url' => 'https://bizbergthemes.com/green-eco-planet-pro/homepage-slider-2/'
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/green-eco-planet/homepage-fully-green.jpg',
+            'preview_url' => 'https://bizbergthemes.com/fully-green-lite/'            
+        ),
+        array(
+            'import_file_name'=> __('About Us','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/green-eco-planet/about-us.jpg',
+            'preview_url' => 'https://bizbergthemes.com/green-eco-planet-pro/about-us/'
+        ),
+        array(
+            'import_file_name'=> __('Team','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/green-eco-planet/team.jpg',
+            'preview_url' => 'https://bizbergthemes.com/green-eco-planet-pro/our-team/'
+        ),
+        array(
+            'import_file_name'=> __('Services','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/green-eco-planet/services.jpg',
+            'preview_url' => 'https://bizbergthemes.com/green-eco-planet-pro/services/'
+        ),
+        array(
+            'import_file_name'=> __('Partners','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/green-eco-planet/partners.jpg',
+            'preview_url' => 'https://bizbergthemes.com/green-eco-planet-pro/partners/'
+        ),
+        array(
+            'import_file_name'=> __('Testimmonials','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/green-eco-planet/testimonials.jpg',
+            'preview_url' => 'https://bizbergthemes.com/green-eco-planet-pro/testimonials/'
         ),
         array(
             'import_file_name'=> __('What We Do','cdi'),

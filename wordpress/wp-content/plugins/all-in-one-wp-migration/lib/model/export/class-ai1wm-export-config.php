@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2018 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,10 +23,14 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'Kangaroos cannot jump here' );
+}
+
 class Ai1wm_Export_Config {
 
 	public static function execute( $params ) {
-		global $wp_version, $wpdb;
+		global $table_prefix, $wp_version, $wpdb;
 
 		// Set progress
 		Ai1wm_Status::info( __( 'Preparing configuration file...', AI1WM_PLUGIN_NAME ) );
@@ -50,13 +54,13 @@ class Ai1wm_Export_Config {
 		$config['HomeURL'] = home_url();
 
 		// Set internal site URL
-		if ( isset( $options['siteurl'] ) && ( untrailingslashit( $options['siteurl'] ) !== site_url() ) ) {
-			$config['InternalSiteURL'] = untrailingslashit( $options['siteurl'] );
+		if ( isset( $options['siteurl'] ) ) {
+			$config['InternalSiteURL'] = $options['siteurl'];
 		}
 
 		// Set internal home URL
-		if ( isset( $options['home'] ) && ( untrailingslashit( $options['home'] ) !== home_url() ) ) {
-			$config['InternalHomeURL'] = untrailingslashit( $options['home'] );
+		if ( isset( $options['home'] ) ) {
+			$config['InternalHomeURL'] = $options['home'];
 		}
 
 		// Set replace old and new values
@@ -128,13 +132,18 @@ class Ai1wm_Export_Config {
 		$config['Plugin'] = array( 'Version' => AI1WM_VERSION );
 
 		// Set WordPress version and content
-		$config['WordPress'] = array( 'Version' => $wp_version, 'Content' => WP_CONTENT_DIR );
+		$config['WordPress'] = array( 'Version' => $wp_version, 'Content' => WP_CONTENT_DIR, 'Plugins' => ai1wm_get_plugins_dir(), 'Themes' => ai1wm_get_themes_dirs(), 'Uploads' => ai1wm_get_uploads_dir(), 'UploadsURL' => ai1wm_get_uploads_url() );
 
 		// Set database version
-		$config['Database'] = array( 'Version' => $mysql->version() );
+		$config['Database'] = array(
+			'Version' => $mysql->version(),
+			'Charset' => defined( 'DB_CHARSET' ) ? DB_CHARSET : 'undefined',
+			'Collate' => defined( 'DB_COLLATE' ) ? DB_COLLATE : 'undefined',
+			'Prefix'  => $table_prefix,
+		);
 
 		// Set PHP version
-		$config['PHP'] = array( 'Version' => PHP_VERSION );
+		$config['PHP'] = array( 'Version' => PHP_VERSION, 'System' => PHP_OS, 'Integer' => PHP_INT_SIZE );
 
 		// Set active plugins
 		$config['Plugins'] = array_values( array_diff( ai1wm_active_plugins(), ai1wm_active_servmask_plugins() ) );
@@ -144,6 +153,20 @@ class Ai1wm_Export_Config {
 
 		// Set active stylesheet
 		$config['Stylesheet'] = ai1wm_active_stylesheet();
+
+		// Set upload path
+		$config['Uploads'] = get_option( 'upload_path' );
+
+		// Set upload URL path
+		$config['UploadsURL'] = get_option( 'upload_url_path' );
+
+		// Set server info
+		$config['Server'] = array( '.htaccess' => base64_encode( ai1wm_get_htaccess() ), 'web.config' => base64_encode( ai1wm_get_webconfig() ) );
+
+		if ( isset( $params['options']['encrypt_backups'] ) ) {
+			$config['Encrypted']          = true;
+			$config['EncryptedSignature'] = base64_encode( ai1wm_encrypt_string( AI1WM_SIGN_TEXT, $params['options']['encrypt_password'] ) );
+		}
 
 		// Save package.json file
 		$handle = ai1wm_open( ai1wm_package_path( $params ), 'w' );

@@ -19,29 +19,74 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Adsense;
 
 class CustomChannel extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var bool
+     */
+    public $active;
+    /**
+     * @var string
+     */
     public $displayName;
+    /**
+     * @var string
+     */
     public $name;
+    /**
+     * @var string
+     */
     public $reportingDimensionId;
+    /**
+     * @param bool
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+    }
+    /**
+     * @return bool
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+    /**
+     * @param string
+     */
     public function setDisplayName($displayName)
     {
         $this->displayName = $displayName;
     }
+    /**
+     * @return string
+     */
     public function getDisplayName()
     {
         return $this->displayName;
     }
+    /**
+     * @param string
+     */
     public function setName($name)
     {
         $this->name = $name;
     }
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
+    /**
+     * @param string
+     */
     public function setReportingDimensionId($reportingDimensionId)
     {
         $this->reportingDimensionId = $reportingDimensionId;
     }
+    /**
+     * @return string
+     */
     public function getReportingDimensionId()
     {
         return $this->reportingDimensionId;

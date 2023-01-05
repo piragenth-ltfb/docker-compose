@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2018 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,15 +23,19 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'Kangaroos cannot jump here' );
+}
+
 class Ai1wm_File_Index {
 
 	/**
-	 * Create index.php file
+	 * Create index file
 	 *
 	 * @param  string  $path Path to file
 	 * @return boolean
 	 */
 	public static function create( $path ) {
-		return Ai1wm_File::create( $path, '<?php // silence is golden' );
+		return Ai1wm_File::create( $path, 'Kangaroos cannot jump here' );
 	}
 }

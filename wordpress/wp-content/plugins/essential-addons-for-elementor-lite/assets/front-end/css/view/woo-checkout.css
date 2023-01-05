@@ -99,7 +99,11 @@
 }
 .ea-woo-checkout .woocommerce .woo-checkout-login .woocommerce-form-login {
   max-width: 100%;
-  margin: 15px 0 0 !important;
+  margin: 15px 0 0;
+  padding: 20px;
+  text-align: left;
+  border: 1px solid inherit;
+  border-radius: 5px;
 }
 .ea-woo-checkout .woocommerce .woo-checkout-login .woocommerce-form-login p:first-child {
   margin-top: 0;
@@ -115,9 +119,9 @@
   width: 48.5%;
 }
 .ea-woo-checkout .woocommerce .woo-checkout-coupon .checkout_coupon {
-  margin: 15px 0 0 !important;
+  margin: 15px 0 0;
   padding: 20px;
-  width: 100%;
+  width: auto;
   text-align: left;
   border: 1px solid inherit;
   border-radius: 5px;
@@ -540,6 +544,28 @@
 }
 .eael-woo-checkout .woocommerce .woo-checkout-payment {
   clear: both;
+}
+.eael-woo-checkout .woocommerce .woo-checkout-payment .carrier-agents-postcode-search #carrier-agent-heading {
+  color: #fff;
+}
+.eael-woo-checkout .woocommerce .woo-checkout-payment .carrier-agents-postcode-search .woo-carrier-agents-postcode-input-wrapper input {
+  padding: 0 15px;
+  line-height: 40px;
+  border: none;
+  border-radius: 5px;
+}
+.eael-woo-checkout .woocommerce .woo-checkout-payment .carrier-agents-postcode-search .woo-carrier-agents-postcode-input-wrapper #woo-carrier-agents-search-button {
+  background: #7866ff;
+  color: #fff;
+  line-height: 40px;
+  padding: 0 20px;
+  border-radius: 5px;
+}
+.eael-woo-checkout .woocommerce .woo-checkout-payment .carrier-agents-postcode-search #woo-carrier-agents-container {
+  background: #fff;
+}
+.eael-woo-checkout .woocommerce .woo-checkout-payment .carrier-agents-postcode-search #woo-carrier-agents-container #woo-carrier-agents .woo-carrier-agent {
+  border-radius: 5px;
 }
 .eael-woo-checkout .woocommerce .woo-checkout-payment #payment {
   border: none;

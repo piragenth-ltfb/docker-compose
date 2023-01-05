@@ -701,10 +701,11 @@ class Uninstall_Feedback extends Abstract_Module {
 		$disclosure_new_labels = apply_filters( $this->product->get_slug() . '_themeisle_sdk_disclosure_content_labels', [], $this->product );
 		$disclosure_labels     = array_merge(
 			[
-				'title' => 'Below is a detailed view of all data that ThemeIsle will receive if you fill in this survey. No domain name, email address or IP addresses are transmited after you submit the survey.',
+				'title' => 'Below is a detailed view of all data that ThemeIsle will receive if you fill in this survey. No email address or IP addresses are transmitted after you submit the survey.',
 				'items' => [
 					sprintf( '%s %s version %s %s %s %s', '<strong>', ucwords( $this->product->get_type() ), '</strong>', '<code>', $this->product->get_version(), '</code>' ),
 					sprintf( '%sCurrent website:%s %s %s %s', '<strong>', '</strong>', '<code>', get_site_url(), '</code>' ),
+					sprintf( '%sUsage time:%s %s %s%s', '<strong>', '</strong>', '<code>', ( time() - $this->product->get_install_time() ), 's</code>' ),
 					sprintf( '%s Uninstall reason %s %s Selected reason from the above survey %s ', '<strong>', '</strong>', '<i>', '</i>' ),
 				],
 			],
@@ -785,11 +786,12 @@ class Uninstall_Feedback extends Abstract_Module {
 	 * @return bool Is the request succesfull?
 	 */
 	protected function call_api( $attributes ) {
-		$slug                  = $this->product->get_slug();
-		$version               = $this->product->get_version();
-		$attributes['slug']    = $slug;
-		$attributes['version'] = $version;
-		$attributes['url']     = get_site_url();
+		$slug                      = $this->product->get_slug();
+		$version                   = $this->product->get_version();
+		$attributes['slug']        = $slug;
+		$attributes['version']     = $version;
+		$attributes['url']         = get_site_url();
+		$attributes['active_time'] = ( time() - $this->product->get_install_time() );
 
 		$response = wp_remote_post(
 			self::FEEDBACK_ENDPOINT,

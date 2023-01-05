@@ -67,6 +67,35 @@ class AMP_Tag extends Module_AMP_Tag {
 	}
 
 	/**
+	 * Gets the attributes for amp-story-auto-ads and amp-auto-ads tags.
+	 *
+	 * @since 1.39.0
+	 *
+	 * @param string $type Whether it's for web stories. Can be `web-story` or ``.
+	 * @return array Filtered $options.
+	 */
+	private function get_auto_ads_attributes( $type = '' ) {
+		$options = array(
+			'ad-client' => $this->tag_id,
+		);
+
+		if ( 'web-story' === $type && ! empty( $this->story_ad_slot_id ) ) {
+			$options['ad-slot'] = $this->story_ad_slot_id;
+		}
+
+		$filtered_options = 'web-story' === $type
+			? apply_filters( 'googlesitekit_amp_story_auto_ads_attributes', $options, $this->tag_id, $this->story_ad_slot_id )
+			: apply_filters( 'googlesitekit_amp_auto_ads_attributes', $options, $this->tag_id, $this->story_ad_slot_id );
+
+		if ( is_array( $filtered_options ) && ! empty( $filtered_options ) ) {
+			$options              = $filtered_options;
+			$options['ad-client'] = $this->tag_id;
+		}
+
+		return $options;
+	}
+
+	/**
 	 * Outputs the <amp-auto-ads> tag.
 	 *
 	 * @since 1.24.0
@@ -78,11 +107,20 @@ class AMP_Tag extends Module_AMP_Tag {
 
 		$this->adsense_tag_printed = true;
 
+		$attributes = '';
+		foreach ( $this->get_auto_ads_attributes() as $amp_auto_ads_opt_key => $amp_auto_ads_opt_value ) {
+			$attributes .= sprintf( ' data-%s="%s"', esc_attr( $amp_auto_ads_opt_key ), esc_attr( $amp_auto_ads_opt_value ) );
+		}
+
+		printf( "\n<!-- %s -->\n", esc_html__( 'Google AdSense AMP snippet added by Site Kit', 'google-site-kit' ) );
+
 		printf(
-			'<amp-auto-ads type="adsense" data-ad-client="%s"%s></amp-auto-ads>',
-			esc_attr( $this->tag_id ),
+			'<amp-auto-ads type="adsense" %s%s></amp-auto-ads>',
+			$attributes, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			$this->get_tag_blocked_on_consent_attribute() // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		);
+
+		printf( "\n<!-- %s -->\n", esc_html__( 'End Google AdSense AMP snippet added by Site Kit', 'google-site-kit' ) );
 	}
 
 	/**
@@ -101,12 +139,16 @@ class AMP_Tag extends Module_AMP_Tag {
 
 		$this->adsense_tag_printed = true;
 
-		return sprintf(
-			'<amp-auto-ads type="adsense" data-ad-client="%s"%s></amp-auto-ads> %s',
+		$snippet_comment_begin = sprintf( "\n<!-- %s -->\n", esc_html__( 'Google AdSense AMP snippet added by Site Kit', 'google-site-kit' ) );
+		$snippet_comment_end   = sprintf( "\n<!-- %s -->\n", esc_html__( 'End Google AdSense AMP snippet added by Site Kit', 'google-site-kit' ) );
+
+		$tag = sprintf(
+			'<amp-auto-ads type="adsense" data-ad-client="%s"%s></amp-auto-ads>',
 			esc_attr( $this->tag_id ),
-			$this->get_tag_blocked_on_consent_attribute(),
-			$content
+			$this->get_tag_blocked_on_consent_attribute()
 		);
+
+		return $snippet_comment_begin . $tag . $snippet_comment_end . $content;
 	}
 
 	/**
@@ -128,11 +170,21 @@ class AMP_Tag extends Module_AMP_Tag {
 	private function render_story_auto_ads() {
 		$config = array(
 			'ad-attributes' => array(
-				'type'           => 'adsense',
-				'data-ad-client' => $this->tag_id,
-				'data-ad-slot'   => $this->story_ad_slot_id,
+				'type' => 'adsense',
 			),
 		);
+
+		$attributes = array();
+		foreach ( $this->get_auto_ads_attributes( 'web-story' ) as $key => $value ) {
+			$attributes[ 'data-' . $key ] = $value;
+		}
+
+		$config['ad-attributes'] = array_merge( $config['ad-attributes'], $attributes );
+
+		printf( "\n<!-- %s -->\n", esc_html__( 'Google AdSense AMP snippet added by Site Kit', 'google-site-kit' ) );
+
 		printf( '<amp-story-auto-ads><script type="application/json">%s</script></amp-story-auto-ads>', wp_json_encode( $config ) );
+
+		printf( "\n<!-- %s -->\n", esc_html__( 'End Google AdSense AMP snippet added by Site Kit', 'google-site-kit' ) );
 	}
 }

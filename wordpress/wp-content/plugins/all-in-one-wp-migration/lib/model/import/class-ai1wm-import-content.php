@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2018 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,10 @@
  * ███████║███████╗██║  ██║ ╚████╔╝ ██║ ╚═╝ ██║██║  ██║███████║██║  ██╗
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'Kangaroos cannot jump here' );
+}
 
 class Ai1wm_Import_Content {
 
@@ -90,54 +94,73 @@ class Ai1wm_Import_Content {
 		// Set the file pointer to the one that we have saved
 		$archive->set_file_pointer( $archive_bytes_offset );
 
-		$old_paths = array();
-		$new_paths = array();
+		$old_paths = array( 'plugins', 'themes' );
+		$new_paths = array( ai1wm_get_plugins_dir(), get_theme_root() );
 
 		// Set extract paths
 		foreach ( $blogs as $blog ) {
-			if ( ai1wm_main_site( $blog['Old']['BlogID'] ) === false ) {
+			if ( ai1wm_is_mainsite( $blog['Old']['BlogID'] ) === false ) {
 				if ( defined( 'UPLOADBLOGSDIR' ) ) {
-					// Old sites dir style
-					$old_paths[] = ai1wm_files_path( $blog['Old']['BlogID'] );
-					$new_paths[] = ai1wm_files_path( $blog['New']['BlogID'] );
+					// Old files dir style
+					$old_paths[] = ai1wm_blog_files_relpath( $blog['Old']['BlogID'] );
+					$new_paths[] = ai1wm_blog_files_abspath( $blog['New']['BlogID'] );
+
+					// Old blogs.dir style
+					$old_paths[] = ai1wm_blog_blogsdir_relpath( $blog['Old']['BlogID'] );
+					$new_paths[] = ai1wm_blog_blogsdir_abspath( $blog['New']['BlogID'] );
 
 					// New sites dir style
-					$old_paths[] = ai1wm_sites_path( $blog['Old']['BlogID'] );
-					$new_paths[] = ai1wm_files_path( $blog['New']['BlogID'] );
+					$old_paths[] = ai1wm_blog_sites_relpath( $blog['Old']['BlogID'] );
+					$new_paths[] = ai1wm_blog_files_abspath( $blog['New']['BlogID'] );
 				} else {
-					// Old sites dir style
-					$old_paths[] = ai1wm_files_path( $blog['Old']['BlogID'] );
-					$new_paths[] = ai1wm_sites_path( $blog['New']['BlogID'] );
+					// Old files dir style
+					$old_paths[] = ai1wm_blog_files_relpath( $blog['Old']['BlogID'] );
+					$new_paths[] = ai1wm_blog_sites_abspath( $blog['New']['BlogID'] );
+
+					// Old blogs.dir style
+					$old_paths[] = ai1wm_blog_blogsdir_relpath( $blog['Old']['BlogID'] );
+					$new_paths[] = ai1wm_blog_sites_abspath( $blog['New']['BlogID'] );
 
 					// New sites dir style
-					$old_paths[] = ai1wm_sites_path( $blog['Old']['BlogID'] );
-					$new_paths[] = ai1wm_sites_path( $blog['New']['BlogID'] );
+					$old_paths[] = ai1wm_blog_sites_relpath( $blog['Old']['BlogID'] );
+					$new_paths[] = ai1wm_blog_sites_abspath( $blog['New']['BlogID'] );
 				}
 			}
 		}
 
 		// Set base site extract paths (should be added at the end of arrays)
 		foreach ( $blogs as $blog ) {
-			if ( ai1wm_main_site( $blog['Old']['BlogID'] ) === true ) {
+			if ( ai1wm_is_mainsite( $blog['Old']['BlogID'] ) === true ) {
 				if ( defined( 'UPLOADBLOGSDIR' ) ) {
-					// Old sites dir style
-					$old_paths[] = ai1wm_files_path( $blog['Old']['BlogID'] );
-					$new_paths[] = ai1wm_files_path( $blog['New']['BlogID'] );
+					// Old files dir style
+					$old_paths[] = ai1wm_blog_files_relpath( $blog['Old']['BlogID'] );
+					$new_paths[] = ai1wm_blog_files_abspath( $blog['New']['BlogID'] );
+
+					// Old blogs.dir style
+					$old_paths[] = ai1wm_blog_blogsdir_relpath( $blog['Old']['BlogID'] );
+					$new_paths[] = ai1wm_blog_blogsdir_abspath( $blog['New']['BlogID'] );
 
 					// New sites dir style
-					$old_paths[] = ai1wm_sites_path( $blog['Old']['BlogID'] );
-					$new_paths[] = ai1wm_files_path( $blog['New']['BlogID'] );
+					$old_paths[] = ai1wm_blog_sites_relpath( $blog['Old']['BlogID'] );
+					$new_paths[] = ai1wm_blog_files_abspath( $blog['New']['BlogID'] );
 				} else {
-					// Old sites dir style
-					$old_paths[] = ai1wm_files_path( $blog['Old']['BlogID'] );
-					$new_paths[] = ai1wm_sites_path( $blog['New']['BlogID'] );
+					// Old files dir style
+					$old_paths[] = ai1wm_blog_files_relpath( $blog['Old']['BlogID'] );
+					$new_paths[] = ai1wm_blog_sites_abspath( $blog['New']['BlogID'] );
+
+					// Old blogs.dir style
+					$old_paths[] = ai1wm_blog_blogsdir_relpath( $blog['Old']['BlogID'] );
+					$new_paths[] = ai1wm_blog_sites_abspath( $blog['New']['BlogID'] );
 
 					// New sites dir style
-					$old_paths[] = ai1wm_sites_path( $blog['Old']['BlogID'] );
-					$new_paths[] = ai1wm_sites_path( $blog['New']['BlogID'] );
+					$old_paths[] = ai1wm_blog_sites_relpath( $blog['Old']['BlogID'] );
+					$new_paths[] = ai1wm_blog_sites_abspath( $blog['New']['BlogID'] );
 				}
 			}
 		}
+
+		$old_paths[] = ai1wm_blog_sites_relpath();
+		$new_paths[] = ai1wm_blog_sites_abspath();
 
 		while ( $archive->has_not_reached_eof() ) {
 			$file_bytes_written = 0;
@@ -146,15 +169,27 @@ class Ai1wm_Import_Content {
 			$exclude_files = array_keys( _get_dropins() );
 
 			// Exclude plugin files
-			$exclude_files = array_merge( $exclude_files, array(
-				AI1WM_PACKAGE_NAME,
-				AI1WM_MULTISITE_NAME,
-				AI1WM_DATABASE_NAME,
-				AI1WM_MUPLUGINS_NAME,
-			) );
+			$exclude_files = array_merge(
+				$exclude_files,
+				array(
+					AI1WM_PACKAGE_NAME,
+					AI1WM_MULTISITE_NAME,
+					AI1WM_DATABASE_NAME,
+					AI1WM_MUPLUGINS_NAME,
+				)
+			);
+
+			// Exclude theme files
+			$exclude_files = array_merge( $exclude_files, array( AI1WM_THEMES_FUNCTIONS_NAME ) );
+
+			// Exclude Elementor files
+			$exclude_files = array_merge( $exclude_files, array( AI1WM_ELEMENTOR_CSS_NAME ) );
+
+			// Exclude content extensions
+			$exclude_extensions = array( AI1WM_LESS_CACHE_NAME );
 
 			// Extract a file from archive to WP_CONTENT_DIR
-			if ( ( $completed = $archive->extract_one_file_to( WP_CONTENT_DIR, $exclude_files, $old_paths, $new_paths, $file_bytes_written, $file_bytes_offset ) ) ) {
+			if ( ( $completed = $archive->extract_one_file_to( WP_CONTENT_DIR, $exclude_files, $exclude_extensions, $old_paths, $new_paths, $file_bytes_written, $file_bytes_offset ) ) ) {
 				$file_bytes_offset = 0;
 			}
 

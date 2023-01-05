@@ -63,6 +63,8 @@ class PrliPopupController extends PrliBaseController {
         'error' => __('An unknown error occurred.', 'pretty-link')
       );
       wp_localize_script('prli-admin-popup','PrliPopup', $loc);
+
+      do_action('prli_admin_enqueue_popup_scripts', $hook);
     }
   }
 

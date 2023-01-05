@@ -2,9 +2,9 @@
 
 if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed');
 
-if (!class_exists('Updraft_Notices')) require_once(UPDRAFTPLUS_DIR.'/includes/updraft-notices.php');
+if (!class_exists('Updraft_Notices_1_2')) updraft_try_include_file('vendor/team-updraft/common-libs/src/updraft-notices/updraft-notices.php', 'require_once');
 
-class UpdraftPlus_Notices extends Updraft_Notices {
+class UpdraftPlus_Notices extends Updraft_Notices_1_2 {
 
 	protected static $_instance = null;
 
@@ -189,6 +189,16 @@ class UpdraftPlus_Notices extends Updraft_Notices {
 				'dismiss_time' => 'dismissautobackup',
 				'supported_positions' => $this->autobackup_bottom_or_report,
 			),
+			'subscriben' => array(
+				'prefix' => '',
+				'title' => 'Subscriben ' .__('by', 'updraftplus'). ' UpdraftPlus',
+				'text' => __("The WordPress subscription extension for WooCommerce store owners.", "updraftplus"),
+				'image' => 'notices/subscriben.png',
+				'button_link' => 'https://subscribenplugin.com',
+				'button_meta' => 'read_more',
+				'dismiss_time' => 'dismiss_notice',
+				'supported_positions' => $this->anywhere,
+			),
 			'wp-optimize' => array(
 				'prefix' => '',
 				'title' => 'WP-Optimize',
@@ -211,9 +221,9 @@ class UpdraftPlus_Notices extends Updraft_Notices {
 				'campaign' => 'blackfriday',
 				'button_meta' => 'updraftplus',
 				'dismiss_time' => 'dismiss_season',
-				'discount_code' => 'blackfridaysale2021',
-				'valid_from' => '2021-11-20 00:00:00',
-				'valid_to' => '2021-11-30 23:59:59',
+				'discount_code' => 'blackfridaysale2022',
+				'valid_from' => '2022-11-20 00:00:00',
+				'valid_to' => '2022-11-30 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 			),
 			'newyear' => array(
@@ -225,23 +235,23 @@ class UpdraftPlus_Notices extends Updraft_Notices {
 				'campaign' => 'newyear',
 				'button_meta' => 'updraftplus',
 				'dismiss_time' => 'dismiss_season',
-				'discount_code' => 'newyearsale2022',
-				'valid_from' => '2021-12-26 00:00:00',
-				'valid_to' => '2022-01-14 23:59:59',
+				'discount_code' => 'newyearsale2023',
+				'valid_from' => '2022-12-26 00:00:00',
+				'valid_to' => '2023-01-14 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 			),
 			'spring' => array(
 				'prefix' => '',
 				'title' => __('Spring sale - 20% off UpdraftPlus Premium until May 31st', 'updraftplus'),
 				'text' => __('To benefit, use this discount code:', 'updraftplus').' ',
-				'image' => 'notices/spring.png',
+				'image' => 'notices/updraft_logo.png', // TODO: Change image and date back to april/spring next year
 				'button_link' => 'https://updraftplus.com/landing/updraftplus-premium',
 				'campaign' => 'spring',
 				'button_meta' => 'updraftplus',
 				'dismiss_time' => 'dismiss_season',
-				'discount_code' => 'springsale2021',
-				'valid_from' => '2021-05-01 00:00:00',
-				'valid_to' => '2021-05-31 23:59:59',
+				'discount_code' => 'springsale2022',
+				'valid_from' => '2022-05-01 00:00:00',
+				'valid_to' => '2022-05-31 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 			),
 			'summer' => array(
@@ -253,9 +263,9 @@ class UpdraftPlus_Notices extends Updraft_Notices {
 				'campaign' => 'summer',
 				'button_meta' => 'updraftplus',
 				'dismiss_time' => 'dismiss_season',
-				'discount_code' => 'summersale2021',
-				'valid_from' => '2021-07-01 00:00:00',
-				'valid_to' => '2021-07-31 23:59:59',
+				'discount_code' => 'summersale2022',
+				'valid_from' => '2022-07-01 00:00:00',
+				'valid_to' => '2022-07-31 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 			),
 			'collection' => array(
@@ -267,9 +277,9 @@ class UpdraftPlus_Notices extends Updraft_Notices {
 				'campaign' => 'collection',
 				'button_meta' => 'collection',
 				'dismiss_time' => 'dismiss_season',
-				'discount_code' => 'UDP2021',
-				'valid_from' => '2021-09-01 00:00:00',
-				'valid_to' => '2021-09-30 23:59:59',
+				'discount_code' => 'UDP2022',
+				'valid_from' => '2022-09-01 00:00:00',
+				'valid_to' => '2022-09-30 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 			)
 		);
@@ -394,7 +404,7 @@ class UpdraftPlus_Notices extends Updraft_Notices {
 			if (isset($advert_information['campaign'])) $advert_information['button_link'] .= '&utm_source=updraftplus&utm_medium=banner&utm_campaign='.$advert_information['campaign'];
 		}
 
-		include_once(UPDRAFTPLUS_DIR.'/admin.php');
+		updraft_try_include_file('admin.php', 'include_once');
 		global $updraftplus_admin;
 		return $updraftplus_admin->include_template('wp-admin/notices/'.$template_file, $return_instead_of_echo, $advert_information);
 	}

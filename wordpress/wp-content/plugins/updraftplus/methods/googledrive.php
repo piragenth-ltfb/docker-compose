@@ -4,7 +4,7 @@ if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed.');
 
 // Converted to multi-options (Feb 2017-) and previous options conversion removed: Yes
 
-if (!class_exists('UpdraftPlus_BackupModule')) require_once(UPDRAFTPLUS_DIR.'/methods/backup-module.php');
+if (!class_exists('UpdraftPlus_BackupModule')) updraft_try_include_file('methods/backup-module.php', 'require_once');
 
 class UpdraftPlus_BackupModule_googledrive extends UpdraftPlus_BackupModule {
 
@@ -17,6 +17,8 @@ class UpdraftPlus_BackupModule_googledrive extends UpdraftPlus_BackupModule {
 	private $callback_url;
 	
 	private $multi_directories = array();
+	
+	private $registered_prune = false;
 
 	/**
 	 * Constructor
@@ -417,7 +419,7 @@ class UpdraftPlus_BackupModule_googledrive extends UpdraftPlus_BackupModule {
 			$client_id = $opts['clientid'];
 			$token = 'token'.$prefixed_instance_id;
 		}
-		// We require access to all Google Drive files (not just ones created by this app - scope https://www.googleapis.com/auth/drive.file) - because we need to be able to re-scan storage for backups uploaded by other installs. But, if you are happy to lose that capability, you can use the filter below to remove the drive.readonly scope.
+		// We require access to all Google Drive files (not just ones created by this app - scope https://www.googleapis.com/auth/drive.file) - because we need to be able to re-scan storage for backups uploaded by other installs, or manually by the user into their Google Drive. But, if you are happy to lose that capability, you can use the filter below to remove the drive.readonly scope.
 		$params = array(
 			'response_type' => 'code',
 			'client_id' => $client_id,
@@ -437,8 +439,8 @@ class UpdraftPlus_BackupModule_googledrive extends UpdraftPlus_BackupModule {
 	/**
 	 * This function will complete the oAuth flow, if return_instead_of_echo is true then add the action to display the authed admin notice, otherwise echo this notice to page.
 	 *
-	 * @param string  $state              - the state
-	 * @param string  $code               - the oauth code
+	 * @param string  $state                  - the state
+	 * @param string  $code                   - the oauth code
 	 * @param boolean $return_instead_of_echo - a boolean to indicate if we should return the result or echo it
 	 *
 	 * @return void|string - returns the authentication message if return_instead_of_echo is true
@@ -640,9 +642,8 @@ class UpdraftPlus_BackupModule_googledrive extends UpdraftPlus_BackupModule {
 				$parent_id = key($parent_ids);
 				if (count($parent_ids) > 1) {
 					$this->log('there appears to be more than one folder: '.implode(', ', array_keys($parent_ids)));
-					static $registered_prune = false;
-					if (!$registered_prune) {
-						$registered_prune = true;
+					if (!$this->registered_prune) {
+						$this->registered_prune = true;
 						$this->multi_directories = $parent_ids;
 						add_action('updraftplus_prune_retained_backups_finished', array($this, 'prune_retained_backups_finished'));
 					}
@@ -849,11 +850,11 @@ class UpdraftPlus_BackupModule_googledrive extends UpdraftPlus_BackupModule {
 		}
 
 		if ((!class_exists('UDP_Google_Config') || !class_exists('UDP_Google_Client') || !class_exists('UDP_Google_Service_Drive') || !class_exists('UDP_Google_Http_Request')) && !function_exists('google_api_php_client_autoload_updraftplus')) {
-			include_once(UPDRAFTPLUS_DIR.'/includes/Google/autoload.php');
+			updraft_try_include_file('includes/Google/autoload.php', 'include_once');
 		}
 
 		if (!class_exists('UpdraftPlus_Google_Http_MediaFileUpload')) {
-			include_once(UPDRAFTPLUS_DIR.'/includes/google-extensions.php');
+			updraft_try_include_file('includes/google-extensions.php', 'include_once');
 		}
 
 		$config = new UDP_Google_Config();
@@ -978,7 +979,7 @@ class UpdraftPlus_BackupModule_googledrive extends UpdraftPlus_BackupModule {
 			if (empty($opts['settings'][$instance_id]['user_id'])) {
 				$old_client_id = (empty($opts['settings'][$instance_id]['clientid'])) ? '' : $opts['settings'][$instance_id]['clientid'];
 				if (!empty($opts['settings'][$instance_id]['token']) && $old_client_id != $storage_options['clientid']) {
-					include_once(UPDRAFTPLUS_DIR.'/methods/googledrive.php');
+					updraft_try_include_file('methods/googledrive.php', 'include_once');
 					$updraftplus->register_wp_http_option_hooks();
 					$googledrive = new UpdraftPlus_BackupModule_googledrive();
 					$googledrive->gdrive_auth_revoke(false);
@@ -1302,6 +1303,13 @@ class UpdraftPlus_BackupModule_googledrive extends UpdraftPlus_BackupModule {
 		return $this->upload_file($file, $parent_id, false);
 	}
 	
+	/**
+	 * Download method: takes a base name, and brings it back from the cloud storage into the internal directory.
+	 *
+	 * @param String $file The specific file to be downloaded from the Cloud Storage
+	 *
+	 * @return Boolean - success or failure state
+	 */
 	public function download($file) {
 
 		global $updraftplus;
@@ -1345,15 +1353,18 @@ class UpdraftPlus_BackupModule_googledrive extends UpdraftPlus_BackupModule {
 
 		$download_to = $updraftplus->backups_dir_location().'/'.$file;
 
-		$existing_size = (file_exists($download_to)) ? filesize($download_to) : 0;
+		$existing_size = file_exists($download_to) ? filesize($download_to) : 0;
 
 		if ($existing_size >= $size) {
 			$this->log('download: was already downloaded ('.filesize($download_to)."/$size bytes)");
 			return true;
 		}
 
-		// Chunk in units of 2MB
+		// We only need a chunk size because the API library won't accept a file handle - otherwise, we could download the whole range. But testing (150Mb/s connection) shows that after 32MB almost all the gains have been realised.
 		$chunk_size = 2097152;
+		while ($updraftplus->verify_free_memory($chunk_size * 3) && $chunk_size <= 20971520) {
+			$chunk_size = $chunk_size * 2;
+		}
 
 		try {
 			while ($existing_size < $size) {
@@ -1445,6 +1456,8 @@ class UpdraftPlus_BackupModule_googledrive extends UpdraftPlus_BackupModule {
 	 * @return String - the template, ready for substitutions to be carried out
 	 */
 	public function get_configuration_template() {
+		global $updraftplus;
+		
 		$classes = $this->get_css_classes();
 		ob_start();
 		?>
@@ -1482,7 +1495,7 @@ class UpdraftPlus_BackupModule_googledrive extends UpdraftPlus_BackupModule {
 				{{/if}}
 							<br>
 							<em>
-								<a href="<?php echo apply_filters("updraftplus_com_link", "https://updraftplus.com/shop/updraftplus-premium/");?>" target="_blank">
+								<a href="<?php echo $updraftplus->get_url('premium');?>" target="_blank">
 									<?php echo __('To be able to set a custom folder name, use UpdraftPlus Premium.', 'updraftplus');?>
 								</a>
 							</em>
@@ -1510,9 +1523,7 @@ class UpdraftPlus_BackupModule_googledrive extends UpdraftPlus_BackupModule {
 						?>
 					{{/if}}
 					<?php
-						echo '<p>';
 						$this->get_authentication_link();
-						echo '</p>';
 					?>
 				</td>
 			</tr>
@@ -1553,5 +1564,20 @@ class UpdraftPlus_BackupModule_googledrive extends UpdraftPlus_BackupModule {
 			'token',
 			'user_id',
 		);
+	}
+
+	/**
+	 * This function will build and return the authentication link
+	 *
+	 * @param String $instance_id     - the instance id
+	 * @param String $text            - the link text
+	 *
+	 * @return String - the authentication link
+	 */
+	public function build_authentication_link($instance_id, $text) {
+		
+		$id = $this->get_id();
+
+		return '<p>'. $text .'</p><br><a data-pretext="'.$text.'" class="button-ud-google updraft_authlink" href="'.UpdraftPlus_Options::admin_page_url().'?&action=updraftmethod-'.$id.'-auth&page=updraftplus&updraftplus_'.$id.'auth=doit&updraftplus_instance='.$instance_id.'" data-instance_id="'.$instance_id.'" data-remote_method="'.$id.'">'.sprintf(__('Sign in with %s', 'updraftplus'), 'Google').'</a>';
 	}
 }

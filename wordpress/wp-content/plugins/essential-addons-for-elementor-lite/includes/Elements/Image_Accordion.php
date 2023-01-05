@@ -51,7 +51,7 @@ class Image_Accordion extends Widget_Base {
         return 'https://essential-addons.com/elementor/docs/image-accordion/';
     }
 
-    protected function _register_controls() {
+    protected function register_controls() {
         /**
          * Image accordion Content Settings
          */
@@ -107,15 +107,15 @@ class Image_Accordion extends Widget_Base {
                 'options' => [
                     'left'   => [
                         'title' => __( 'Left', 'essential-addons-for-elementor-lite' ),
-                        'icon'  => 'fa fa-align-left',
+                        'icon'  => 'eicon-text-align-left',
                     ],
                     'center' => [
                         'title' => __( 'Center', 'essential-addons-for-elementor-lite' ),
-                        'icon'  => 'fa fa-align-center',
+                        'icon'  => 'eicon-text-align-center',
                     ],
                     'right'  => [
                         'title' => __( 'Right', 'essential-addons-for-elementor-lite' ),
-                        'icon'  => 'fa fa-align-right',
+                        'icon'  => 'eicon-text-align-right',
                     ],
                 ],
                 'default' => 'center',
@@ -134,7 +134,7 @@ class Image_Accordion extends Widget_Base {
                     ],
                     'center' => [
                         'title' => __( 'Center', 'essential-addons-for-elementor-lite' ),
-                        'icon'  => 'fa fa-align-center',
+                        'icon'  => 'eicon-text-align-center',
                     ],
                     'bottom' => [
                         'title' => __( 'Bottom', 'essential-addons-for-elementor-lite' ),
@@ -497,7 +497,7 @@ class Image_Accordion extends Widget_Base {
                 'type'      => Controls_Manager::COLOR,
                 'default'   => '#fff',
                 'selectors' => [
-                    '{{WRAPPER}} .eael-img-accordion .overlay .img-accordion-title' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .eael-img-accordion .overlay .img-accordion-title' => 'color: {{VALUE}} !important;',
                 ],
             ]
         );
@@ -605,8 +605,15 @@ class Image_Accordion extends Widget_Base {
             <div class="overlay">
                 <div class="overlay-inner">
                     <div class="overlay-inner <?php echo( $active === 'yes' ? ' overlay-inner-show' : '' ); ?>">
-                        <?php printf( '<%1$s class="img-accordion-title">%2$s</%1$s>', Helper::eael_validate_html_tag($settings[ 'title_tag' ]), Helper::eael_wp_kses($img_accordion[ 'eael_accordion_tittle' ]) ); ?>
-                        <p><?php echo sprintf( "%s", $this->parse_text_editor( $img_accordion[ 'eael_accordion_content' ] ) ); ?></p>
+                        <?php
+                        if ( !empty( $img_accordion[ 'eael_accordion_tittle' ] ) ):
+                            printf( '<%1$s class="img-accordion-title">%2$s</%1$s>', Helper::eael_validate_html_tag($settings[ 'title_tag' ]), Helper::eael_wp_kses($img_accordion[ 'eael_accordion_tittle' ]) );
+                        endif;
+
+                        if ( !empty( $img_accordion[ 'eael_accordion_content' ] ) ):
+                        ?>
+                            <p><?php echo sprintf( "%s", $this->parse_text_editor( $img_accordion[ 'eael_accordion_content' ] ) ); ?></p>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

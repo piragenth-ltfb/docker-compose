@@ -13,13 +13,22 @@ function cdi_import_files() {
             'preview_url' => 'https://bizbergthemes.com/building-construction-architecture-pro/'
         ),
         array(
-            'import_file_name'=> __('Homepage PRO','cdi'),
+            'import_file_name'=> __('Homepage Construction Sewa PRO','cdi'),
             'categories'      =>  array( 'Homepage' ),
-            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/building-construction-architecture/homepage-pro.jpg',
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/building-construction-architecture/construction-sewa-homepage.jpg',
             'local_import_file'=> CDI_PLUGIN_DIR_PATH . '/themes/building-construction-architecture-pro/inc/content.xml',
             'local_import_customizer_file' => CDI_PLUGIN_DIR_PATH . '/themes/building-construction-architecture-pro/inc/options.dat',
             'local_import_widget_file'     => CDI_PLUGIN_DIR_PATH . '/themes/building-construction-architecture-pro/inc/widgets.wie',
-            'preview_url' => 'https://bizbergthemes.com/building-construction-architecture-pro/homepage-pro/'
+            'preview_url' => 'https://bizbergthemes.com/building-construction-architecture-pro/homepage-construction-sewa-pro/'
+        ),
+        array(
+            'import_file_name'=> __('Homepage Creative Construction PRO','cdi'),
+            'categories'      =>  array( 'Homepage' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/building-construction-architecture/homepage-3.jpg',
+            'local_import_file'=> CDI_PLUGIN_DIR_PATH . '/themes/building-construction-architecture-pro/inc/content.xml',
+            'local_import_customizer_file' => CDI_PLUGIN_DIR_PATH . '/themes/building-construction-architecture-pro/inc/options.dat',
+            'local_import_widget_file'     => CDI_PLUGIN_DIR_PATH . '/themes/building-construction-architecture-pro/inc/widgets.wie',
+            'preview_url' => 'https://bizbergthemes.com/building-construction-architecture-pro/homepage-3/'
         )
     );
 }
@@ -43,8 +52,12 @@ function cdi_after_import_setup( $selected_import ) {
             $front_page_id = get_page_by_path( 'homepage-free' );
             break;
 
-        case 'Homepage PRO':
-            $front_page_id = get_page_by_path( 'homepage-pro' );
+        case 'Homepage Construction Sewa PRO':
+            $front_page_id = get_page_by_path( 'homepage-construction-sewa-pro' );
+            break;
+
+        case 'Homepage Creative Construction PRO':
+            $front_page_id = get_page_by_path( 'homepage-3' );
             break;
         
         default:
@@ -96,6 +109,11 @@ function cdi_register_plugins( $plugins ) {
         [ 
           'name'     => 'Essential Addons for Elementor', 
           'slug'     => 'essential-addons-for-elementor-lite', 
+          'required' => true,             
+        ],
+        [ 
+          'name'     => 'Primary Addon for Elementor', 
+          'slug'     => 'primary-addon-for-elementor', 
           'required' => true,             
         ],
     ];

@@ -6,9 +6,21 @@
  * @subpackage RankMath\Settings
  */
 
+use RankMath\KB;
 use RankMath\Helper;
 
 defined( 'ABSPATH' ) || exit;
+
+$cmb->add_field(
+	[
+		'id'      => 'headless_support',
+		'type'    => 'toggle',
+		'name'    => esc_html__( 'Headless CMS Support', 'rank-math' ),
+		// Translators: placeholder is a link to "Read more".
+		'desc'    => sprintf( esc_html__( 'Enable this option to register a REST API endpoint that returns the HTML meta tags for a given URL. %s', 'rank-math' ), '<a href="' . KB::get( 'headless-support', 'Others Tab KB Link' ) . '">' . esc_html__( 'Read more', 'rank-math' ) . '</a>' ),
+		'default' => 'off',
+	]
+);
 
 $cmb->add_field(
 	[
@@ -75,7 +87,7 @@ $cmb->add_field(
 		'type'    => 'toggle',
 		'name'    => esc_html__( 'Support Us with a Link', 'rank-math' ),
 		/* Translators: %s is the word "nofollow" code tag and second one for the filter link */
-		'desc'    => sprintf( esc_html__( 'If you are showing the SEO scores on the front end, this option will insert a %1$s backlink to RankMath.com to show your support. You can change the link & the text by using this %2$s.', 'rank-math' ), '<code>follow</code>', '<a href="https://rankmath.com/kb/filters-hooks-api-developer/#change-seo-score-backlink" target="_blank">' . __( 'filter', 'rank-math' ) . '</a>' ),
+		'desc'    => sprintf( esc_html__( 'If you are showing the SEO scores on the front end, this option will insert a %1$s backlink to RankMath.com to show your support. You can change the link & the text by using this %2$s.', 'rank-math' ), '<code>follow</code>', '<a href="' . KB::get( 'change-seo-score-backlink', 'Options Panel Support Us' ) . '" target="_blank">' . __( 'filter', 'rank-math' ) . '</a>' ),
 		'default' => 'on',
 		'dep'     => [ [ 'frontend_seo_score', 'on' ] ],
 	]
@@ -101,7 +113,7 @@ $cmb->add_field(
 
 $cmb->add_field(
 	[
-		'id'   => 'rank_math_serp_preview',
+		'id'   => 'rank_math_rss_vars',
 		'type' => 'raw',
 		'file' => rank_math()->includes_dir() . 'settings/general/rss-vars-table.php',
 	]

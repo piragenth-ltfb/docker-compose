@@ -204,3 +204,6 @@ ul.custom_options_list {
   font-size: 18px;
   margin: 2px 0 10px 0;
 }
+#prli-install-license-edition-loading {
+  margin-left: 10px;
+}

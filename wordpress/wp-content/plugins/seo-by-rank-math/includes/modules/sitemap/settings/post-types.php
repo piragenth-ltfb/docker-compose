@@ -20,7 +20,8 @@ if ( 'attachment' === $post_type && Helper::get_settings( 'general.attachment_re
 			'id'      => 'attachment_redirect_urls_notice',
 			'type'    => 'notice',
 			'what'    => 'warning',
-			'content' => esc_html__( 'To generate attachment sitemap disable attachment redirection to parent.', 'rank-math' ),
+			/* translators: The settings page link */
+			'content' => sprintf( __( 'To configure meta tags for your media attachment pages, you need to first %s to parent.', 'rank-math' ), '<a href="' . esc_url( Helper::get_admin_url( 'options-general#setting-panel-links' ) ) . '">' . esc_html__( 'disable redirect attachments', 'rank-math' ) . '</a>' ),
 		]
 	);
 	$attributes['disabled'] = 'disabled';
@@ -34,6 +35,21 @@ $cmb->add_field(
 		'desc'       => esc_html__( 'Include this post type in the XML sitemap.', 'rank-math' ),
 		'default'    => 'attachment' === $post_type ? 'off' : 'on',
 		'attributes' => $attributes,
+	]
+);
+
+$cmb->add_field(
+	[
+		'id'         => $prefix . 'html_sitemap',
+		'type'       => 'toggle',
+		'name'       => esc_html__( 'Include in HTML Sitemap', 'rank-math' ),
+		'desc'       => esc_html__( 'Include this post type in the HTML sitemap if it\'s enabled.', 'rank-math' ),
+		'default'    => 'attachment' === $post_type ? 'off' : 'on',
+		'attributes' => $attributes,
+		'classes'    => [
+			'rank-math-html-sitemap',
+			! Helper::get_settings( 'sitemap.html_sitemap' ) ? 'hidden' : ''
+		],
 	]
 );
 

@@ -7,7 +7,7 @@
  * Author: Ibrar Hussain
  * Author URI: https://github.com/imibrar
  * Text Domain: i2-pros-and-cons
- * Version: 1.3.0
+ * Version: 1.3.1
  * License: GPLv3
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
  */
@@ -17,9 +17,9 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('I2PC_MORE_THEMES_PLUGINS_URL', 'https://themesfirst.com');
-define('I2PC_VER', '1.3.0');
-define('I2PC_CSS_VER', '1.3.0');
+define('I2PC_MORE_THEMES_PLUGINS_URL', 'https://www.themesfirst.com');
+define('I2PC_VER', '1.3.1');
+define('I2PC_CSS_VER', '1.3.1');
 
 //include_once('include/ibr-test-block.php');
 include_once('include/shortcodes.php');

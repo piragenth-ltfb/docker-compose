@@ -11,6 +11,7 @@
 namespace Google\Site_Kit\Core\Util;
 
 use Google\Site_Kit\Context;
+use Google\Site_Kit\Core\Authentication\Authentication;
 use Google\Site_Kit\Core\Permissions\Permissions;
 use Google\Site_Kit\Core\REST_API\REST_Route;
 use WP_REST_Server;
@@ -238,6 +239,8 @@ class Reset {
 						'methods'             => WP_REST_Server::EDITABLE,
 						'callback'            => function( WP_REST_Request $request ) {
 							$this->all();
+							$this->maybe_hard_reset();
+
 							return new WP_REST_Response( true );
 						},
 						'permission_callback' => $can_setup,
@@ -256,13 +259,15 @@ class Reset {
 	 */
 	private function handle_reset_action( $nonce ) {
 		if ( ! wp_verify_nonce( $nonce, static::ACTION ) ) {
-			wp_die( esc_html__( 'Invalid nonce.', 'google-site-kit' ), 400 );
+			$authentication = new Authentication( $this->context );
+			$authentication->invalid_nonce_error( static::ACTION );
 		}
 		if ( ! current_user_can( Permissions::SETUP ) ) {
 			wp_die( esc_html__( 'You don\'t have permissions to set up Site Kit.', 'google-site-kit' ), 403 );
 		}
 
 		$this->all();
+		$this->maybe_hard_reset();
 
 		wp_safe_redirect(
 			$this->context->admin_url(
@@ -277,4 +282,32 @@ class Reset {
 		);
 		exit;
 	}
+
+	/**
+	 * Performs hard reset if it is enabled programmatically.
+	 *
+	 * @since 1.46.0
+	 */
+	public function maybe_hard_reset() {
+		/**
+		 * Filters the hard reset option, which is `false` by default.
+		 *
+		 * By default, when Site Kit is reset it does not delete "persistent" data
+		 * (options prefixed with `googlesitekitpersistent_`). If this filter returns `true`,
+		 * all options belonging to Site Kit, including those with the above "persistent"
+		 * prefix, will be deleted.
+		 *
+		 * @since 1.46.0
+		 *
+		 * @param bool $hard_reset_enabled If a hard reset is enabled. `false` by default.
+		 */
+		$hard_reset_enabled = apply_filters( 'googlesitekit_hard_reset_enabled', false );
+		if ( ! $hard_reset_enabled ) {
+			return;
+		}
+
+		$reset_persistent = new Reset_Persistent( $this->context );
+		$reset_persistent->all();
+	}
+
 }

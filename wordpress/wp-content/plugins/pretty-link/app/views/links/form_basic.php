@@ -38,6 +38,7 @@
     </th>
     <td>
       <textarea id="prli_url" class="large-text" name="prli_url"><?php echo esc_textarea($values['url']); ?></textarea>
+      <?php do_action('prli_link_form_after_target_url'); ?>
     </td>
   </tr>
   <tr>
@@ -69,5 +70,6 @@
       <textarea class="large-text" name="prli_description"><?php echo esc_textarea($values['description']); ?></textarea>
     </td>
   </tr>
+  <?php do_action('prli_link_form_basic'); ?>
 </table>
 

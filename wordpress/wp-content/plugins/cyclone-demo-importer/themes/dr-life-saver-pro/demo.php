@@ -22,13 +22,22 @@ function cdi_import_files() {
             'preview_url' => 'https://bizbergthemes.com/dr-life-saver-pro/homepage-pro/'
         ),
         array(
-            'import_file_name'=> __('Homepage Slider','cdi'),
-            'categories'      =>  array( 'Homepage' ),
-            'local_import_file'=> CDI_PLUGIN_DIR_PATH . '/themes/dr-life-saver-pro/inc/content.xml',
+            'import_file_name'             => __('Homepage Smart Health Pharmacy','cdi'),
+            'categories'                   =>  array( 'Homepage' ),
+            'local_import_file'            => CDI_PLUGIN_DIR_PATH . '/themes/dr-life-saver-pro/inc/content.xml',
             'local_import_customizer_file' => CDI_PLUGIN_DIR_PATH . '/themes/dr-life-saver-pro/inc/options.dat',
-            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/dr-life-saver/homepage-3.jpg',
+            'import_preview_image_url'     => CDI_PLUGIN_DIR_URL . '/assets/images/dr-life-saver/homepage-smart.jpg',
             'local_import_widget_file'     => CDI_PLUGIN_DIR_PATH . '/themes/dr-life-saver-pro/inc/widgets.wie',
-            'preview_url' => 'https://bizbergthemes.com/dr-life-saver-pro/homepage-pro-2/'
+            'preview_url'                  => 'https://bizbergthemes.com/dr-life-saver-pro/homepage-smart-health-pharmacy/'
+        ),
+        array(
+            'import_file_name'             => __('Homepage Medical Business','cdi'),
+            'categories'                   =>  array( 'Homepage' ),
+            'local_import_file'            => CDI_PLUGIN_DIR_PATH . '/themes/dr-life-saver-pro/inc/content.xml',
+            'local_import_customizer_file' => CDI_PLUGIN_DIR_PATH . '/themes/dr-life-saver-pro/inc/options.dat',
+            'import_preview_image_url'     => CDI_PLUGIN_DIR_URL . '/assets/images/dr-life-saver/homepage-medical-business.jpg',
+            'local_import_widget_file'     => CDI_PLUGIN_DIR_PATH . '/themes/dr-life-saver-pro/inc/widgets.wie',
+            'preview_url'                  => 'https://bizbergthemes.com/dr-life-saver-pro/medical-business-pro/'
         ),
     );
 }
@@ -56,8 +65,12 @@ function cdi_after_import_setup( $selected_import ) {
             $front_page_id = get_page_by_path( 'homepage-pro' );
             break;
 
-        case 'Homepage Slider':
-            $front_page_id = get_page_by_path( 'homepage-pro-2' );
+        case 'Homepage Smart Health Pharmacy':
+            $front_page_id = get_page_by_path( 'homepage-smart-health-pharmacy' );
+            break;
+
+        case 'Homepage Medical Business':
+            $front_page_id = get_page_by_path( 'medical-business-pro' );
             break;
         
         default:
@@ -109,6 +122,11 @@ function cdi_register_plugins( $plugins ) {
         [ 
           'name'     => 'Essential Addons for Elementor', 
           'slug'     => 'essential-addons-for-elementor-lite', 
+          'required' => true,             
+        ],
+        [ 
+          'name'     => 'Medical Addon for Elementor', 
+          'slug'     => 'medical-addon-for-elementor', 
           'required' => true,             
         ],
     ];

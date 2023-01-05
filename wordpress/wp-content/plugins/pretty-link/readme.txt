@@ -1,22 +1,22 @@
-=== Pretty Links - Link Management, Branding, Tracking & Sharing Plugin ===
+=== Pretty Links - Affiliate Links, Link Branding, Link Tracking & Marketing Plugin ===
 Contributors: supercleanse, cartpauj
 Donate link: https://prettylinks.com
-Tags: links, urls, shortlinks, link branding, link tracking, affiliate links, link cloaking, marketing, redirect, forward, social media, rewrite, shorturl, shorten, shortening, click, clicks, track, tracking, tiny, tinyurl, budurl, shrinking, domain, shrink, mask, masking, cloak, cloaking, slug, slugs, admin, administration, stats, statistics, stat, statistic, email, ajax, javascript, ui, csv, download, page, post, pages, posts, shortcode, seo, automation, widget, widgets, dashboard
+Tags: affiliate links, link branding, link shortner, link tracking, redirects, affiliate, affiliate marketing, affiliates, short links, shorten, shortening, shortlink, shortlinks, shorturl, shrinking, marketing, marketing plugin, cloak, cloaker, cloaking, 301, 302, 307, 404, bit.ly, bitly, tinyurl, link cloaking, link redirection, link shortener, links, pretty links, url redirection, url shortener, urls, seo, slug, slugs
 Requires at least: 5.1
-Tested up to: 5.8
-Stable tag: 3.2.3
+Tested up to: 6.1.1
+Stable tag: 3.2.8
 
-The best WordPress link management, branding, tracking & sharing plugin. Link shortener helps you easily make pretty & trackable shortlinks.
+🌠 The best WordPress link management, branding, tracking & sharing plugin. Easily make pretty & trackable shortlinks. 🔗
 
 == Description ==
 
 Pretty Links helps you shrink, beautify, track, manage and share any URL on or off of your WordPress website. Create links that look how you want using your own domain name!
 
-= Pretty Links =
+## Pretty Links 🌠
 
-Pretty Links enables you to shorten links using your own domain name (as opposed to using tinyurl.com, bit.ly, or any other link shrinking service)! In addition to creating clean links, Pretty Links tracks each hit on your URL and provides a full, detailed report of where the hit came from, the browser, os and host. Pretty Links is a killer plugin for people who want to clean up their affiliate links, track clicks from emails, their links on Twitter to come from their own domain, or generally increase the reach of their website by spreading these links on forums or comments on other blogs.
+Pretty Links enables you to shorten links using your own domain name (as opposed to using tinyurl.com, bit.ly, or any other link shrinking service)! In addition to creating clean links, Pretty Links tracks each hit on your URL and provides a full, detailed report of where the hit came from, the browser, OS, and host. Pretty Links is a killer plugin for people who want to clean up their affiliate links, track clicks from emails, their links on Twitter to come from their own domain, or generally increase the reach of their website by spreading these links on forums or comments on other blogs.
 
-= Link Examples =
+## Examples 👇
 
 This is a link setup using Pretty Links that redirects to the Pretty Links Homepage where you can find more info about this Plugin:
 
@@ -30,32 +30,69 @@ Here's a link that Pretty Links generated a random slug for (similar to what bit
 
 http://blairwilliams.com/w7a
 
-= Features =
+## Features ✔️
 
-* Gives you the ability to create clean, simple URLs on your website that redirect to any other URL (allows for 301, 302, and 307 redirects only)
-* Generates random 3-4 character slugs for your URL or allows you to name a custom slug for your URL
-* Tracks the Number of Clicks per link
-* Tracks the Number of Unique Clicks per link
-* Provides a reporting interface where you can see a configurable chart of clicks per day. This report can be filtered by the specific link clicked, date range, and/or unique clicks.
-* View click details including ip address, remote host, browser (including browser version), operating system, and referring site
-* Download hit details in CSV format
-* Intuitive Javascript / AJAX Admin User Interface
-* Pass custom parameters to your scripts through pretty link and still have full tracking ability
-* Exclude IP Addresses from Stats
-* Enables you to send your pretty links via Email directly from your WordPress admin
-* Select Temporary (302 or 307) or Permanent (301) redirection for your pretty links
-* Cookie based system for tracking visitor activity across clicks
-* Create nofollow/noindex links
-* Turn tracking on / off on each link
-* Pretty Links Bookmarklet
+**[🔗 Create clean, simple URLs that redirect to any other URL](https://prettylinks.com/about#pl-link-setup?utm_source=wordpress.org&utm_medium=lite_plugin_listing&utm_content=features)**
+Easily turn your long URLs into short ones within a matter of seconds.
 
-= Pretty Links Pro =
+**[🔃 Supports 301, 302, and 307 redirects](https://prettylinks.com/about#pl-redirect-types?utm_source=wordpress.org&utm_medium=lite_plugin_listing&utm_content=features)**
+Redirect users using one of our three redirect types: 301 (Permanent), 302 (Temporary), and 307 (Temporary).
 
-[Upgrade to Pretty Links Pro](https://prettylinks.com/why-upgrade/ "Upgrade to Pretty Links Pro")
+**[🖱️ One-Click Link Sharing](https://prettylinks.com/about#pl-dashboard?utm_source=wordpress.org&utm_medium=lite_plugin_listing&utm_content=features)**
+Copy and manage your pretty links all in one centralized area.
 
-*Pretty Links Pro* is a **significant upgrade** that adds many tools and redirection types that will allow you to create pretty links automatically, cloak links, replace keywords thoughout your blog with pretty links, categorize & tag your pretty links and much more.  You can learn more about *Pretty Links Pro* here:
+**[⚙️ Fully configurable slugs](https://prettylinks.com/about#pl-link-setup?utm_source=wordpress.org&utm_medium=lite_plugin_listing&utm_content=features)**
+Pretty Links will automatically generate 3-4 random characters to use as the slug, but you can also create your own slug to use for your URL.
 
-[Learn More](https://prettylinks.com/about "Learn More") | [Pricing](https://prettylinks.com/pricing/plans/ "Pricing")
+**[🔎 Track the Number of Clicks and Unique Clicks per link](https://prettylinks.com/about#pl-dashboard?utm_source=wordpress.org&utm_medium=lite_plugin_listing&utm_content=features)**
+Track how well your pretty links are performing by viewing the number of overall clicks and unique clicks on your links.
+
+**[📊 Generate Highly Customizable Reports](https://prettylinks.com/about#pl-dashboard?utm_source=wordpress.org&utm_medium=lite_plugin_listing&utm_content=features)**
+Create reports where you can see a configurable chart of clicks per day. The report can be filtered by the specific link clicked, date range, and/or unique clicks.
+
+**[💡 Extremely Intuitive Admin User Interface](https://prettylinks.com/about#pl-dashboard?utm_source=wordpress.org&utm_medium=lite_plugin_listing&utm_content=features)**
+No need to guess where everything is located. Pretty Links makes the setup and link management process as simple as possible.
+
+**[⬇️ Download Click Details](https://prettylinks.com/about#pl-dashboard?utm_source=wordpress.org&utm_medium=lite_plugin_listing&utm_content=features)**
+Need to download click data for your links? Pretty Links has you covered. The plugin will generate a CSV containing all the information you need to successfully manage your links.
+
+... and so much more! [Visit our site](https://prettylinks.com?utm_source=wordpress.org&utm_medium=lite_plugin_listing&utm_content=home) to learn more about what Pretty Links can do for you.
+
+## Pretty Links Pro 💪
+
+*Pretty Links Pro* is a **significant upgrade** that adds many tools and redirection types.  Here's a glimpse at some of the different features that Pretty Links Pro offers:
+
+* [**Keyword & URL Replacements**](https://prettylinks.com/features?utm_source=wordpress.org&utm_medium=lite_plugin_listing&utm_content=pro_features)
+Using one of Pretty Link's automation features, you can define a list of keywords and URLs, then Pretty Links will automatically scan your site's content and replace them with your pretty link.
+
+* [**Advanced Redirect Types**](https://prettylinks.com/features?utm_source=wordpress.org&utm_medium=lite_plugin_listing&utm_content=pro_features)
+Take full control over how your users are redirected. With the Pro version, you can now offer Cloaked redirects, Pretty Bar redirects, JavaScript redirects, Meta-Refresh redirects, Tracking Pixel redirects, and Geographic redirects.
+
+* [**Automatically Create Pretty Links for Posts/Pages**](https://prettylinks.com/features?utm_source=wordpress.org&utm_medium=lite_plugin_listing&utm_content=pro_features)
+Another one of Pretty Link's powerful automation features. Whenever a new page or post is published, Pretty Links will automatically create a pretty link for it.
+
+* [**Link Categories & Tags**](https://prettylinks.com/features?utm_source=wordpress.org&utm_medium=lite_plugin_listing&utm_content=pro_features)
+Make link management easier by grouping your links together and assigning them a category or tag.
+
+* [**Expiring Links**](https://prettylinks.com/features?utm_source=wordpress.org&utm_medium=lite_plugin_listing&utm_content=pro_features)
+Set an expiration date on your links and decide where the user is redirected to after clicking an expired link.
+
+You can learn more about *Pretty Links Pro* here:
+
+[Learn More](https://prettylinks.com/why-upgrade?utm_source=wordpress.org&utm_medium=lite_plugin_listing&utm_content=pro "Learn More") | [Pricing](https://prettylinks.com/pricing/plans?utm_source=wordpress.org&utm_medium=lite_plugin_listing&utm_content=pro "Pricing")
+
+## Integrations ⚡
+* [Google Analytics](https://prettylinks.com/docs/integrating-google-analytics?utm_source=wordpress.org&utm_medium=lite_plugin_listing&utm_content=kb) - Easily start tracking your links within Google Analytics
+* [MonsterInsights](https://prettylinks.com/docs/integrating-pretty-links-with-monsterinsights?utm_source=wordpress.org&utm_medium=lite_plugin_listing&utm_content=kb) - See how well your links are performing with the MonsterInsights plugin
+
+## What's Next 🤩
+Enjoying your time with Pretty Links? Consider checking out some of our other projects:
+
+* [MemberPress](https://memberpress.com/) - Full-featured Membership solution for WordPress. Control who has access to your site and sell content securely through payment gateways such as Stripe, PayPal, and Authorize.net
+* [EasyAffiliate](https://easyaffiliate.com/) - Complete Affiliate Program management plugin for WordPress. Start an Affiliate Program to dramatically increase traffic, attention, and sales.
+* [ThirstyAffiliates](https://thirstyaffiliates.com/) - Link cloaking plugin made specifically for affiliate bloggers to start making money.
+* [Buy Now Plus](https://buynowplus.com/) - Easily start accepting Credit Card payments through a simple buy now button on your website or social media accounts using the Stripe gateway.
+* [Members](https://members-plugin.com/) - Roles and capabilities management plugin for your WordPress site. This is an excellent plugin to use alongside a Membership solution such as MemberPress.
 
 == Installation ==
 
@@ -65,7 +102,52 @@ http://blairwilliams.com/w7a
 
 3. Make sure you have changed your permalink Common Settings in Settings -> Permalinks away from "Default" to something else. I prefer using custom and then "/%year%/%month%/%postname%/" for the simplest possible URL slugs with the best performance.
 
+== Frequently Asked Questions ==
+= Who will find Pretty Links useful? =
+Pretty Links is particularly useful to affiliate marketers. It helps them to clean up, brand, group, organize, and track their links. In addition to affiliate marketing, Pretty Links is also useful to bloggers, podcasters, merchants, social media marketers, and anyone else who wants to easily take control of their link strategy.
+
+= Can I use Pretty Links with any WordPress theme? =
+Absolutely! Pretty Links operates mainly in the WordPress admin, but the front end features should be totally compatible with any WordPress theme.
+
+= How do I get started with Pretty Links? =
+Getting started with Pretty Links is incredibly easy. Everything you need to know you can find on our [Getting Started page](https://prettylinks.com/helpdesk_category/getting-started/).
+
+= Is Pretty Links Translatable? =
+Yes! Pretty Links is ready for translation. See our [Translating Pretty Links](https://prettylinks.com/docs/translating-pretty-link-pro/) documentation for more information on how you can translate the plugin into your language.
+
+= What are the differences in redirect types? =
+301 (Permanent) redirects are used to tell search engines that a requested URL has been permanently moved to another URL. If you're confident that your target URL will never change, then use this redirect type. 302 and 307 (Temporary) redirects tell search engines that the requested URL has been moved temporarily, but will be back eventually.
+
+== Screenshots ==
+1. Setting up a Pretty Link
+2. Settings Page
+3. Pretty Links Listing
+4. Click Tracking
+
 == Changelog ==
+= 3.2.8 =
+* Update readme.txt
+* Fix JS error on options page
+* Set cookie using secure attribute when accessed via secure connection
+* Fix PL Link Inserter jumping to bottom of page on WP 6.1
+* Fix Gutenberg deprecation notices
+
+= 3.2.7 =
+* Fix index replacements
+
+= 3.2.6 =
+* Fix upgrade to Pro bug
+
+= 3.2.5 =
+* Fix fatal error if update transient is false
+* Notifications Inbox
+* Small bug fixes
+* Pro: Don't force black background on cloaked urls
+* Pro: License key optimizations
+
+= 3.2.4 =
+* Review notification dismissal improvements
+
 = 3.2.3 =
 * Removing vestigial files
 
@@ -158,4 +240,3 @@ http://blairwilliams.com/w7a
 * PRO ONLY: Added Pretty Link Tags
 * PRO ONLY: Fixed some issues with Pretty Link Imports and Exports
 * Many other small fixes and enhancements
-

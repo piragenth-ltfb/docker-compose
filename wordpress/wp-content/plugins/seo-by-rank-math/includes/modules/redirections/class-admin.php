@@ -54,7 +54,6 @@ class Admin extends Base {
 		$this->load_metabox();
 
 		if ( Helper::has_cap( 'redirections' ) ) {
-			$this->action( 'rank_math/dashboard/widget', 'dashboard_widget', 12 );
 			$this->filter( 'rank_math/settings/general', 'add_settings' );
 		}
 
@@ -172,7 +171,7 @@ class Admin extends Base {
 					'icon'  => 'rm-icon rm-icon-redirection',
 					'title' => esc_html__( 'Redirections', 'rank-math' ),
 					/* translators: Link to kb article */
-					'desc'  => sprintf( esc_html__( 'Easily create redirects without fiddling with tedious code. %s.', 'rank-math' ), '<a href="' . \RankMath\KB::get( 'redirections-settings' ) . '" target="_blank">' . esc_html__( 'Learn more', 'rank-math' ) . '</a>' ),
+					'desc'  => sprintf( esc_html__( 'Easily create redirects without fiddling with tedious code. %s.', 'rank-math' ), '<a href="' . KB::get( 'redirections-settings', 'Options Panel Redirections Tab' ) . '" target="_blank">' . esc_html__( 'Learn more', 'rank-math' ) . '</a>' ),
 					'file'  => $this->directory . '/views/options.php',
 				],
 			],
@@ -180,35 +179,6 @@ class Admin extends Base {
 		);
 
 		return $tabs;
-	}
-
-	/**
-	 * Add stats in the Rank Math admin dashboard widget.
-	 */
-	public function dashboard_widget() {
-		$data = DB::get_stats();
-		?>
-		<h3>
-			<?php esc_html_e( 'Redirections', 'rank-math' ); ?>
-			<a href="<?php echo esc_url( Helper::get_admin_url( 'redirections' ) ); ?>" class="rank-math-view-report" title="<?php esc_html_e( 'View Report', 'rank-math' ); ?>"><i class="dashicons dashicons-ellipsis"></i></a>
-		</h3>
-		<div class="rank-math-dashabord-block">
-			<div>
-				<h4>
-					<?php esc_html_e( 'Redirection Count', 'rank-math' ); ?>
-					<span class="rank-math-tooltip"><em class="dashicons-before dashicons-editor-help"></em><span><?php esc_html_e( 'Total number of Redirections created in the Rank Math.', 'rank-math' ); ?></span></span>
-				</h4>
-				<strong class="text-large"><?php echo esc_html( Str::human_number( $data->total ) ); ?></strong>
-			</div>
-			<div>
-				<h4>
-					<?php esc_html_e( 'Redirection Hits', 'rank-math' ); ?>
-					<span class="rank-math-tooltip"><em class="dashicons-before dashicons-editor-help"></em><span><?php esc_html_e( 'Total number of hits received by all the Redirections.', 'rank-math' ); ?></span></span>
-				</h4>
-				<strong class="text-large"><?php echo esc_html( Str::human_number( $data->hits ) ); ?></strong>
-			</div>
-		</div>
-		<?php
 	}
 
 	/**
@@ -313,7 +283,7 @@ class Admin extends Base {
 	 */
 	public function page_title_actions( $is_editing ) {
 		$actions = [
-			'add' => [
+			'add'           => [
 				'class' => 'page-title-action rank-math-add-new-redirection' . ( $is_editing ? '-refresh' : '' ),
 				'href'  => Helper::get_admin_url( 'redirections', 'new=1' ),
 				'label' => __( 'Add New', 'rank-math' ),
@@ -323,12 +293,12 @@ class Admin extends Base {
 				'href'  => Helper::get_admin_url( 'redirections', 'importexport=1' ),
 				'label' => __( 'Export Options', 'rank-math' ),
 			],
-			'learn_more' => [
+			'learn_more'    => [
 				'class' => 'page-title-action',
-				'href'  => KB::get( 'redirections' ),
+				'href'  => KB::get( 'redirections', 'SW Redirection Step' ),
 				'label' => __( 'Learn More', 'rank-math' ),
 			],
-			'settings' => [
+			'settings'      => [
 				'class' => 'page-title-action',
 				'href'  => Helper::get_admin_url( 'options-general#setting-panel-redirections' ),
 				'label' => __( 'Settings', 'rank-math' ),

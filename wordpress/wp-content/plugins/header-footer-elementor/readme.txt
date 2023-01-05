@@ -4,8 +4,8 @@ Tags: elementor, header footer builder, header template, footer template, elemen
 Donate link: https://www.paypal.me/BrainstormForce
 Requires at least: 4.4
 Requires PHP: 5.4
-Tested up to: 5.8
-Stable tag: 1.6.3
+Tested up to: 6.1
+Stable tag: 1.6.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,9 +15,9 @@ Create Header, Footer and Blocks for your WordPress website using Elementor Page
 
 Have you ever imagined you could create your website header and footer with <a href="https://elementor.com/">Elementor</a> for FREE?
 
-Elementor Header & Footer Builder is a simple yet powerful WordPress plugin that allows you to create a layout with Elementor and set it as 
-- Header 
-- Footer 
+Elementor Header & Footer Builder is a simple yet powerful WordPress plugin that allows you to create a layout with Elementor and set it as
+- Header
+- Footer
 - Block (anywhere on the website)
 
 = Create Attractive Designs =
@@ -58,7 +58,7 @@ The plugin offers inbuilt widgets that help to create header/footer layouts. The
 
 = WORKS WITH ALL THEMES =
 
-Elementor Header & Footer Builder plugin works with all WordPress themes. Few of the themes have direct support while for few you can choose a method to add theme support. 
+Elementor Header & Footer Builder plugin works with all WordPress themes. Few of the themes have direct support while for few you can choose a method to add theme support.
 
 In case you face any difficulty displaying header/footer, manually choose the theme support method. Visit Appearance > Elementor Header & Footer Builder > Theme Support. Select a method to suit your current theme and you are good to go!
 
@@ -111,7 +111,7 @@ Made with love at [Brainstorm Force](https://www.brainstormforce.com/?utm_source
 = How Does This Plugin Work? =
 
 1. Go to Appearance -> Elementor Header & Footer Builder to build a header or footer layout using Elementor.
-2. Click on “Add New” and design a template with Elementor. 
+2. Click on “Add New” and design a template with Elementor.
 3. Once the template is ready, set is as a header/footer/block using options “Type of Template” (<a href="https://share.getcloudapp.com/geurz2JR">screenshot</a>).
 4.
 
@@ -137,11 +137,47 @@ This same applies when you are creating your Header/Footer using this plugin.
 5. Default widgets available with Elementor Header & Footer Builder.
 
 == Changelog ==
-= 1.6.3 = 
+
+= 1.6.13 =
+- Compatibility with Elementor version 3.7.2 and Elementor Pro version 3.7.3.
+
+= 1.6.12 =
+- Compatibility with Elementor and Elementor Pro.
+
+= 1.6.11 =
+- Improvement: Compatibility with Elementor Pro version 3.7
+- Fix: Removed meta tag attribute [maximum-scale=1] for a better accessibility.
+
+= 1.6.10 =
+- Improvement: Compatibility with Elementor version 3.6.
+  Removed elementor deprecated functions and replaced with latest functions.
+  Now to work with Elementor Header & Footer Builder, Elementor minimum version 3.5.0 or higher will be required.
+
+= 1.6.9 =
+- Improvement: Compatibility with Elementor Pro version 3.6
+- Fix: Navigation Menu - If Polylang language switcher is present in the menu, it closes the menu with a click.
+
+= 1.6.8 =
+- Improvement: WordPress 5.9 compatibility.
+
+= 1.6.7 =
+- Improvement: Added GDPR support to Subscription form.
+
+= 1.6.6 =
+- Improvement: Added compatibility to Elementor core version 3.5.0. Now to work with EHF, Elementor minimum version 3.1.0 or higher will be required.
+- Fix: PHP warning of undefined array key on responsive controls in all widgets.
+
+= 1.6.5 =
+- Fix: Hide empty cart count badge hiding even when cart is not empty.
+
+= 1.6.4 =
+- Improvement: Elementor 3.4 compatibility.
+
+= 1.6.3 =
 - Improvement: WordPress 5.8 compatibility.
 - Improvement: Elementor 3.3 compatibility.
 
-= 1.6.2 = 
+= 1.6.2 =
 - Improvement: Copyright - Added custom link attributes support.
 - Improvement: Page Title - Added custom link attributes support.
 - Improvement: Retina Image - Added custom link attributes support.

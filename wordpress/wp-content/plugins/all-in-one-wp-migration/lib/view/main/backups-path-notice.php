@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2018 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,10 @@
  * ███████║███████╗██║  ██║ ╚████╔╝ ██║ ╚═╝ ██║██║  ██║███████║██║  ██╗
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'Kangaroos cannot jump here' );
+}
 ?>
 
 <div class="error">
@@ -29,9 +33,9 @@
 		<?php
 		printf(
 			__(
-				'All in One WP Migration is not able to create <strong>%s</strong> folder. ' .
+				'All-in-One WP Migration is not able to create <strong>%s</strong> folder. ' .
 				'You will need to create this folder and grant it read/write/execute permissions (0777) ' .
-				'for the All in One WP Migration plugin to function properly.',
+				'for the All-in-One WP Migration plugin to function properly.',
 				AI1WM_PLUGIN_NAME
 			),
 			AI1WM_BACKUPS_PATH

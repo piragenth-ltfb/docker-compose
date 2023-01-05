@@ -41,7 +41,10 @@
       <div class="prli-page" id="pro">
         <?php require(PRLI_VIEWS_PATH . '/links/form_pro.php'); ?>
       </div>
+      <?php do_action('prli_admin_link_nav_body'); ?>
     </td>
   </tr>
 </table>
+
+<?php do_action('prli_admin_after_link_form'); ?>
 

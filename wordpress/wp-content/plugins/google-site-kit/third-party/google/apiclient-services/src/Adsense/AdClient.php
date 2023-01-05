@@ -19,32 +19,77 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Adsense;
 
 class AdClient extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $name;
+    /**
+     * @var string
+     */
     public $productCode;
+    /**
+     * @var string
+     */
     public $reportingDimensionId;
+    /**
+     * @var string
+     */
+    public $state;
+    /**
+     * @param string
+     */
     public function setName($name)
     {
         $this->name = $name;
     }
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
+    /**
+     * @param string
+     */
     public function setProductCode($productCode)
     {
         $this->productCode = $productCode;
     }
+    /**
+     * @return string
+     */
     public function getProductCode()
     {
         return $this->productCode;
     }
+    /**
+     * @param string
+     */
     public function setReportingDimensionId($reportingDimensionId)
     {
         $this->reportingDimensionId = $reportingDimensionId;
     }
+    /**
+     * @return string
+     */
     public function getReportingDimensionId()
     {
         return $this->reportingDimensionId;
+    }
+    /**
+     * @param string
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+    /**
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state;
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.

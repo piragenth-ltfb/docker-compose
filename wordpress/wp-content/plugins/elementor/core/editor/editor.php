@@ -7,7 +7,7 @@ use Elementor\Core\Breakpoints\Manager as Breakpoints_Manager;
 use Elementor\Core\Common\Modules\Ajax\Module;
 use Elementor\Core\Common\Modules\Ajax\Module as Ajax;
 use Elementor\Core\Debug\Loading_Inspection_Manager;
-use Elementor\Core\Files\Assets\Files_Upload_Handler;
+use Elementor\Core\Files\Uploads_Manager;
 use Elementor\Core\Schemes\Manager as Schemes_Manager;
 use Elementor\Core\Settings\Manager as SettingsManager;
 use Elementor\Icons_Manager;
@@ -33,12 +33,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.0
  */
 class Editor {
-
-	/**
-	 * The nonce key for Elementor editor.
-	 * @deprecated 2.3.0
-	 */
-	const EDITING_NONCE_KEY = 'elementor-editing';
 
 	/**
 	 * User capability required to access Elementor editor.
@@ -73,6 +67,11 @@ class Editor {
 	 * @var Notice_Bar
 	 */
 	public $notice_bar;
+
+	/**
+	 * @var Promotion
+	 */
+	public $promotion;
 
 	/**
 	 * Init.
@@ -202,7 +201,7 @@ class Editor {
 		$document = Plugin::$instance->documents->get( get_the_ID() );
 
 		if ( ! $document ) {
-			wp_die( __( 'Document not found.', 'elementor' ) );
+			wp_die( esc_html__( 'Document not found.', 'elementor' ) );
 		}
 
 		if ( ! $document->is_editable_by_current_user() || ! $document->is_built_with_elementor() ) {
@@ -546,10 +545,7 @@ class Editor {
 			],
 			'icons' => [
 				'libraries' => Icons_Manager::get_icon_manager_tabs_config(),
-				'goProURL' => Utils::get_pro_link( 'https://elementor.com/pro/?utm_source=icon-library&utm_campaign=gopro&utm_medium=wp-dash' ),
-			],
-			'filesUpload' => [
-				'unfilteredFiles' => Files_Upload_Handler::is_enabled(),
+				'goProURL' => 'https://go.elementor.com/go-pro-icon-library/',
 			],
 			'fa4_to_fa5_mapping_url' => ELEMENTOR_ASSETS_URL . 'lib/font-awesome/migration/mapping.js',
 			'default_schemes' => $plugin->schemes_manager->get_schemes_defaults(),
@@ -558,6 +554,7 @@ class Editor {
 			'wp_editor' => $this->get_wp_editor_config(),
 			'settings_page_link' => Settings::get_url(),
 			'tools_page_link' => Tools::get_url(),
+			'tools_page_nonce' => wp_create_nonce( 'tools-page-from-editor' ),
 			'elementor_site' => 'https://go.elementor.com/about-elementor/',
 			'docs_elementor_site' => 'https://go.elementor.com/docs/',
 			'help_the_content_url' => 'https://go.elementor.com/the-content-missing/',
@@ -569,6 +566,7 @@ class Editor {
 				'restrictions' => $plugin->role_manager->get_user_restrictions_array(),
 				'is_administrator' => current_user_can( 'manage_options' ),
 				'introduction' => User::get_introduction_meta(),
+				'locale' => get_user_locale(),
 			],
 			'preview' => [
 				'help_preview_error_url' => 'https://go.elementor.com/preview-not-loaded/',
@@ -588,6 +586,14 @@ class Editor {
 			],
 			// Empty array for BC to avoid errors.
 			'i18n' => [],
+			// 'responsive' contains the custom breakpoints config introduced in Elementor v3.2.0
+			'responsive' => [
+				'breakpoints' => Plugin::$instance->breakpoints->get_breakpoints_config(),
+				'icons_map' => Plugin::$instance->breakpoints->get_responsive_icons_classes_map(),
+			],
+			'promotion' => [
+				'elements' => $this->promotion->get_elements_promotion(),
+			],
 		];
 
 		if ( ! Utils::has_pro() && current_user_can( 'manage_options' ) ) {
@@ -867,9 +873,10 @@ class Editor {
 	 * @access public
 	 */
 	public function __construct() {
-		Plugin::$instance->data_manager->register_controller( Data\Globals\Controller::class );
+		Plugin::$instance->data_manager_v2->register_controller( new Data\Globals\Controller() );
 
 		$this->notice_bar = new Notice_Bar();
+		$this->promotion = new Promotion();
 
 		add_action( 'admin_action_elementor', [ $this, 'init' ] );
 		add_action( 'template_redirect', [ $this, 'redirect_to_new_url' ] );
@@ -897,7 +904,9 @@ class Editor {
 	 * @access public
 	 */
 	public function filter_wp_link_query( $results ) {
-		if ( isset( $_POST['editor'] ) && 'elementor' === $_POST['editor'] ) {
+
+		// PHPCS - The user data is not used.
+		if ( isset( $_POST['editor'] ) && 'elementor' === $_POST['editor'] ) {  // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$post_type_object = get_post_type_object( 'post' );
 			$post_label = $post_type_object->labels->singular_name;
 

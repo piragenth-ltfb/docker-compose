@@ -180,23 +180,24 @@ class Policy_Notice_OBFX_Module extends Orbit_Fox_Module_Abstract {
 
 		// @TODO maybe think at some template system for a further hookable customization.
 		// message output will start with a wrapper and an input tag which will decide if the template is visible or not
-		$output = '<div class="obfx-cookie-bar-container" id="obfx-cookie-bar"><input class="obfx-checkbox-cb" id="obfx-checkbox-cb" type="checkbox" />';
+		$output = '<div class="obfx-cookie-bar-container" style="display: none" id="obfx-cookie-bar"><input class="obfx-checkbox-cb" id="obfx-checkbox-cb" type="checkbox" />';
 
 		// we'll add the buttons as a separate var and we'll start with the close button
 		$buttons = '<label for="obfx-checkbox-cb" class="obfx-close-cb">X</label>';
 		// the "Acceptance" button
 		$buttons .= '<a href="#" id="obfx-accept-cookie-policy" >' . $accept_button . '</a>';
 		// the "View Policy button"
-		$buttons .= '<a href="' . $policy_link . '" >' . $policy_button . '</a>';
-
+		if ( ! empty( $policy_button ) ) {
+			$buttons .= '<a href="' . $policy_link . '" >' . $policy_button . '</a>';
+		}
 		// combine the buttons with the bar and close the wrapper.
 		$output               .= '<span class="obfx-cookie-bar">' . $policy_text . $buttons . '</span></div>';
 		$allowed_html          = wp_kses_allowed_html( 'post' );
-		$allowed_html['input'] = [
-			'class' => [],
-			'id'    => [],
-			'type'  => [],
-		];
+		$allowed_html['input'] = array(
+			'class' => array(),
+			'id'    => array(),
+			'type'  => array(),
+		);
 
 		echo wp_kses( apply_filters( 'obfx_cookie_notice_output', $output, $options ), $allowed_html );
 	}
@@ -224,8 +225,8 @@ class Policy_Notice_OBFX_Module extends Orbit_Fox_Module_Abstract {
 					return "";
 				}
 				let cookie = getCookie('obfx-policy-consent');
-				if(cookie === 'accepted'){
-					document.getElementById('obfx-cookie-bar').style.display = 'none';
+				if(cookie !== 'accepted'){
+					document.getElementById('obfx-cookie-bar').style.display = 'block';
 				}
 				document.getElementById('obfx-accept-cookie-policy').addEventListener('click', function (e) {
 					e.preventDefault();
@@ -255,6 +256,7 @@ class Policy_Notice_OBFX_Module extends Orbit_Fox_Module_Abstract {
 		<style>
 			.obfx-cookie-bar-container {
 				height: 0;
+				display: none;
 			}
 
 			.obfx-checkbox-cb {
@@ -266,10 +268,10 @@ class Policy_Notice_OBFX_Module extends Orbit_Fox_Module_Abstract {
 				position: fixed;
 				z-index: 9999;
 				text-align: center;
+				display:block;
 				bottom: 0;
 				left: 0;
 				right: 0;
-				display: block;
 				min-height: 40px;
 				background: #fff;
 				border: 1px solid #333;

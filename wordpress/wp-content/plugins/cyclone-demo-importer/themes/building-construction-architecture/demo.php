@@ -14,8 +14,14 @@ function cdi_import_files() {
         array(
             'import_file_name'=> __('Homepage PRO','cdi'),
             'categories'      =>  array( 'PRO' , 'Homepage' ),
-            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/building-construction-architecture/homepage-pro.jpg',
-            'preview_url' => 'https://bizbergthemes.com/building-construction-architecture-pro/homepage-pro/'
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/building-construction-architecture/construction-sewa-homepage.jpg',
+            'preview_url' => 'https://bizbergthemes.com/building-construction-architecture-pro/homepage-construction-sewa-pro/'
+        ),
+        array(
+            'import_file_name'=> __('Homepage PRO 2','cdi'),
+            'categories'      =>  array( 'PRO' , 'Homepage' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/building-construction-architecture/homepage-3.jpg',
+            'preview_url' => 'https://bizbergthemes.com/building-construction-architecture-pro/homepage-3/'
         ),
         array(
             'import_file_name'=> __('About US 1','cdi'),
@@ -28,6 +34,18 @@ function cdi_import_files() {
             'categories'      =>  array( 'PRO' , 'Pages' ),
             'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/building-construction-architecture/about-2.jpg',
             'preview_url' => 'https://bizbergthemes.com/building-construction-architecture-pro/about-us-2-2/'
+        ),
+        array(
+            'import_file_name'=> __('Services','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/building-construction-architecture/services.jpg',
+            'preview_url' => 'https://bizbergthemes.com/building-construction-architecture-pro/services/'
+        ),
+        array(
+            'import_file_name'=> __('Career','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/building-construction-architecture/career.jpg',
+            'preview_url' => 'https://bizbergthemes.com/building-construction-architecture-pro/career/'
         ),
         array(
             'import_file_name'=> __('Gallery 1','cdi'),

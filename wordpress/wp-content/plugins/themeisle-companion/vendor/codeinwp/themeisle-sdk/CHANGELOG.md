@@ -1,3 +1,53 @@
+##### [Version 3.2.32](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.31...v3.2.32) (2022-11-30)
+
+Release
+
+##### [Version 3.2.31](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.30...v3.2.31) (2022-11-23)
+
+- improve the promotions module
+
+##### [Version 3.2.30](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.29...v3.2.30) (2022-09-15)
+
+- fix filesystem wrong use - ref [#138](https://github.com/Codeinwp/themeisle-sdk/issues/138), props [@ethanclevenger91](https://github.com/ethanclevenger91) for reporting
+
+##### [Version 3.2.29](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.28...v3.2.29) (2022-09-08)
+
+* Adds compatibility mechanism
+* Adds content utms
+* Adds usage time on uninstall feedback
+
+##### [Version 3.2.28](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.27...v3.2.28) (2022-08-30)
+
+* Adds utm handler
+* Improve promotions
+
+##### [Version 3.2.27](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.26...v3.2.27) (2022-08-23)
+
+- Add Promotion Module
+Add the Promotion module for free plugins
+
+##### [Version 3.2.26](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.25...v3.2.26) (2022-05-12)
+
+- [Fix] Solve rollback sometimes not available
+
+##### [Version 3.2.25](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.24...v3.2.25) (2022-03-28)
+
+- Force update request after rollback
+
+##### [Version 3.2.24](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.23...v3.2.24) (2022-02-09)
+
+Fix edge case issue on dismiss
+Avoid issues with open_basedir restrictions
+
+##### [Version 3.2.23](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.22...v3.2.23) (2022-02-02)
+
+Fix php 8.1 issues
+Fix edge case when update_themes site transient was empty and a fatal error was thrown
+
+##### [Version 3.2.22](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.21...v3.2.22) (2021-10-27)
+
+Fix edge case when reset failed checks was not working properly
+
 ##### [Version 3.2.21](https://github.com/Codeinwp/themeisle-sdk/compare/v3.2.20...v3.2.21) (2021-06-30)
 
 review and improve compatibility with auto-updates on custom updates endpoint

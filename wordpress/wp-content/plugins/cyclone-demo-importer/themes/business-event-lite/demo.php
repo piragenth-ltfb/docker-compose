@@ -12,6 +12,12 @@ function cdi_import_files() {
             'preview_url' => 'https://bizbergthemes.com/business-event-pro/'
         ),
         array(
+            'import_file_name'             => __('Epic Business Event','cdi'),
+            'categories'                   =>  array( 'PRO' , 'Homepage' , 'Light' ),
+            'import_preview_image_url'     => CDI_PLUGIN_DIR_URL . '/assets/images/business-event/homepage-epic-business-event.jpg',
+            'preview_url'                  => 'https://bizbergthemes.com/business-event-pro/epic-business-event-homepage-3/'
+        ),
+        array(
             'import_file_name'=> __('Dark Version','cdi'),
             'categories'      =>  array( 'PRO' , 'Homepage' , 'Dark' ),
             'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/business-event/homepage-2.jpg',

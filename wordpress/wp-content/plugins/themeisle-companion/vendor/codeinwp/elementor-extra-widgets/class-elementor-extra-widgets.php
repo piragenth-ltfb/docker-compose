@@ -43,6 +43,14 @@ if ( ! class_exists( '\ThemeIsle\ElementorExtraWidgets' ) ) {
 			if ( ! defined( 'EAW_PRO_VERSION' ) ) {
 				add_action( 'elementor/editor/after_enqueue_scripts', array( $this, 'enqueue_sidebar_css' ) );
 			}
+
+			// Ensure Font Awesome is always enqeued
+			add_action(
+				'elementor/editor/after_enqueue_styles',
+				function() {
+					wp_enqueue_style( 'font-awesome' );
+				}
+			);
 		}
 
 		/**
@@ -62,7 +70,7 @@ if ( ! class_exists( '\ThemeIsle\ElementorExtraWidgets' ) ) {
 			$elements_manager->add_category(
 				$category_args['slug'] . '-pro',
 				array(
-					'title' => 'Premium ' . $category_args['title'],
+					'title' => 'Neve PRO Addon Widgets',
 					'icon'  => $category_args['slug'],
 				)
 			);
@@ -94,6 +102,7 @@ if ( ! class_exists( '\ThemeIsle\ElementorExtraWidgets' ) ) {
 		public function enqueue_sidebar_css() {
 			wp_enqueue_style( 'eaw-elementor-admin', plugins_url( '/css/admin.css', __FILE__ ), array(), $this::$version );
 		}
+
 		/**
 		 * Require and instantiate Elementor Widgets and Premium Placeholders.
 		 *
@@ -119,10 +128,10 @@ if ( ! class_exists( '\ThemeIsle\ElementorExtraWidgets' ) ) {
 				}
 			}
 
-			if ( apply_filters( 'eaw_should_load_placeholders', false ) ) {
+            if( class_exists( 'Elementor_Widgets_OBFX_Module', false ) && \Elementor_Widgets_OBFX_Module::should_add_placeholders() ){
 				$placeholders = $this->get_dir_files( __DIR__ . '/widgets/elementor/placeholders' );
 				foreach ( $placeholders as $widget ) {
-					require_once $widget;
+                    require_once $widget;
 				}
 
 				do_action( 'eaw_before_pro_widgets', $placeholders, $widgets_manager );

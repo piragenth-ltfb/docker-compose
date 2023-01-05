@@ -10,7 +10,6 @@ import { __ } from '@wordpress/i18n';
 import { Component, Fragment, createRef, useMemo } from '@wordpress/element';
 import {
   ExternalLink,
-  IconButton,
   ToggleControl,
   Button,
   TextControl,
@@ -41,6 +40,7 @@ import './style.scss';
 import { createLinkFormat, isValidHref } from './utils';
 
 const stopKeyPropagation = ( event ) => event.stopPropagation();
+const { useAnchor } = wp.richText;
 
 function isShowingInput( props, state ) {
   return props.addingLink || state.editLink;
@@ -59,8 +59,9 @@ const LinkEditor = ( { value, onChangeInputValue, onKeyDown, submitLink, autocom
       value={ value }
       onChange={ onChangeInputValue }
       autocompleteRef={ autocompleteRef }
+      autoFocus={ false }
     />
-    <IconButton icon="editor-break" label={ __( 'Insert Pretty Link' ) } type="submit" />
+    <Button icon="editor-break" label={ __( 'Insert Pretty Link' ) } type="submit" />
   </form>
   /* eslint-enable jsx-a11y/no-noninteractive-element-interactions */
 );
@@ -85,7 +86,7 @@ const LinkViewerUrl = ( { url } ) => {
   );
 };
 
-const URLPopoverAtLink = ( { isActive, addingLink, value, ...props } ) => {
+const URLPopoverAtLink = ( { isActive, addingLink, value, contentRef, ...props } ) => {
   const anchorRect = useMemo( () => {
     const selection = window.getSelection();
     const range = selection.rangeCount > 0 ? selection.getRangeAt( 0 ) : null;
@@ -112,11 +113,30 @@ const URLPopoverAtLink = ( { isActive, addingLink, value, ...props } ) => {
     }
   }, [ isActive, addingLink, value.start, value.end ] );
 
-  if ( ! anchorRect ) {
+  if ( ! anchorRect && ! useAnchor ) {
     return null;
   }
 
-  return <URLPopover anchorRect={ anchorRect } { ...props } />;
+  let anchorProps;
+
+  if ( useAnchor ) {
+    // Prefer useAnchor over useAnchorRef, this is WP 6.1+ only
+    anchorProps = {
+      anchor: useAnchor( {
+        editableContentElement: contentRef.current,
+        value,
+        settings: {
+          tagName: 'a'
+        },
+      } )
+    };
+  } else {
+    anchorProps = {
+      anchorRect: anchorRect,
+    };
+  }
+
+  return <URLPopover { ...anchorProps } { ...props } />;
 };
 
 const LinkViewer = ( { url, editLink } ) => {
@@ -128,7 +148,7 @@ const LinkViewer = ( { url, editLink } ) => {
       onKeyPress={ stopKeyPropagation }
     >
       <LinkViewerUrl url={ url } />
-      <IconButton icon="edit" label={ __( 'Edit' ) } onClick={ editLink } />
+      <Button icon="edit" label={ __( 'Edit' ) } onClick={ editLink } />
     </div>
     /* eslint-enable jsx-a11y/no-static-element-interactions */
   );
@@ -324,7 +344,7 @@ class InlineLinkUI extends Component {
   }
 
   render() {
-    const { isActive, activeAttributes: { url }, addingLink, value } = this.props;
+    const { isActive, activeAttributes: { url }, addingLink, value, contentRef } = this.props;
 
     if ( ! isActive && ! addingLink ) {
       return null;
@@ -342,6 +362,7 @@ class InlineLinkUI extends Component {
         onClickOutside={ this.onClickOutside }
         onClose={ this.resetState }
         focusOnMount={ showInput ? 'firstElement' : false }
+        contentRef={ contentRef }
         renderSettings={ () => (
           <Fragment>
             <div>

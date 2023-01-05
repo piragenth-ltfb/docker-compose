@@ -1,6 +1,7 @@
 <?php
 $inlineStyle = "";
 $options = get_option( 'i2_pros_and_cons', i2_pros_and_cons_options_default());
+$options = array_merge(i2_pros_and_cons_options_default(), $options);
 
     $useBorder = $options['use_border'] != null ? $options['use_border'] : '';
     $borderColor = $options['border_color'] != null ? $options['border_color'] : '';
@@ -36,8 +37,6 @@ $options = get_option( 'i2_pros_and_cons', i2_pros_and_cons_options_default());
 
     $prosIconColor = $options['pros_icon_color'] != null ? $options['pros_icon_color'] : '';
     $consIconColor = $options['cons_icon_color'] != null ? $options['cons_icon_color'] : '';
-
-
 
 
 
@@ -146,6 +145,40 @@ $options = get_option( 'i2_pros_and_cons', i2_pros_and_cons_options_default());
     if($consIconColor != ''){
         $inlineStyle .= " .i2-pros-cons-wrapper .i2-cons ul li i{color: {$consIconColor}!important;}";  
     }
+
+
+                // added box shadow v 1.3.1              
+                // 'use_box_shadow' => 0,
+                // 'outer_box_shadow' => 0,
+                // 'box_shadow_height' => 4,
+                // 'box_shadow_color' => '#000000',
+                // 'box_shadow_alpha' => 50,
+
+                /*
+                .i2-pros-cons-main-wrapper .i2-pros-cons-wrapper{
+	box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+                
+.i2-pros-cons-main-wrapper .i2-pros-cons-wrapper .i2-pros,.i2-pros-cons-main-wrapper .i2-pros-cons-wrapper .i2-cons,{
+	box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+                */
+
+    $useBoxShadow = $options['use_box_shadow'] != null ? $options['use_box_shadow'] : '';
+
+    if( $useBoxShadow != ''){
+      $outerBoxShadow = $options['outer_box_shadow'] != null ? $options['outer_box_shadow'] : '';
+      $boxShadowHeight = $options['box_shadow_height'] != null ? $options['box_shadow_height'] : 4;    
+      $boxShadowWidth = $boxShadowHeight / 2;    
+      $boxShadowColor = i2pc_rgba_onverter($options['box_shadow_color'], (.01 * $options['box_shadow_alpha']));
+
+      if(isset($outerBoxShadow) && $outerBoxShadow != '' && $outerBoxShadow != '0'){
+         $inlineStyle .= " .i2-pros-cons-main-wrapper .i2-pros-cons-wrapper{box-shadow: 0 {$boxShadowWidth}px {$boxShadowHeight}px {$boxShadowColor};}";  
+      }else{
+        $inlineStyle .= " .i2-pros-cons-main-wrapper .i2-pros-cons-wrapper .i2-pros,.i2-pros-cons-main-wrapper .i2-pros-cons-wrapper .i2-cons{box-shadow: 0 {$boxShadowWidth}px {$boxShadowHeight}px {$boxShadowColor};}"; 
+      }
+    }
+
 
   if($options['button_theme'] != "no-style"){
 
@@ -256,7 +289,7 @@ if(!function_exists('i2_pros_cons_custom_style')) {
    add_action( 'admin_enqueue_scripts', 'i2_pros_cons_admin_custom_style' );
 
 
-   function i2pc_rgba_onverter($color) {
+   function i2pc_rgba_onverter($color, $alpha = .3) {
        if(strlen($color) !== 7){
            return $color;
        }
@@ -264,7 +297,7 @@ if(!function_exists('i2_pros_cons_custom_style')) {
         $hex = array( $color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5] );
         //Convert hexadec to rgb http://php.net/manual/en/function.hexdec.php
         $rgb =  array_map('hexdec', $hex);
-        return 'rgba('.implode(",",$rgb).',.3)';
+        return 'rgba('.implode(",",$rgb).', ' . $alpha .')';
  
 }
 

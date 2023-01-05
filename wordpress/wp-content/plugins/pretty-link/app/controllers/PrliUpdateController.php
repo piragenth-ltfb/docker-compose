@@ -17,32 +17,24 @@ class PrliUpdateController {
   public function load_hooks() {
     if(!empty($this->mothership_license)) {
       add_filter('pre_set_site_transient_update_plugins', array($this, 'queue_update'));
+      add_action('admin_init', array($this, 'maybe_activate'));
       add_action('wp_ajax_plp_edge_updates', array($this, 'plp_edge_updates'));
       add_filter('plugins_api', array($this, 'plugin_info'), 11, 3);
     }
 
-    add_action('admin_init', array($this, 'activate_from_define'));
-
     add_action('admin_notices', array($this, 'activation_warning'));
+    add_action('admin_init', array($this, 'activate_from_define'));
     add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts'));
+    add_action('wp_ajax_prli_activate_license', array($this, 'ajax_activate_license'));
+    add_action('wp_ajax_prli_deactivate_license', array($this, 'ajax_deactivate_license'));
+    add_action('wp_ajax_prli_install_license_edition', array($this, 'ajax_install_license_edition'));
+    add_action('in_plugin_update_message-pretty-link/pretty-link.php', array($this, 'check_incorrect_edition'));
+    add_action('prli_plugin_edition_changed', array($this, 'clear_update_transients'));
     //add_action('prli_display_options', array($this, 'queue_button'));
   }
 
   public function route() {
-    if(strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
-      return $this->process_form();
-    }
-    else {
-      if( isset($_GET['action']) &&
-          $_GET['action'] == 'deactivate' &&
-          isset($_GET['_wpnonce']) &&
-          wp_verify_nonce($_GET['_wpnonce'], 'pretty-link_deactivate') ) {
-        return $this->deactivate();
-      }
-      else {
-        return $this->display_form();
-      }
-    }
+    $this->display_form();
   }
 
   public function set_edge_updates($updates) {
@@ -69,38 +61,169 @@ class PrliUpdateController {
     require(PRLI_VIEWS_PATH.'/admin/update/ui.php');
   }
 
-  public function process_form() {
-    if(!isset($_POST['_wpnonce']) || !wp_verify_nonce($_POST['_wpnonce'],'activation_form')) {
-      wp_die(__('Why you creepin\'?', 'pretty-link'));
+  public function ajax_activate_license() {
+    if(!PrliUtils::is_post_request() || !isset($_POST['key']) || !is_string($_POST['key'])) {
+      wp_send_json_error(__('Bad request.', 'pretty-link'));
     }
 
-    if(!isset($_POST[$this->mothership_license_str])) {
-      $this->display_form();
-      return;
+    if(!PrliUtils::is_logged_in_and_an_admin()) {
+      wp_send_json_error(__('Sorry, you don\'t have permission to do this.', 'pretty-link'));
     }
 
-    $message = '';
-    $errors = array();
-    $this->set_mothership_license(stripslashes($_POST[$this->mothership_license_str]));
-    $domain = urlencode(PrliUtils::site_domain());
+    if(!check_ajax_referer('prli_activate_license', false, false)) {
+      wp_send_json_error(__('Security check failed.', 'pretty-link'));
+    }
+
+    $license_key = sanitize_text_field(wp_unslash($_POST['key']));
+
+    if(empty($license_key)) {
+      wp_send_json_error(__('Bad request.', 'pretty-link'));
+    }
 
     try {
-      $args = compact('domain');
-      $act = $this->send_mothership_request("/license_keys/activate/{$this->mothership_license}", $args, 'post');
-      update_option('prli_activated', true); // if we get here we're activated
-      wp_cache_delete('alloptions', 'options');
-      $this->manually_queue_update();
-      $message = $act['message'];
+      $act = $this->activate_license($license_key);
+      $li = get_site_transient('prli_license_info');
+      $output = sprintf('<div class="notice notice-success inline"><p>%s</p></div>', esc_html($act['message']));
 
-      if(strpos($message, 'site has already been activated') !== false ) {
-        $this->deactivate(true);
+      if(is_array($li)) {
+        $editions = PrliUtils::is_incorrect_edition_installed();
+
+        if(is_array($editions) && $editions['license']['index'] > $editions['installed']['index']) {
+          // The installed plugin is a lower edition, try to upgrade to the higher license edition
+          if(!empty($li['url']) && PrliUtils::is_url($li['url'])) {
+            $result = $this->install_plugin_silently($li['url'], array('overwrite_package' => true));
+
+            if($result === true) {
+              do_action('prli_plugin_edition_changed');
+              wp_send_json_success(true);
+            }
+          }
+        }
+
+        ob_start();
+        require PRLI_VIEWS_PATH . '/admin/update/active_license.php';
+        $output .= ob_get_clean();
       }
+      else {
+        $output .= sprintf('<div class="notice notice-warning"><p>%s</p></div>', esc_html__('The license information is not available, try refreshing the page.', 'pretty-link'));
+      }
+
+      wp_send_json_success($output);
     }
     catch(Exception $e) {
-      $errors[] = $e->getMessage();
+      try {
+        $expires = $this->send_mothership_request("/license_keys/expires_at/$license_key");
+
+        if(isset($expires['expires_at'])) {
+          $expires_at = strtotime($expires['expires_at']);
+
+          if($expires_at && $expires_at < time()) {
+            $licenses = $this->send_mothership_request("/license_keys/list_keys/$license_key");
+
+            if(!empty($licenses) && is_array($licenses)) {
+              $highest_edition_index = -1;
+              $highest_license = null;
+
+              foreach($licenses as $license) {
+                $edition = PrliUtils::get_edition($license['product_slug']);
+
+                if(is_array($edition) && $edition['index'] > $highest_edition_index) {
+                  $highest_edition_index = $edition['index'];
+                  $highest_license = $license;
+                }
+              }
+
+              if(is_array($highest_license)) {
+                wp_send_json_error(
+                  sprintf(
+                    /* translators: %1$s: the product name, %2$s: open link tag, %3$s: close link tag */
+                    esc_html__('This License Key has expired, but you have an active license for %1$s, %2$sclick here%3$s to activate using this license instead.', 'pretty-link'),
+                    '<strong>' . esc_html($highest_license['product_name']) . '</strong>',
+                    sprintf('<a href="#" id="prli-activate-new-license" data-license-key="%s">', esc_attr($highest_license['license_key'])),
+                    '</a>'
+                  )
+                );
+              }
+            }
+          }
+        }
+      }
+      catch(Exception $ignore) {
+        // Nothing we can do, let it fail.
+      }
+
+      wp_send_json_error($e->getMessage());
+    }
+  }
+
+  public function ajax_deactivate_license() {
+    if(!PrliUtils::is_post_request()) {
+      wp_send_json_error(__('Bad request.', 'pretty-link'));
     }
 
-    $this->display_form($message, $errors);
+    if(!PrliUtils::is_logged_in_and_an_admin()) {
+      wp_send_json_error(__('Sorry, you don\'t have permission to do this.', 'pretty-link'));
+    }
+
+    if(!check_ajax_referer('prli_deactivate_license', false, false)) {
+      wp_send_json_error(__('Security check failed.', 'pretty-link'));
+    }
+
+    $act = $this->deactivate_license();
+
+    $output = sprintf('<div class="notice notice-success"><p>%s</p></div>', esc_html($act['message']));
+
+    ob_start();
+    require PRLI_VIEWS_PATH . '/admin/update/inactive_license.php';
+    $output .= ob_get_clean();
+
+    wp_send_json_success($output);
+  }
+
+  public function install_plugin_silently($url, $args) {
+    require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+
+    $skin = new Automatic_Upgrader_Skin();
+    $upgrader = new Plugin_Upgrader($skin);
+
+    if(!$skin->request_filesystem_credentials(false, WP_PLUGIN_DIR)) {
+      return new WP_Error('no_filesystem_access', __('Failed to get filesystem access', 'pretty-link'));
+    }
+
+    return $upgrader->install($url, $args);
+  }
+
+  public function ajax_install_license_edition() {
+    if(!PrliUtils::is_post_request()) {
+      wp_send_json_error(__('Bad request', 'pretty-link'));
+    }
+
+    if(!current_user_can('update_plugins')) {
+      wp_send_json_error(__('Sorry, you don\'t have permission to do this.', 'pretty-link'));
+    }
+
+    if(!check_ajax_referer('prli_install_license_edition', false, false)) {
+      wp_send_json_error(__('Security check failed.', 'pretty-link'));
+    }
+
+    $li = get_site_transient('prli_license_info');
+
+    if(!empty($li) && is_array($li) && !empty($li['url']) && PrliUtils::is_url($li['url'])) {
+      $result = $this->install_plugin_silently($li['url'], array('overwrite_package' => true));
+
+      if($result instanceof WP_Error) {
+        wp_send_json_error($result->get_error_message());
+      }
+      elseif($result === true) {
+        do_action('prli_plugin_edition_changed');
+        wp_send_json_success(__('The correct edition of Pretty Links has been installed successfully.', 'pretty-link'));
+      }
+      else {
+        wp_send_json_error(__('Failed to install the correct edition of Pretty Links, please download it from prettylinks.com and install it manually.', 'pretty-link'));
+      }
+    }
+
+    wp_send_json_error(__('License data not found', 'pretty-link'));
   }
 
   public function is_activated() {
@@ -131,55 +254,92 @@ class PrliUpdateController {
 
     if(!empty($aov)) {
       update_option('prli_activated', true);
-      wp_cache_delete('alloptions', 'options');
-      return true;
+      do_action('prli_license_activated', array('aov' => 1));
+      return;
     }
 
-    $domain = urlencode(PrliUtils::site_domain());
+    if(empty($this->mothership_license)) {
+      return;
+    }
 
-    // Bail if there's no license key
-    if(empty($this->mothership_license)) { return; }
+    // Only check the key once per day
+    $option_key = "prli_license_check_{$this->mothership_license}";
+
+    if(get_site_transient($option_key)) {
+      return;
+    }
+
+    $check_count = get_option($option_key, 0) + 1;
+    update_option($option_key, $check_count);
+
+    set_site_transient($option_key, true, ($check_count > 3 ? 72 : 24) * HOUR_IN_SECONDS);
+
+    $domain = urlencode(PrliUtils::site_domain());
+    $args = compact('domain');
 
     try {
-      $act = $this->send_mothership_request("/license_keys/a/{$domain}/{$this->mothership_license}", array(), 'get');
+      $act = $this->send_mothership_request("/license_keys/check/{$this->mothership_license}", $args);
 
-      if(!empty($act) && is_array($act) && isset($act['status'])) {
-        update_option('prli_activated', ($act['status']=='enabled'));
-        wp_cache_delete('alloptions', 'options');
+      if(!empty($act) && is_array($act)) {
+        $license_expired = false;
+
+        if(isset($act['expires_at'])) {
+          $expires_at = strtotime($act['expires_at']);
+
+          if($expires_at && $expires_at < time()) {
+            $license_expired = true;
+            update_option('prli_activated', false);
+            do_action('prli_license_expired', $act);
+          }
+        }
+
+        if(isset($act['status']) && !$license_expired) {
+          if($act['status'] == 'enabled') {
+            update_option($option_key, 0);
+            update_option('prli_activated', true);
+            do_action('prli_license_activated', $act);
+          }
+          elseif($act['status'] == 'disabled') {
+            update_option('prli_activated', false);
+            do_action('prli_license_invalidated', $act);
+          }
+        }
       }
     }
     catch(Exception $e) {
-      // TODO: For now do nothing if the server can't be reached
+      if($e->getMessage() == 'Not Found') {
+        update_option('prli_activated', false);
+        do_action('prli_license_invalidated');
+      }
+    }
+  }
+
+  public function maybe_activate() {
+    if($this->is_installed()) {
+      $activated = get_option('prli_activated');
+
+      if(!$activated) {
+        $this->check_license_activation();
+      }
     }
   }
 
   public function activate_from_define() {
-    if(!$this->is_installed()) { return; }
+    if(!$this->is_installed()) {
+      return;
+    }
 
     if(defined('PRETTYLINK_LICENSE_KEY') && $this->mothership_license != PRETTYLINK_LICENSE_KEY) {
-      $message = '';
-      $errors = array();
-      $this->mothership_license = stripslashes(PRETTYLINK_LICENSE_KEY);
-      update_option($this->mothership_license_str, PRETTYLINK_LICENSE_KEY);
-      wp_cache_delete('alloptions', 'options');
-      $domain = urlencode(PrliUtils::site_domain());
-
       try {
-        $args = compact('domain');
-
         if(!empty($this->mothership_license)) {
-          $act = $this->send_mothership_request("/license_keys/deactivate/{$this->mothership_license}", $args, 'post');
-          delete_site_transient('prli_addons');
+          // Deactivate the old license key
+          $this->deactivate_license();
         }
-
-        $act = $this->send_mothership_request("/license_keys/activate/".PRETTYLINK_LICENSE_KEY, $args, 'post');
-        update_option('prli_activated', true); // if we get here we're activated
-        wp_cache_delete('alloptions', 'options');
-
-        $this->manually_queue_update();
 
         // If we're using defines then we have to do this with defines too
         $this->set_edge_updates(false);
+
+        $act = $this->activate_license(PRETTYLINK_LICENSE_KEY);
 
         $message = $act['message'];
         $callback = function() use ($message) { require(PRLI_VIEWS_PATH."/admin/errors.php"); };
@@ -193,36 +353,100 @@ class PrliUpdateController {
     }
   }
 
-  public function deactivate($hide_form = false) {
-    $domain = urlencode(PrliUtils::site_domain());
-    $message = '';
+  /**
+   * Activate the license with the given key
+   *
+   * @param string $license_key The license key
+   * @return array The license data
+   * @throws Exception If there was an error activating the license
+   */
+  public function activate_license($license_key) {
+    $args = array(
+      'domain' => urlencode(PrliUtils::site_domain()),
+      'product' => PRLI_EDITION,
+    );
 
-    try {
-      $args = compact('domain');
-      $act = $this->send_mothership_request("/license_keys/deactivate/{$this->mothership_license}", $args, 'post');
+    $act = $this->send_mothership_request("/license_keys/activate/{$license_key}", $args, 'post');
 
-      $this->manually_queue_update();
+    $this->set_mothership_license($license_key);
+    update_option('prli_activated', true); //If we have made it here we are activated
 
-      $this->set_mothership_license('');
+    $option_key = "prli_license_check_{$license_key}";
+    delete_site_transient($option_key);
+    delete_option($option_key);
 
-      // Don't need to check the mothership for this one ... we just deactivated
-      update_option('prli_activated', false);
-      wp_cache_delete('alloptions', 'options');
+    delete_site_transient('prli_update_info');
 
-      $message = $act['message'];
+    do_action('prli_license_activated_before_queue_update');
+
+    $this->manually_queue_update();
+
+    // Clear the cache of add-ons
+    delete_site_transient('prli_addons');
+    delete_site_transient('prli_all_addons');
+
+    do_action('prli_license_activated', $act);
+
+    return $act;
+  }
+
+  /**
+   * Deactivate the license
+   *
+   * @return array
+   */
+  public function deactivate_license() {
+    $license_key = $this->mothership_license;
+    $act = array('message' => __('License key deactivated', 'pretty-link'));
+
+    if(!empty($this->mothership_license)) {
+      try {
+        $args = array(
+          'domain' => urlencode(PrliUtils::site_domain())
+        );
+
+        $act = $this->send_mothership_request("/license_keys/deactivate/{$this->mothership_license}", $args, 'post');
+      }
+      catch(Exception $e) {
+        // Catching here to allow invalid license keys to be deactivated
+      }
     }
-    catch(Exception $e) {
-      update_option('prli_activated', false);
-      wp_cache_delete('alloptions', 'options');
-      update_option($this->mothership_license_str, '');
-      wp_cache_delete('alloptions', 'options');
-      $errors[] = $e->getMessage();
-    }
 
-    if(!$hide_form) { $this->display_form($message); }
+    $this->set_mothership_license('');
+
+    $option_key = "prli_license_check_{$license_key}";
+    delete_site_transient($option_key);
+    delete_option($option_key);
+
+    delete_site_transient('prli_update_info');
+
+    do_action('prli_license_deactivated_before_queue_update');
+
+    $this->manually_queue_update();
+
+    // Don't need to check the mothership for this one ... we just deactivated
+    update_option('prli_activated', false);
+
+    // Clear the cache of the license and add-ons
+    delete_site_transient('prli_license_info');
+    delete_site_transient('prli_addons');
+    delete_site_transient('prli_all_addons');
+
+    do_action('prli_license_deactivated', $act);
+
+    return $act;
+  }
+
+  public function deactivate() {
+    $act = $this->deactivate_license();
+    $this->display_form($act['message']);
   }
 
   public function queue_update($transient, $force=false) {
+    if(empty($transient) || !is_object($transient)) {
+      return $transient;
+    }
+
     if(!$this->is_installed() && !$this->is_activated()) { return $transient; }
 
     if($force || (false === ($update_info = get_site_transient('prli_update_info')))) {
@@ -253,8 +477,12 @@ class PrliUpdateController {
           set_site_transient(
             'prli_license_info',
             $license_info,
-            (12*HOUR_IN_SECONDS)
+            (24*HOUR_IN_SECONDS)
           );
+
+          if(PrliUtils::is_incorrect_edition_installed()) {
+            $download_url = '';
+          }
         }
         catch(Exception $e) {
           try {
@@ -284,8 +512,6 @@ class PrliUpdateController {
         compact('curr_version', 'download_url'),
         (12*HOUR_IN_SECONDS)
       );
-
-      $this->addons(false, true);
     }
     else {
       extract( $update_info );
@@ -410,6 +636,19 @@ class PrliUpdateController {
 
       wp_register_script('prli-settings-table', PRLI_JS_URL.'/settings_table.js', array(), PRLI_VERSION);
       wp_enqueue_script('prli-activate-js', PRLI_JS_URL.'/admin_activate.js', array('prli-settings-table'), PRLI_VERSION);
+      wp_localize_script('prli-activate-js', 'PrliActivateL10n', array(
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'activate_license_nonce' => wp_create_nonce('prli_activate_license'),
+        'loading_image' => sprintf('<img src="%1$s" alt="%2$s" />', esc_url(PRLI_IMAGES_URL . '/square-loader.gif'), esc_attr__('Loading...', 'pretty-link')),
+        'activation_error' => __('An error occurred during activation: %s', 'pretty-link'),
+        'invalid_response' => __('Invalid response.', 'pretty-link'),
+        'ajax_error' => __('Ajax error.', 'pretty-link'),
+        'deactivate_confirm' => sprintf(__('Are you sure? Pretty Links will not be functional on %s if this License Key is deactivated.', 'pretty-link'), PrliUtils::site_domain()),
+        'deactivate_license_nonce' => wp_create_nonce('prli_deactivate_license'),
+        'deactivation_error' => __('An error occurred during deactivation: %s', 'pretty-link'),
+        'install_license_edition_nonce' => wp_create_nonce('prli_install_license_edition'),
+        'error_installing_license_edition' => __('An error occurred while installing the correct edition.', 'pretty-link'),
+      ));
     }
   }
 
@@ -512,5 +751,22 @@ class PrliUpdateController {
     include_once PRLI_VIEWS_PATH . "/admin/upgrade/import-export.php";
   }
 
-} //End class
+  public static function check_incorrect_edition() {
+    if(PrliUtils::is_incorrect_edition_installed()) {
+      printf(
+        /* translators: %1$s: open link tag, %2$s: close link tag */
+        ' <strong>' . esc_html__('To restore automatic updates, %1$sinstall the correct edition%2$s of Pretty Links.', 'pretty-link') . '</strong>',
+        sprintf('<a href="%s">', esc_url(admin_url('edit.php?post_type=pretty-link&page=pretty-link-updates'))),
+        '</a>'
+      );
+    }
+  }
 
+  public function clear_update_transients() {
+    delete_site_transient('update_plugins');
+    delete_site_transient('prli_update_info');
+    delete_site_transient('prli_addons');
+    delete_site_transient('prli_all_addons');
+  }
+
+} //End class

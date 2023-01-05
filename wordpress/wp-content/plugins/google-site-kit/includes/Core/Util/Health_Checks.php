@@ -15,6 +15,7 @@ use Google\Site_Kit\Core\Authentication\Authentication;
 use Google\Site_Kit\Core\Permissions\Permissions;
 use Google\Site_Kit\Core\REST_API\REST_Route;
 use Google\Site_Kit_Dependencies\Google\Service\SearchConsole as Google_Service_SearchConsole;
+use Google\Site_Kit_Dependencies\Google_Service_Exception;
 use WP_REST_Server;
 
 /**
@@ -34,12 +35,20 @@ class Health_Checks {
 	protected $authentication;
 
 	/**
+	 * Google_Proxy instance.
+	 *
+	 * @var Google_Proxy
+	 */
+	protected $google_proxy;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param Authentication $authentication Authentication instance.
 	 */
 	public function __construct( Authentication $authentication ) {
 		$this->authentication = $authentication;
+		$this->google_proxy   = $authentication->get_google_proxy();
 	}
 
 	/**
@@ -75,6 +84,7 @@ class Health_Checks {
 						'callback'            => function() {
 							$checks = array(
 								'googleAPI' => $this->check_google_api(),
+								'skService' => $this->check_service_connectivity(),
 							);
 
 							return compact( 'checks' );
@@ -101,26 +111,56 @@ class Health_Checks {
 		$error_msg     = '';
 
 		// Make a request to the Search API.
-		// This request is bound to fail with a 401 "Login Required" error
-		// but this is okay - the test is only intended to check that
-		// the server is capable of connecting to the Google API (at all)
+		// This request is bound to fail but this is okay as long as the error response comes
+		// from a Google API endpoint (Google_Service_exception). The test is only intended
+		// to check that the server is capable of connecting to the Google API (at all)
 		// regardless of valid authentication, which will likely be missing here.
 		try {
 			( new Google_Service_SearchConsole( $client ) )->sites->listSites();
 			$pass = true;
-		} catch ( Exception $e ) {
-			if ( $e->getCode() === 401 ) {
+		} catch ( Google_Service_Exception $e ) {
+			if ( ! empty( $e->getErrors() ) ) {
 				$pass = true;
 			} else {
 				$pass      = false;
 				$error_msg = $e->getMessage();
 			}
+		} catch ( Exception $e ) {
+			$pass      = false;
+			$error_msg = $e->getMessage();
 		}
 		$restore_defer();
 
 		return array(
 			'pass'     => $pass,
 			'errorMsg' => $error_msg,
+		);
+	}
+
+	/**
+	 * Checks connection to Site Kit service.
+	 *
+	 * @since 1.85.0
+	 *
+	 * @return array Results data.
+	 */
+	private function check_service_connectivity() {
+		$service_url = $this->google_proxy->url();
+		$response    = wp_remote_head( $service_url );
+
+		if ( is_wp_error( $response ) ) {
+			return array(
+				'pass'     => false,
+				'errorMsg' => $response->get_error_message(),
+			);
+		}
+
+		$status_code = wp_remote_retrieve_response_code( $response );
+		$pass        = is_int( $status_code ) && $status_code < 400;
+
+		return array(
+			'pass'     => $pass,
+			'errorMsg' => $pass ? '' : 'connection_fail',
 		);
 	}
 }

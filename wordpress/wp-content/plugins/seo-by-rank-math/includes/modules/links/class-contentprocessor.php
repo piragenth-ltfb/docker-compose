@@ -61,7 +61,13 @@ class ContentProcessor {
 		];
 
 		$new_links = [];
+		$post_permalink = $this->normalize_link( get_permalink( $post_id ) );
 		foreach ( $links as $link ) {
+			$normalized_link = $this->normalize_link( $link );
+			if ( $post_permalink === $normalized_link ) {
+				continue;
+			}
+
 			$this->process_link( $link, $new_links, $counts );
 		}
 
@@ -149,10 +155,29 @@ class ContentProcessor {
 	 * @return boolean
 	 */
 	private function is_valid_link_type( $link ) {
-		if ( empty( $link ) || '#' === $link[0] ) {
-			return false;
+		$type = false;
+		if ( ! empty( $link ) && '#' !== $link[0] ) {
+			$type = $this->classifier->classify( $link );
 		}
 
-		return $this->classifier->classify( $link );
+		if ( Classifier::TYPE_INTERNAL === $type && preg_match( '/\.(jpg|jpeg|png|gif|bmp|pdf|mp3|zip)$/i', $link ) ) {
+			$type = false;
+		}
+
+		/**
+		 * Filter: 'rank_math/links/link_type' - Allow developers to filter the link type.
+		 */
+		return apply_filters( 'rank_math/links/link_type', $type, $link );
+	}
+
+	/**
+	 * Normalize a link: remove trailing slash, remove fragment identifier, remove home_url.
+	 *
+	 * @param string $link The link to normalize.
+	 * @return string
+	 */
+	private function normalize_link( $link ) {
+		$normalized = untrailingslashit( str_replace( home_url(), '', explode( '#', $link )[0] ) );
+		return $normalized;
 	}
 }

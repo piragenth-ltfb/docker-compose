@@ -17,8 +17,6 @@
  */
 namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\Resource;
 
-use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaEnhancedMeasurementSettings;
-use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaGlobalSiteTag;
 use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListWebDataStreamsResponse;
 use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaWebDataStream;
 use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleProtobufEmpty;
@@ -79,40 +77,6 @@ class PropertiesWebDataStreams extends \Google\Site_Kit_Dependencies\Google\Serv
         return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaWebDataStream::class);
     }
     /**
-     * Returns the singleton enhanced measurement settings for this web stream. Note
-     * that the stream must enable enhanced measurement for these settings to take
-     * effect. (webDataStreams.getEnhancedMeasurementSettings)
-     *
-     * @param string $name Required. The name of the settings to lookup. Format: pro
-     * perties/{property_id}/webDataStreams/{stream_id}/enhancedMeasurementSettings
-     * Example: "properties/1000/webDataStreams/2000/enhancedMeasurementSettings"
-     * @param array $optParams Optional parameters.
-     * @return GoogleAnalyticsAdminV1alphaEnhancedMeasurementSettings
-     */
-    public function getEnhancedMeasurementSettings($name, $optParams = [])
-    {
-        $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('getEnhancedMeasurementSettings', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaEnhancedMeasurementSettings::class);
-    }
-    /**
-     * Returns the Site Tag for the specified web stream. Site Tags are immutable
-     * singletons. (webDataStreams.getGlobalSiteTag)
-     *
-     * @param string $name Required. The name of the site tag to lookup. Note that
-     * site tags are singletons and do not have unique IDs. Format:
-     * properties/{property_id}/webDataStreams/{stream_id}/globalSiteTag Example:
-     * "properties/123/webDataStreams/456/globalSiteTag"
-     * @param array $optParams Optional parameters.
-     * @return GoogleAnalyticsAdminV1alphaGlobalSiteTag
-     */
-    public function getGlobalSiteTag($name, $optParams = [])
-    {
-        $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('getGlobalSiteTag', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaGlobalSiteTag::class);
-    }
-    /**
      * Returns child web data streams under the specified parent property. Web data
      * streams will be excluded if the caller does not have access. Returns an empty
      * list if no relevant web data streams are found.
@@ -158,29 +122,6 @@ class PropertiesWebDataStreams extends \Google\Site_Kit_Dependencies\Google\Serv
         $params = ['name' => $name, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
         return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaWebDataStream::class);
-    }
-    /**
-     * Updates the singleton enhanced measurement settings for this web stream. Note
-     * that the stream must enable enhanced measurement for these settings to take
-     * effect. (webDataStreams.updateEnhancedMeasurementSettings)
-     *
-     * @param string $name Output only. Resource name of this Data Stream. Format: p
-     * roperties/{property_id}/webDataStreams/{stream_id}/enhancedMeasurementSetting
-     * s Example: "properties/1000/webDataStreams/2000/enhancedMeasurementSettings"
-     * @param GoogleAnalyticsAdminV1alphaEnhancedMeasurementSettings $postBody
-     * @param array $optParams Optional parameters.
-     *
-     * @opt_param string updateMask Required. The list of fields to be updated.
-     * Field names must be in snake case (e.g., "field_to_update"). Omitted fields
-     * will not be updated. To replace the entire entity, use one path with the
-     * string "*" to match all fields.
-     * @return GoogleAnalyticsAdminV1alphaEnhancedMeasurementSettings
-     */
-    public function updateEnhancedMeasurementSettings($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaEnhancedMeasurementSettings $postBody, $optParams = [])
-    {
-        $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('updateEnhancedMeasurementSettings', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaEnhancedMeasurementSettings::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.

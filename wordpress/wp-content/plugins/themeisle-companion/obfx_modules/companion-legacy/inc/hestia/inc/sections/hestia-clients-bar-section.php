@@ -80,7 +80,7 @@ if ( ! function_exists( 'hestia_clients_bar' ) ) :
 									$link_html .= '>';
 									echo wp_kses_post( $link_html );
 								}
-								echo '<img src="' . esc_url( $image ) . '" ' . wp_kses_post( $alt_text ) . '>';
+                                echo '<img src="' . esc_url( $image ) . '" ' . wp_kses_post( $alt_text ) . '>';
 								if ( ! empty( $link ) ) {
 									echo '</a>';
 								}

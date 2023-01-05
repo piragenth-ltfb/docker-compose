@@ -12,7 +12,6 @@ namespace Google\Site_Kit\Core\Authentication;
 
 use Google\Site_Kit\Context;
 use Google\Site_Kit\Core\Authentication\Clients\OAuth_Client;
-use Google\Site_Kit\Core\Authentication\User_Input_State;
 use Google\Site_Kit\Core\Permissions\Permissions;
 use Google\Site_Kit\Core\REST_API\REST_Route;
 use Google\Site_Kit\Core\REST_API\REST_Routes;
@@ -23,11 +22,17 @@ use Google\Site_Kit\Core\Storage\Transients;
 use Google\Site_Kit\Core\Admin\Notice;
 use Google\Site_Kit\Core\Util\Feature_Flags;
 use Google\Site_Kit\Core\Util\Method_Proxy_Trait;
-use Google\Site_Kit\Core\Util\User_Input_Settings;
+use Google\Site_Kit\Core\Authentication\Google_Proxy;
+use Google\Site_Kit\Core\User_Input\User_Input;
+use Google\Site_Kit\Plugin;
+use WP_Error;
 use WP_REST_Server;
 use WP_REST_Request;
 use WP_REST_Response;
-use Exception;
+use Google\Site_Kit\Core\Modules\Modules;
+use Google\Site_Kit\Core\Util\BC_Functions;
+use Google\Site_Kit\Core\Util\URL;
+use Google\Site_Kit\Modules\Idea_Hub;
 
 /**
  * Authentication Class.
@@ -79,13 +84,13 @@ final class Authentication {
 	private $user_input_state = null;
 
 	/**
-	 * User_Input_Settings
+	 * User_Input
 	 *
-	 * @since 1.20.0
+	 * @since 1.90.0
 	 *
-	 * @var User_Input_Settings
+	 * @var User_Input
 	 */
-	private $user_input_settings = null;
+	private $user_input = null;
 
 	/**
 	 * Transients object.
@@ -95,6 +100,15 @@ final class Authentication {
 	 * @var Transients
 	 */
 	private $transients = null;
+
+	/**
+	 * Modules object.
+	 *
+	 * @since 1.70.0
+	 *
+	 * @var Modules
+	 */
+	private $modules = null;
 
 	/**
 	 * OAuth client object.
@@ -144,6 +158,14 @@ final class Authentication {
 	 * @var Profile
 	 */
 	protected $profile;
+
+	/**
+	 * Token instance.
+	 *
+	 * @since 1.39.0
+	 * @var Token
+	 */
+	protected $token;
 
 	/**
 	 * Owner_ID instance.
@@ -228,14 +250,16 @@ final class Authentication {
 		$this->options              = $options ?: new Options( $this->context );
 		$this->user_options         = $user_options ?: new User_Options( $this->context );
 		$this->transients           = $transients ?: new Transients( $this->context );
+		$this->modules              = new Modules( $this->context, $this->options, $this->user_options, $this );
 		$this->user_input_state     = new User_Input_State( $this->user_options );
-		$this->user_input_settings  = new User_Input_Settings( $context, $this, $transients );
+		$this->user_input           = new User_Input( $context, $this->options, $this->user_options );
 		$this->google_proxy         = new Google_Proxy( $this->context );
 		$this->credentials          = new Credentials( new Encrypted_Options( $this->options ) );
 		$this->verification         = new Verification( $this->user_options );
 		$this->verification_meta    = new Verification_Meta( $this->user_options );
 		$this->verification_file    = new Verification_File( $this->user_options );
 		$this->profile              = new Profile( $this->user_options );
+		$this->token                = new Token( $this->user_options );
 		$this->owner_id             = new Owner_ID( $this->options );
 		$this->has_connected_admins = new Has_Connected_Admins( $this->options, $this->user_options );
 		$this->has_multiple_admins  = new Has_Multiple_Admins( $this->transients );
@@ -260,6 +284,7 @@ final class Authentication {
 		$this->disconnected_reason->register();
 		$this->user_input_state->register();
 		$this->initial_version->register();
+		$this->user_input->register();
 
 		add_filter( 'allowed_redirect_hosts', $this->get_method_proxy( 'allowed_redirect_hosts' ) );
 		add_filter( 'googlesitekit_admin_data', $this->get_method_proxy( 'inline_js_admin_data' ) );
@@ -267,6 +292,11 @@ final class Authentication {
 		add_filter( 'googlesitekit_inline_base_data', $this->get_method_proxy( 'inline_js_base_data' ) );
 		add_filter( 'googlesitekit_setup_data', $this->get_method_proxy( 'inline_js_setup_data' ) );
 		add_filter( 'googlesitekit_is_feature_enabled', $this->get_method_proxy( 'filter_features_via_proxy' ), 10, 2 );
+
+		add_action( 'googlesitekit_cron_update_remote_features', $this->get_method_proxy( 'cron_update_remote_features' ) );
+		if ( ! wp_next_scheduled( 'googlesitekit_cron_update_remote_features' ) && ! wp_installing() ) {
+			wp_schedule_event( time(), 'twicedaily', 'googlesitekit_cron_update_remote_features' );
+		}
 
 		add_action( 'admin_init', $this->get_method_proxy( 'handle_oauth' ) );
 		add_action( 'admin_init', $this->get_method_proxy( 'check_connected_proxy_url' ) );
@@ -285,20 +315,6 @@ final class Authentication {
 		);
 		add_action( 'admin_action_' . self::ACTION_CONNECT, $this->get_method_proxy( 'handle_connect' ) );
 		add_action( 'admin_action_' . self::ACTION_DISCONNECT, $this->get_method_proxy( 'handle_disconnect' ) );
-		// Google_Proxy::ACTION_SETUP is called from the proxy as an intermediate step.
-		add_action( 'admin_action_' . Google_Proxy::ACTION_SETUP, $this->get_method_proxy( 'verify_proxy_setup_nonce' ), -1 );
-		// Google_Proxy::ACTION_SETUP is called from Site Kit to redirect to the proxy initially.
-		add_action( 'admin_action_' . Google_Proxy::ACTION_SETUP, $this->get_method_proxy( 'handle_sync_site_fields' ), 5 );
-		add_action(
-			'admin_action_' . Google_Proxy::ACTION_SETUP,
-			function () {
-				$code      = $this->context->input()->filter( INPUT_GET, 'googlesitekit_code', FILTER_SANITIZE_STRING );
-				$site_code = $this->context->input()->filter( INPUT_GET, 'googlesitekit_site_code', FILTER_SANITIZE_STRING );
-
-				$this->handle_site_code( $code, $site_code );
-				$this->redirect_to_proxy( $code );
-			}
-		);
 
 		add_action(
 			'admin_action_' . Google_Proxy::ACTION_PERMISSIONS,
@@ -349,16 +365,23 @@ final class Authentication {
 					$profile_data            = $this->profile->get();
 					$user['user']['email']   = $profile_data['email'];
 					$user['user']['picture'] = $profile_data['photo'];
+					// Older versions of Site Kit (before 1.86.0) did not
+					// fetch the user's full name, so we need to check for
+					// that attribute before using it.
+					$user['user']['full_name'] = isset( $profile_data['full_name'] ) ? $profile_data['full_name'] : null;
 				}
 
-				$user['connectURL']     = esc_url_raw( $this->get_connect_url() );
-				$user['initialVersion'] = $this->initial_version->get();
-				$user['userInputState'] = $this->user_input_state->get();
-				$user['verified']       = $this->verification->has();
+				$user['connectURL']        = esc_url_raw( $this->get_connect_url() );
+				$user['hasMultipleAdmins'] = $this->has_multiple_admins->get();
+				$user['initialVersion']    = $this->initial_version->get();
+				$user['userInputState']    = $this->user_input_state->get();
+				$user['verified']          = $this->verification->has();
 
 				return $user;
 			}
 		);
+
+		add_filter( 'googlesitekit_inline_tracking_data', $this->get_method_proxy( 'inline_js_tracking_data' ) );
 
 		// Synchronize site fields on shutdown when select options change.
 		$option_updated = function () {
@@ -394,6 +417,20 @@ final class Authentication {
 			add_action( 'googlesitekit_authorize_user', $set_initial_version );
 			add_action( 'googlesitekit_reauthorize_user', $set_initial_version );
 		}
+
+		add_action(
+			'current_screen',
+			function( $current_screen ) {
+				$this->maybe_refresh_token_for_screen( $current_screen->id );
+			}
+		);
+
+		add_action(
+			'heartbeat_tick',
+			function() {
+				$this->maybe_refresh_token_for_screen( $this->context->input()->filter( INPUT_POST, 'screen_id' ) );
+			}
+		);
 	}
 
 	/**
@@ -465,6 +502,17 @@ final class Authentication {
 	}
 
 	/**
+	 * Gets the Token instance.
+	 *
+	 * @since 1.39.0
+	 *
+	 * @return Token Token instance.
+	 */
+	public function token() {
+		return $this->token;
+	}
+
+	/**
 	 * Gets the OAuth client instance.
 	 *
 	 * @since 1.0.0
@@ -473,7 +521,15 @@ final class Authentication {
 	 */
 	public function get_oauth_client() {
 		if ( ! $this->auth_client instanceof OAuth_Client ) {
-			$this->auth_client = new OAuth_Client( $this->context, $this->options, $this->user_options, $this->credentials, $this->google_proxy );
+			$this->auth_client = new OAuth_Client(
+				$this->context,
+				$this->options,
+				$this->user_options,
+				$this->credentials,
+				$this->google_proxy,
+				$this->profile,
+				$this->token
+			);
 		}
 		return $this->auth_client;
 	}
@@ -569,11 +625,7 @@ final class Authentication {
 	 * @return boolean True if the user is authenticated, false otherwise.
 	 */
 	public function is_authenticated() {
-		$auth_client = $this->get_oauth_client();
-
-		$access_token = $auth_client->get_access_token();
-
-		return ! empty( $access_token );
+		return $this->token->has();
 	}
 	/**
 	 * Checks whether the Site Kit setup is considered complete.
@@ -622,6 +674,83 @@ final class Authentication {
 	}
 
 	/**
+	 * Proactively refreshes the current user's OAuth token when on the
+	 * Site Kit Plugin Dashboard screen.
+	 *
+	 * Also refreshes the module owner's OAuth token for all shareable modules
+	 * the current user can read shared data for.
+	 *
+	 * @since 1.42.0
+	 * @since 1.70.0 Moved the closure within regiser() to this method.
+	 *
+	 * @param string $screen_id The unique ID of the current WP_Screen.
+	 *
+	 * @return void
+	 */
+	private function maybe_refresh_token_for_screen( $screen_id ) {
+		if ( 'dashboard' !== $screen_id && 'toplevel_page_googlesitekit-dashboard' !== $screen_id ) {
+			return;
+		}
+
+		if ( Feature_Flags::enabled( 'dashboardSharing' ) ) {
+			$this->refresh_shared_module_owner_tokens();
+		}
+
+		if ( ! current_user_can( Permissions::AUTHENTICATE ) || ! $this->credentials()->has() ) {
+			return;
+		}
+
+		$this->refresh_user_token();
+	}
+
+	/**
+	 * Proactively refreshes the module owner's OAuth token for all shareable
+	 * modules the current user can read shared data for.
+	 *
+	 * @since 1.70.0
+	 *
+	 * @return void
+	 */
+	private function refresh_shared_module_owner_tokens() {
+		$shareable_modules = $this->modules->get_shareable_modules();
+		foreach ( $shareable_modules as $module_slug => $module ) {
+			if ( ! current_user_can( Permissions::READ_SHARED_MODULE_DATA, $module_slug ) ) {
+				continue;
+			}
+			$owner_id = $module->get_owner_id();
+			if ( ! $owner_id ) {
+				continue;
+			}
+			$restore_user = $this->user_options->switch_user( $owner_id );
+			$this->refresh_user_token();
+			$restore_user();
+		}
+	}
+
+	/**
+	 * Proactively refreshes the current user's OAuth token.
+	 *
+	 * @since 1.70.0
+	 *
+	 * @return void
+	 */
+	private function refresh_user_token() {
+		$token = $this->token->get();
+
+		// Do nothing if the token is not set.
+		if ( empty( $token['created'] ) || empty( $token['expires_in'] ) ) {
+			return;
+		}
+
+		// Do nothing if the token expires in more than 5 minutes.
+		if ( $token['created'] + $token['expires_in'] > time() + 5 * MINUTE_IN_SECONDS ) {
+			return;
+		}
+
+		$this->get_oauth_client()->refresh_token();
+	}
+
+	/**
 	 * Handles receiving a temporary OAuth code.
 	 *
 	 * @since 1.0.0
@@ -651,7 +780,7 @@ final class Authentication {
 		$input = $this->context->input();
 		$nonce = $input->filter( INPUT_GET, 'nonce' );
 		if ( ! wp_verify_nonce( $nonce, self::ACTION_CONNECT ) ) {
-			wp_die( esc_html__( 'Invalid nonce.', 'google-site-kit' ), 400 );
+			$this->invalid_nonce_error( self::ACTION_CONNECT );
 		}
 
 		if ( ! current_user_can( Permissions::AUTHENTICATE ) ) {
@@ -680,7 +809,7 @@ final class Authentication {
 	private function handle_disconnect() {
 		$nonce = $this->context->input()->filter( INPUT_GET, 'nonce' );
 		if ( ! wp_verify_nonce( $nonce, self::ACTION_DISCONNECT ) ) {
-			wp_die( esc_html__( 'Invalid nonce.', 'google-site-kit' ), 400 );
+			$this->invalid_nonce_error( self::ACTION_DISCONNECT );
 		}
 
 		if ( ! current_user_can( Permissions::AUTHENTICATE ) ) {
@@ -701,6 +830,27 @@ final class Authentication {
 	}
 
 	/**
+	 * Gets the update core URL if the user can update the WordPress core version.
+	 *
+	 * If the site is multisite, it gets the update core URL for the network admin.
+	 *
+	 * @since 1.85.0
+	 *
+	 * @return string The update core URL.
+	 */
+	private function get_update_core_url() {
+		if ( ! current_user_can( 'update_core' ) ) {
+			return null;
+		}
+
+		if ( is_multisite() ) {
+			return admin_url( 'network/update-core.php' );
+		}
+
+		return admin_url( 'update-core.php' );
+	}
+
+	/**
 	 * Modifies the base data to pass to JS.
 	 *
 	 * @since 1.2.0
@@ -710,25 +860,83 @@ final class Authentication {
 	 */
 	private function inline_js_base_data( $data ) {
 		$data['isOwner']             = $this->owner_id->get() === get_current_user_id();
-		$data['isFirstAdmin']        = $data['isOwner'] || ( ! $this->owner_id->get() && current_user_can( Permissions::MANAGE_OPTIONS ) );
 		$data['splashURL']           = esc_url_raw( $this->context->admin_url( 'splash' ) );
 		$data['proxySetupURL']       = '';
 		$data['proxyPermissionsURL'] = '';
 		$data['usingProxy']          = false;
+		$data['isAuthenticated']     = $this->is_authenticated();
+		$data['setupErrorCode']      = null;
+		$data['setupErrorMessage']   = null;
+		$data['setupErrorRedoURL']   = null;
+		$data['proxySupportLinkURL'] = null;
+		$data['updateCoreURL']       = null;
+
 		if ( $this->credentials->using_proxy() ) {
 			$auth_client                 = $this->get_oauth_client();
 			$data['proxySetupURL']       = esc_url_raw( $this->get_proxy_setup_url() );
 			$data['proxyPermissionsURL'] = esc_url_raw( $this->get_proxy_permissions_url() );
 			$data['usingProxy']          = true;
+			$data['proxySupportLinkURL'] = esc_url_raw( $this->get_proxy_support_link_url() );
+			$data['updateCoreURL']       = esc_url_raw( $this->get_update_core_url() );
+
+			// Check for an error in the proxy setup.
+			$error_code = $this->user_options->get( OAuth_Client::OPTION_ERROR_CODE );
+
+			// If an error is found, add it to the data we send to the client.
+			//
+			// We'll also remove the existing access code in the user options,
+			// because it isn't valid (given there was a setup error).
+			if ( ! empty( $error_code ) ) {
+				$data['setupErrorCode']    = $error_code;
+				$data['setupErrorMessage'] = $auth_client->get_error_message( $error_code );
+
+				// Get credentials needed to authenticate with the proxy
+				// so we can build a new setup URL.
+				$credentials = $this->credentials->get();
+
+				$access_code = $this->user_options->get( OAuth_Client::OPTION_PROXY_ACCESS_CODE );
+
+				// Both the access code and site ID are needed to generate
+				// a setup URL.
+				if ( $access_code && ! empty( $credentials['oauth2_client_id'] ) ) {
+					$setup_url = $this->google_proxy->setup_url(
+						array(
+							'code'    => $access_code,
+							'site_id' => $credentials['oauth2_client_id'],
+						)
+					);
+
+					$this->user_options->delete( OAuth_Client::OPTION_PROXY_ACCESS_CODE );
+				} elseif ( $this->is_authenticated() ) {
+					$setup_url = $this->get_connect_url();
+				} else {
+					$setup_url = $data['proxySetupURL'];
+				}
+
+				// Add the setup URL to the data sent to the client.
+				$data['setupErrorRedoURL'] = $setup_url;
+
+				// Remove the error code from the user options so it doesn't
+				// appear again.
+				$this->user_options->delete( OAuth_Client::OPTION_ERROR_CODE );
+			}
 		}
 
-		$version               = get_bloginfo( 'version' );
-		list( $major, $minor ) = explode( '.', $version );
-		$data['wpVersion']     = array(
+		$version = get_bloginfo( 'version' );
+
+		// The trailing '.0' is added to the $version to ensure there are always at least 2 segments in the version.
+		// This is necessary in case the minor version is stripped from the version string by a plugin.
+		// See https://github.com/google/site-kit-wp/issues/4963 for more details.
+		list( $major, $minor ) = explode( '.', $version . '.0' );
+
+		$data['wpVersion'] = array(
 			'version' => $version,
 			'major'   => (int) $major,
 			'minor'   => (int) $minor,
 		);
+
+		$current_user      = wp_get_current_user();
+		$data['userRoles'] = $current_user->roles;
 
 		return $data;
 	}
@@ -757,24 +965,16 @@ final class Authentication {
 	 * @return array Filtered $data.
 	 */
 	private function inline_js_setup_data( $data ) {
-		$auth_client = $this->get_oauth_client();
-
-		$access_token = $auth_client->get_access_token();
+		$auth_client      = $this->get_oauth_client();
+		$is_authenticated = $this->is_authenticated();
 
 		$data['isSiteKitConnected'] = $this->credentials->has();
 		$data['isResettable']       = $this->options->has( Credentials::OPTION );
-		$data['isAuthenticated']    = ! empty( $access_token );
+		$data['isAuthenticated']    = $is_authenticated;
 		$data['requiredScopes']     = $auth_client->get_required_scopes();
-		$data['grantedScopes']      = ! empty( $access_token ) ? $auth_client->get_granted_scopes() : array();
-		$data['unsatisfiedScopes']  = ! empty( $access_token ) ? $auth_client->get_unsatisfied_scopes() : array();
+		$data['grantedScopes']      = $is_authenticated ? $auth_client->get_granted_scopes() : array();
+		$data['unsatisfiedScopes']  = $is_authenticated ? $auth_client->get_unsatisfied_scopes() : array();
 		$data['needReauthenticate'] = $auth_client->needs_reauthentication();
-
-		if ( $this->credentials->using_proxy() ) {
-			$error_code = $this->user_options->get( OAuth_Client::OPTION_ERROR_CODE );
-			if ( ! empty( $error_code ) ) {
-				$data['errorMessage'] = $auth_client->get_error_message( $error_code );
-			}
-		}
 
 		// All admins need to go through site verification process.
 		if ( current_user_can( Permissions::MANAGE_OPTIONS ) ) {
@@ -788,9 +988,20 @@ final class Authentication {
 			$data['hasSearchConsoleProperty'] = false;
 		}
 
-		$data['showModuleSetupWizard'] = $this->context->input()->filter( INPUT_GET, 'reAuth', FILTER_VALIDATE_BOOLEAN );
+		return $data;
+	}
 
-		$data['moduleToSetup'] = sanitize_key( (string) $this->context->input()->filter( INPUT_GET, 'slug' ) );
+	/**
+	 * Adds / modifies tracking relevant data to pass to JS.
+	 *
+	 * @since 1.78.0
+	 *
+	 * @param array $data Inline JS data.
+	 * @return array Filtered $data.
+	 */
+	private function inline_js_tracking_data( $data ) {
+		$data['isAuthenticated'] = $this->is_authenticated();
+		$data['userRoles']       = wp_get_current_user()->roles;
 
 		return $data;
 	}
@@ -806,7 +1017,7 @@ final class Authentication {
 	 */
 	private function allowed_redirect_hosts( $hosts ) {
 		$hosts[] = 'accounts.google.com';
-		$hosts[] = wp_parse_url( $this->google_proxy->url(), PHP_URL_HOST );
+		$hosts[] = URL::parse( $this->google_proxy->url(), PHP_URL_HOST );
 
 		return $hosts;
 	}
@@ -823,7 +1034,11 @@ final class Authentication {
 			return current_user_can( Permissions::SETUP );
 		};
 
-		$can_authenticate = function() {
+		$can_access_authentication = function() {
+			return current_user_can( Permissions::VIEW_SPLASH ) || current_user_can( Permissions::VIEW_DASHBOARD );
+		};
+
+		$can_disconnect = function() {
 			return current_user_can( Permissions::AUTHENTICATE );
 		};
 
@@ -855,21 +1070,22 @@ final class Authentication {
 					array(
 						'methods'             => WP_REST_Server::READABLE,
 						'callback'            => function( WP_REST_Request $request ) {
-							$oauth_client = $this->get_oauth_client();
-							$access_token = $oauth_client->get_access_token();
+							$oauth_client     = $this->get_oauth_client();
+							$is_authenticated = $this->is_authenticated();
 
 							$data = array(
-								'authenticated'         => ! empty( $access_token ),
+								'authenticated'         => $is_authenticated,
 								'requiredScopes'        => $oauth_client->get_required_scopes(),
-								'grantedScopes'         => ! empty( $access_token ) ? $oauth_client->get_granted_scopes() : array(),
-								'unsatisfiedScopes'     => ! empty( $access_token ) ? $oauth_client->get_unsatisfied_scopes() : array(),
+								'grantedScopes'         => $is_authenticated ? $oauth_client->get_granted_scopes() : array(),
+								'unsatisfiedScopes'     => $is_authenticated ? $oauth_client->get_unsatisfied_scopes() : array(),
 								'needsReauthentication' => $oauth_client->needs_reauthentication(),
 								'disconnectedReason'    => $this->disconnected_reason->get(),
+								'connectedProxyURL'     => $this->connected_proxy_url->get(),
 							);
 
 							return new WP_REST_Response( $data );
 						},
-						'permission_callback' => $can_authenticate,
+						'permission_callback' => $can_access_authentication,
 					),
 				)
 			),
@@ -882,7 +1098,7 @@ final class Authentication {
 							$this->disconnect();
 							return new WP_REST_Response( true );
 						},
-						'permission_callback' => $can_authenticate,
+						'permission_callback' => $can_disconnect,
 					),
 				)
 			),
@@ -906,7 +1122,6 @@ final class Authentication {
 		}
 
 		$notices[] = $this->get_reauthentication_needed_notice();
-		$notices[] = $this->get_authentication_oauth_error_notice();
 		$notices[] = $this->get_reconnect_after_url_mismatch_notice();
 
 		return $notices;
@@ -924,12 +1139,38 @@ final class Authentication {
 			'reconnect_after_url_mismatch',
 			array(
 				'content'         => function() {
-					return sprintf(
-						'<p>%s <a href="%s">%s</a></p>',
+					$connected_url = $this->connected_proxy_url->get();
+					$current_url   = $this->context->get_canonical_home_url();
+					$content       = '<p>' . sprintf(
+						/* translators: 1: Plugin name. 2: URL change message. 3: Proxy setup URL. 4: Reconnect string. 5: Proxy support link for the url-has-changed help page. 6: Help link message. */
+						__( '%1$s: %2$s <a href="%3$s">%4$s</a>. <a target="_blank" href="%5$s">%6$s</a>', 'google-site-kit' ),
+						esc_html__( 'Site Kit by Google', 'google-site-kit' ),
 						esc_html__( 'Looks like the URL of your site has changed. In order to continue using Site Kit, you’ll need to reconnect, so that your plugin settings are updated with the new URL.', 'google-site-kit' ),
 						esc_url( $this->get_proxy_setup_url() ),
-						esc_html__( 'Reconnect', 'google-site-kit' )
-					);
+						esc_html__( 'Reconnect', 'google-site-kit' ),
+						esc_url( $this->get_proxy_support_link_url() . '/?doc=url-has-changed' ),
+						esc_html__( 'Get help', 'google-site-kit' )
+					) . '</p>';
+
+					// Only show the comparison if URLs don't match as it is possible
+					// they could already match again at this point, although they most likely won't.
+					if ( ! $this->connected_proxy_url->matches_url( $current_url ) ) {
+						$content .= sprintf(
+							'<ul><li>%s</li><li>%s</li></ul>',
+							sprintf(
+								/* translators: %s: Previous URL */
+								esc_html__( 'Old URL: %s', 'google-site-kit' ),
+								$connected_url
+							),
+							sprintf(
+								/* translators: %s: Current URL */
+								esc_html__( 'New URL: %s', 'google-site-kit' ),
+								$current_url
+							)
+						);
+					}
+
+					return $content;
 				},
 				'type'            => Notice::TYPE_INFO,
 				'active_callback' => function() {
@@ -955,169 +1196,47 @@ final class Authentication {
 					ob_start();
 					?>
 					<p>
-						<?php esc_html_e( 'You need to reauthenticate your Google account.', 'google-site-kit' ); ?>
+						<?php
+							echo esc_html(
+								sprintf(
+									/* translators: 1: Plugin name. 2: Message. */
+									__( '%1$s: %2$s', 'google-site-kit' ),
+									__( 'Site Kit by Google', 'google-site-kit' ),
+									__( 'You need to reauthenticate your Google account.', 'google-site-kit' )
+								)
+							);
+						?>
 						<a
 							href="#"
 							onclick="clearSiteKitAppStorage()"
 						><?php esc_html_e( 'Click here', 'google-site-kit' ); ?></a>
 					</p>
-					<script>
-						function clearSiteKitAppStorage() {
-							if ( localStorage ) {
-								localStorage.clear();
-							}
-							if ( sessionStorage ) {
-								sessionStorage.clear();
-							}
-							document.location = '<?php echo esc_url_raw( $this->get_connect_url() ); ?>';
-						}
-					</script>
 					<?php
+					BC_Functions::wp_print_inline_script_tag(
+						sprintf(
+							"
+							function clearSiteKitAppStorage() {
+								if ( localStorage ) {
+									localStorage.clear();
+								}
+								if ( sessionStorage ) {
+									sessionStorage.clear();
+								}
+								document.location = '%s';
+							}
+							",
+							esc_url_raw( $this->get_connect_url() )
+						)
+					);
 					return ob_get_clean();
 				},
 				'type'            => Notice::TYPE_SUCCESS,
 				'active_callback' => function() {
+					if ( ! empty( $this->user_options->get( OAuth_Client::OPTION_ERROR_CODE ) ) ) {
+						return false;
+					}
 					return $this->get_oauth_client()->needs_reauthentication();
 				},
-			)
-		);
-	}
-
-	/**
-	 * Gets OAuth error notice.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return Notice Notice object.
-	 */
-	private function get_authentication_oauth_error_notice() {
-		return new Notice(
-			'oauth_error',
-			array(
-				'type'            => Notice::TYPE_ERROR,
-				'content'         => function() {
-					$auth_client = $this->get_oauth_client();
-					$error_code  = $this->context->input()->filter( INPUT_GET, 'error', FILTER_SANITIZE_STRING );
-
-					if ( ! $error_code ) {
-						$error_code = $this->user_options->get( OAuth_Client::OPTION_ERROR_CODE );
-					}
-
-					if ( $error_code ) {
-						// Delete error code from database to prevent future notice.
-						$this->user_options->delete( OAuth_Client::OPTION_ERROR_CODE );
-					} else {
-						return '';
-					}
-
-					$message     = $auth_client->get_error_message( $error_code );
-					$access_code = $this->user_options->get( OAuth_Client::OPTION_PROXY_ACCESS_CODE );
-					if ( $this->credentials->using_proxy() && $access_code ) {
-						$message .= ' ' . sprintf(
-							/* translators: %s: URL to re-authenticate */
-							__( 'To fix this, <a href="%s">redo the plugin setup</a>.', 'google-site-kit' ),
-							esc_url( $auth_client->get_proxy_setup_url( $access_code, $error_code ) )
-						);
-						$this->user_options->delete( OAuth_Client::OPTION_PROXY_ACCESS_CODE );
-					} else {
-						$message .= ' ' . sprintf(
-							/* translators: %s: setup screen URL */
-							__( 'To fix this, <a href="%s">redo the plugin setup</a>.', 'google-site-kit' ),
-							esc_url( $this->context->admin_url( 'splash' ) )
-						);
-					}
-
-					$message = wp_kses(
-						$message,
-						array(
-							'a'      => array(
-								'href' => array(),
-							),
-							'strong' => array(),
-							'em'     => array(),
-						)
-					);
-
-					return '<p>' . $message . '</p>';
-				},
-				'active_callback' => function() {
-					$notification = $this->context->input()->filter( INPUT_GET, 'notification', FILTER_SANITIZE_STRING );
-					$error_code   = $this->context->input()->filter( INPUT_GET, 'error', FILTER_SANITIZE_STRING );
-
-					if ( 'authentication_success' === $notification && $error_code ) {
-						return true;
-					}
-
-					return (bool) $this->user_options->get( OAuth_Client::OPTION_ERROR_CODE );
-				},
-			)
-		);
-	}
-
-	/**
-	 * Verifies the nonce for processing proxy setup.
-	 *
-	 * @since 1.1.2
-	 */
-	private function verify_proxy_setup_nonce() {
-		$nonce = $this->context->input()->filter( INPUT_GET, 'nonce', FILTER_SANITIZE_STRING );
-
-		if ( ! wp_verify_nonce( $nonce, Google_Proxy::ACTION_SETUP ) ) {
-			wp_die( esc_html__( 'Invalid nonce.', 'google-site-kit' ), 400 );
-		}
-	}
-
-	/**
-	 * Handles the exchange of a code and site code for client credentials from the proxy.
-	 *
-	 * @since 1.1.2
-	 *
-	 * @param string $code      Code ('googlesitekit_code') provided by proxy.
-	 * @param string $site_code Site code ('googlesitekit_site_code') provided by proxy.
-	 *
-	 * phpcs:disable Squiz.Commenting.FunctionCommentThrowTag.Missing
-	 */
-	private function handle_site_code( $code, $site_code ) {
-		if ( ! $code || ! $site_code ) {
-			return;
-		}
-
-		if ( ! current_user_can( Permissions::SETUP ) ) {
-			wp_die( esc_html__( 'You don\'t have permissions to set up Site Kit.', 'google-site-kit' ), 403 );
-		}
-
-		$data = $this->google_proxy->exchange_site_code( $site_code, $code );
-		if ( is_wp_error( $data ) ) {
-			$error_message = $data->get_error_message();
-			if ( empty( $error_message ) ) {
-				$error_message = $data->get_error_code();
-				if ( empty( $error_message ) ) {
-					$error_message = 'unknown_error';
-				}
-			}
-
-			// If missing verification, rely on the redirect back to the proxy,
-			// passing the site code instead of site ID.
-			if ( 'missing_verification' === $error_message ) {
-				add_filter(
-					'googlesitekit_proxy_setup_url_params',
-					function ( $params ) use ( $site_code ) {
-						$params['site_code'] = $site_code;
-						return $params;
-					}
-				);
-				return;
-			}
-
-			$this->user_options->set( OAuth_Client::OPTION_ERROR_CODE, $error_message );
-			wp_safe_redirect( $this->context->admin_url( 'splash' ) );
-			exit;
-		}
-
-		$this->credentials->set(
-			array(
-				'oauth2_client_id'     => $data['site_id'],
-				'oauth2_client_secret' => $data['site_secret'],
 			)
 		);
 	}
@@ -1134,25 +1253,11 @@ final class Authentication {
 
 		// Refresh user input settings from the proxy.
 		// This will ensure the user input state is updated as well.
-		$this->user_input_settings->set_settings( null );
+		$this->user_input->set_answers( null );
 
 		if ( User_Input_State::VALUE_COMPLETED !== $this->user_input_state->get() ) {
 			$this->user_input_state->set( User_Input_State::VALUE_REQUIRED );
 		}
-	}
-
-	/**
-	 * Redirects back to the authentication service with any added parameters.
-	 *
-	 * @since 1.1.2
-	 *
-	 * @param string $code Code ('googlesitekit_code') provided by proxy.
-	 */
-	private function redirect_to_proxy( $code ) {
-		wp_safe_redirect(
-			$this->get_oauth_client()->get_proxy_setup_url( $code )
-		);
-		exit;
 	}
 
 	/**
@@ -1201,31 +1306,6 @@ final class Authentication {
 	}
 
 	/**
-	 * Handles user connection action and redirects to the proxy connection page.
-	 *
-	 * @since 1.17.0
-	 */
-	private function handle_sync_site_fields() {
-		// If this query parameter is sent, the request comes from the authentication proxy as part of an ongoing setup flow, so there is no need to sync site fields.
-		$googlesitekit_code = $this->context->input()->filter( INPUT_GET, 'googlesitekit_code' );
-		if ( $googlesitekit_code ) {
-			return;
-		}
-
-		if ( ! current_user_can( Permissions::SETUP ) ) {
-			wp_die( esc_html__( 'You have insufficient permissions to connect Site Kit.', 'google-site-kit' ) );
-		}
-
-		if ( ! $this->credentials->using_proxy() ) {
-			wp_die( esc_html__( 'Site Kit is not configured to use the authentication proxy.', 'google-site-kit' ) );
-		}
-
-		if ( $this->google_proxy->are_site_fields_synced( $this->credentials ) === false ) {
-			$this->google_proxy->sync_site_fields( $this->credentials, 'sync' );
-		}
-	}
-
-	/**
 	 * Gets the publicly visible URL to set up the plugin with the authentication proxy.
 	 *
 	 * @since 1.17.0
@@ -1235,8 +1315,8 @@ final class Authentication {
 	private function get_proxy_setup_url() {
 		return add_query_arg(
 			array(
-				'action' => Google_Proxy::ACTION_SETUP,
-				'nonce'  => wp_create_nonce( Google_Proxy::ACTION_SETUP ),
+				'action' => Google_Proxy::ACTION_SETUP_START,
+				'nonce'  => wp_create_nonce( Google_Proxy::ACTION_SETUP_START ),
 			),
 			admin_url( 'index.php' )
 		);
@@ -1250,7 +1330,7 @@ final class Authentication {
 	private function handle_proxy_permissions() {
 		$nonce = $this->context->input()->filter( INPUT_GET, 'nonce' );
 		if ( ! wp_verify_nonce( $nonce, Google_Proxy::ACTION_PERMISSIONS ) ) {
-			wp_die( esc_html__( 'Invalid nonce.', 'google-site-kit' ) );
+			$this->invalid_nonce_error( Google_Proxy::ACTION_PERMISSIONS );
 		}
 
 		if ( ! current_user_can( Permissions::AUTHENTICATE ) ) {
@@ -1284,6 +1364,17 @@ final class Authentication {
 	}
 
 	/**
+	 * Gets the proxy support URL.
+	 *
+	 * @since 1.80.0
+	 *
+	 * @return string|null Support URL.
+	 */
+	public function get_proxy_support_link_url() {
+		return $this->google_proxy->url( Google_Proxy::SUPPORT_LINK_URI );
+	}
+
+	/**
 	 * Verifies the user input settings
 	 *
 	 * @since 1.20.0
@@ -1295,7 +1386,7 @@ final class Authentication {
 			&& $this->credentials()->has()
 			&& $this->credentials->using_proxy()
 		) {
-			$is_empty = $this->user_input_settings->are_settings_empty();
+			$is_empty = $this->user_input->are_settings_empty();
 			if ( ! is_null( $is_empty ) ) {
 				$this->user_input_state->set( $is_empty ? User_Input_State::VALUE_MISSING : User_Input_State::VALUE_COMPLETED );
 			}
@@ -1312,19 +1403,33 @@ final class Authentication {
 	 * @return boolean State flag from the proxy server if it is available, otherwise the original value.
 	 */
 	private function filter_features_via_proxy( $feature_enabled, $feature_name ) {
-		if ( ! $this->credentials->has() ) {
-			return $feature_enabled;
-		}
+		$remote_features_option = 'googlesitekitpersistent_remote_features';
+		$features               = $this->options->get( $remote_features_option );
 
-		$transient_name = 'googlesitekit_remote_features';
-		$features       = $this->transients->get( $transient_name );
 		if ( false === $features ) {
-			$features = $this->google_proxy->get_features( $this->credentials );
-			if ( is_wp_error( $features ) ) {
-				$this->transients->set( $transient_name, array(), HOUR_IN_SECONDS );
-			} else {
-				$this->transients->set( $transient_name, $features, DAY_IN_SECONDS );
+			// The experimental features (ideaHubModule) are checked within Modules::construct() which
+			// runs before Modules::register() where the `googlesitekit_features_request_data` filter is registered.
+			// Without this filter, some necessary context data is not sent when a request to Google_Proxy::get_features() is
+			// made. So we avoid making this request and solely check the active modules in the database to see if these
+			// features are enabled.
+			if ( in_array( $feature_name, array( 'ideaHubModule' ), true ) ) {
+				$active_modules = $this->options->get( Modules::OPTION_ACTIVE_MODULES );
+
+				if ( ! is_array( $active_modules ) ) {
+					return false;
+				}
+
+				if ( 'ideaHubModule' === $feature_name ) {
+					return in_array( Idea_Hub::MODULE_SLUG, $active_modules, true );
+				}
 			}
+
+			// Don't attempt to fetch features if the site is not connected yet.
+			if ( ! $this->credentials->has() ) {
+				return $feature_enabled;
+			}
+
+			$features = $this->fetch_remote_features();
 		}
 
 		if ( ! is_wp_error( $features ) && isset( $features[ $feature_name ]['enabled'] ) ) {
@@ -1334,4 +1439,62 @@ final class Authentication {
 		return $feature_enabled;
 	}
 
+	/**
+	 * Fetches remotely-controlled features from the Google Proxy server and
+	 * saves them in a persistent option.
+	 *
+	 * If the fetch errors or fails, the persistent option is not updated.
+	 *
+	 * @since 1.71.0
+	 *
+	 * @return array|WP_Error Array of features or a WP_Error object if the fetch errored.
+	 */
+	private function fetch_remote_features() {
+		$remote_features_option = 'googlesitekitpersistent_remote_features';
+		$features               = $this->google_proxy->get_features( $this->credentials );
+		if ( ! is_wp_error( $features ) && is_array( $features ) ) {
+			$this->options->set( $remote_features_option, $features );
+		}
+
+		return $features;
+	}
+
+	/**
+	 * Action that is run by a cron twice daily to fetch and cache remotely-enabled features
+	 * from the Google Proxy server, if Site Kit has been setup.
+	 *
+	 * @since 1.71.0
+	 *
+	 * @return void
+	 */
+	private function cron_update_remote_features() {
+		if ( ! $this->credentials->has() ) {
+			return;
+		}
+		$this->fetch_remote_features();
+	}
+
+	/**
+	 * Invalid nonce error handler.
+	 *
+	 * @since 1.42.0
+	 *
+	 * @param string $action Action name.
+	 */
+	public function invalid_nonce_error( $action ) {
+		if ( strpos( $action, 'googlesitekit_proxy_' ) !== 0 ) {
+			wp_nonce_ays( $action );
+			return;
+		}
+		// Copied from wp_nonce_ays() with tweak to the url.
+		$html  = __( 'The link you followed has expired.', 'google-site-kit' );
+		$html .= '</p><p>';
+		$html .= sprintf(
+			/* translators: 1: Admin splash URL. 2: Support link URL. */
+			__( '<a href="%1$s">Please try again</a>. Retry didn’t work? <a href="%2$s" target="_blank">Get help</a>.', 'google-site-kit' ),
+			esc_url( Plugin::instance()->context()->admin_url( 'splash' ) ),
+			esc_url( $this->get_proxy_support_link_url() . '?error_id=nonce_expired' )
+		);
+		wp_die( $html, __( 'Something went wrong.', 'google-site-kit' ), 403 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
 }

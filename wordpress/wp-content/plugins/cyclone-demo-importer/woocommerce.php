@@ -116,6 +116,8 @@ function bizberg_woocommerce_account_menu(){
     		} 
 
     		$dropdown_menu_pages = get_theme_mod( 'woocommerce_account_drop_down_menu_header' );
+    		$dropdown_menu_pages = is_array( $dropdown_menu_pages ) ? $dropdown_menu_pages : json_decode( urldecode( $dropdown_menu_pages ), true );
+
     		$logout_header_menu = get_theme_mod( 'woocommerce_disable_logout_header_menu' );
     		$hide_logout_icon_header_menu = get_theme_mod( 'woocommerce_hide_logout_icon_header_menu' ); ?>
 	    	<ul>

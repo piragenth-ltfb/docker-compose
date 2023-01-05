@@ -34,6 +34,13 @@ class Yoast_Blocks extends \WP_Background_Process {
 	private $howto_converter;
 
 	/**
+	 * TOC Converter.
+	 *
+	 * @var Yoast_TOC_Converter
+	 */
+	private $toc_converter;
+
+	/**
 	 * Action.
 	 *
 	 * @var string
@@ -81,7 +88,8 @@ class Yoast_Blocks extends \WP_Background_Process {
 		$posts = get_option( 'rank_math_yoast_block_posts' );
 		delete_option( 'rank_math_yoast_block_posts' );
 		Helper::add_notification(
-			sprintf( 'Converted %d posts successfully.', $posts['count'] ),
+			// Translators: placeholder is the number of modified posts.
+			sprintf( _n( 'Blocks successfully converted in %d post.', 'Blocks successfully converted in %d posts.', $posts['count'], 'rank-math' ), $posts['count'] ),
 			[
 				'type'    => 'success',
 				'id'      => 'rank_math_yoast_block_posts',
@@ -114,6 +122,7 @@ class Yoast_Blocks extends \WP_Background_Process {
 			$this->faq_converter   = new Yoast_FAQ_Converter();
 			$this->howto_converter = new Yoast_HowTo_Converter();
 			$this->local_converter = new Yoast_Local_Converter();
+			$this->toc_converter   = new Yoast_TOC_Converter();
 			foreach ( $posts as $post_id ) {
 				$post = get_post( $post_id );
 				$this->convert( $post );
@@ -142,6 +151,11 @@ class Yoast_Blocks extends \WP_Background_Process {
 		if ( isset( $blocks['yoast/how-to-block'] ) && ! empty( $blocks['yoast/how-to-block'] ) ) {
 			$dirty   = true;
 			$content = $this->howto_converter->replace( $post->post_content, $blocks['yoast/how-to-block'] );
+		}
+
+		if ( isset( $blocks['yoast-seo/table-of-contents'] ) && ! empty( $blocks['yoast-seo/table-of-contents'] ) ) {
+			$dirty   = true;
+			$content = $this->toc_converter->replace( $post->post_content, $blocks['yoast-seo/table-of-contents'] );
 		}
 
 		if ( ! empty( array_intersect( array_keys( $blocks ), $this->local_converter->yoast_blocks ) ) ) {
@@ -173,6 +187,7 @@ class Yoast_Blocks extends \WP_Background_Process {
 			'numberposts'   => -1,
 			'fields'        => 'ids',
 			'no_found_rows' => true,
+			'post_type'     => 'any',
 		];
 		$faqs = get_posts( $args );
 
@@ -180,11 +195,14 @@ class Yoast_Blocks extends \WP_Background_Process {
 		$args['s'] = 'wp:yoast/how-to-block';
 		$howto     = get_posts( $args );
 
+		// TOC Posts.
+		$args['s'] = 'wp:yoast-seo/table-of-contents';
+		$toc       = get_posts( $args );
+
 		// Local Business Posts.
-		$args['s']         = ':yoast-seo-local/';
-		$args['post_type'] = 'any';
-		$local_business    = get_posts( $args );
-		$posts             = array_merge( $faqs, $howto, $local_business );
+		$args['s']      = ':yoast-seo-local/';
+		$local_business = get_posts( $args );
+		$posts          = array_merge( $faqs, $howto, $toc, $local_business );
 
 		$posts_data = [
 			'posts' => $posts,
@@ -227,6 +245,11 @@ class Yoast_Blocks extends \WP_Background_Process {
 
 			if ( 'yoast/how-to-block' === $name ) {
 				$block             = $this->howto_converter->convert( $block );
+				$blocks[ $name ][] = \serialize_block( $block );
+			}
+
+			if ( 'yoast-seo/table-of-contents' === $name ) {
+				$block             = $this->toc_converter->convert( $block );
 				$blocks[ $name ][] = \serialize_block( $block );
 			}
 

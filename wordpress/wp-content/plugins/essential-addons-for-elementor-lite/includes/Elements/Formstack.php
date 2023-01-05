@@ -146,7 +146,7 @@ class Formstack extends Widget_Base {
         return $keys;
     }
 
-    protected function _register_controls () {
+    protected function register_controls () {
 
         if (!apply_filters('eael/is_plugin_active', 'formstack/plugin.php')) {
             $this->formstack_not_activated();
@@ -447,15 +447,15 @@ class Formstack extends Widget_Base {
                 'options'   => [
                     'left'   => [
                         'title' => __('Left', 'essential-addons-for-elementor-lite'),
-                        'icon'  => 'fa fa-align-left',
+                        'icon'  => 'eicon-text-align-left',
                     ],
                     'center' => [
                         'title' => __('Center', 'essential-addons-for-elementor-lite'),
-                        'icon'  => 'fa fa-align-center',
+                        'icon'  => 'eicon-text-align-center',
                     ],
                     'right'  => [
                         'title' => __('Right', 'essential-addons-for-elementor-lite'),
-                        'icon'  => 'fa fa-align-right',
+                        'icon'  => 'eicon-text-align-right',
                     ],
                 ],
                 'default'   => '',

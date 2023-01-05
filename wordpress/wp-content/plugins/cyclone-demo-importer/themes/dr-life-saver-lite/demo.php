@@ -18,16 +18,46 @@ function cdi_import_files() {
             'preview_url' => 'https://bizbergthemes.com/dr-life-saver-pro/homepage-pro/'
         ),
         array(
-            'import_file_name'=> __('Homepage Slider','cdi'),
+            'import_file_name'=> __('Homepage PRO 2','cdi'),
             'categories'      =>  array( 'PRO' , 'Homepage' ),
-            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/dr-life-saver/homepage-3.jpg',
-            'preview_url' => 'https://bizbergthemes.com/dr-life-saver-pro/homepage-pro-2/'
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/dr-life-saver/homepage-smart.jpg',
+            'preview_url' => 'https://bizbergthemes.com/dr-life-saver-pro/homepage-smart-health-pharmacy/'
+        ),
+        array(
+            'import_file_name'=> __('Homepage PRO 3','cdi'),
+            'categories'      =>  array( 'PRO' , 'Homepage' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/dr-life-saver/homepage-medical-business.jpg',
+            'preview_url' => 'https://bizbergthemes.com/dr-life-saver-pro/medical-business-pro/'
         ),
         array(
             'import_file_name'=> __('About Us','cdi'),
             'categories'      =>  array( 'PRO' , 'Pages' ),
             'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/dr-life-saver/about-us.jpg',
             'preview_url' => 'https://bizbergthemes.com/dr-life-saver-pro/about-us/'
+        ),
+        array(
+            'import_file_name'=> __('About Us ( New )','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/dr-life-saver/about-us-new.jpg',
+            'preview_url' => 'https://bizbergthemes.com/dr-life-saver-pro/about-us-new/'
+        ),
+        array(
+            'import_file_name'=> __('Our Team','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/dr-life-saver/team.jpg',
+            'preview_url' => 'https://bizbergthemes.com/dr-life-saver-pro/our-team/'
+        ),
+        array(
+            'import_file_name'=> __('Our Departments','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/dr-life-saver/departments.jpg',
+            'preview_url' => 'https://bizbergthemes.com/dr-life-saver-pro/our-departments/'
+        ),
+        array(
+            'import_file_name'=> __('Pricing Plan','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/dr-life-saver/pricing.jpg',
+            'preview_url' => 'https://bizbergthemes.com/dr-life-saver-pro/pricing-plan/'
         ),
         array(
             'import_file_name'=> __('Gallery 1','cdi'),
@@ -124,6 +154,11 @@ function cdi_register_plugins( $plugins ) {
         [ 
           'name'     => 'Essential Addons for Elementor', 
           'slug'     => 'essential-addons-for-elementor-lite', 
+          'required' => true,             
+        ],
+        [ 
+          'name'     => 'Medical Addon for Elementor', 
+          'slug'     => 'medical-addon-for-elementor', 
           'required' => true,             
         ],
     ];

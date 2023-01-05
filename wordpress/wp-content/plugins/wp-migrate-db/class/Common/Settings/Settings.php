@@ -3,6 +3,7 @@
 namespace DeliciousBrains\WPMDB\Common\Settings;
 
 use DeliciousBrains\WPMDB\Common\Filesystem\Filesystem;
+use DeliciousBrains\WPMDB\Common\Helpers;
 use DeliciousBrains\WPMDB\Common\Util\Util;
 
 class Settings
@@ -57,13 +58,6 @@ class Settings
         }
 
         $existing_settings['plugins']         = $this->filesystem->get_local_plugins();
-        $existing_settings['plugin_disabled'] = false;
-
-        // If pretty permalinks are not enabled, disable the plugin
-        // @TODO fix me - this only works for multisites with 1 as the BLOG_ID_CURRENT_SITE
-        if (empty(get_option('permalink_structure'))){
-            $existing_settings['plugin_disabled'] = true;
-        }
 
         return $existing_settings;
     }
@@ -80,18 +74,19 @@ class Settings
         $this->settings  = get_site_option('wpmdb_settings');
 
         $default_settings = array(
-            'key'                    => $this->util->generate_key(),
-            'allow_pull'             => false,
-            'allow_push'             => false,
-            'profiles'               => array(),
-            'licence'                => '',
-            'verify_ssl'             => false,
-            'whitelist_plugins'      => array(),
-            'max_request'            => min(1024 * 1024, $this->util->get_bottleneck('max')),
-            'delay_between_requests' => 0,
-            'prog_tables_hidden'     => true,
-            'pause_before_finalize'  => false,
-            'allow_tracking'         => null,
+            'key'                        => $this->util->generate_key(),
+            'allow_pull'                 => false,
+            'allow_push'                 => false,
+            'profiles'                   => array(),
+            'licence'                    => '',
+            'verify_ssl'                 => false,
+            'whitelist_plugins'          => array(),
+            'max_request'                => min(1024 * 1024, $this->util->get_bottleneck('max')),
+            'delay_between_requests'     => 0,
+            'prog_tables_hidden'         => true,
+            'pause_before_finalize'      => false,
+            'allow_tracking'             => null,
+            'high_performance_transfers' => false
         );
 
         // if we still don't have settings exist this must be a fresh install, set up some default settings
@@ -122,6 +117,11 @@ class Settings
 
         if ($update_settings) {
             update_site_option('wpmdb_settings', $this->settings);
+        }
+
+        $user_licence = Helpers::get_user_licence_key();
+        if ( $user_licence ) {
+            $this->settings['licence'] = $user_licence;
         }
 
         self::$static_settings = $this->settings;

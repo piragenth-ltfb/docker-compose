@@ -15,7 +15,31 @@ function cdi_import_files() {
             'import_file_name'=> __('Homepage PRO','cdi'),
             'categories'      =>  array( 'PRO' , 'Homepage' ),
             'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/ngo-charity-fundraising-lite/homepage-pro.jpg',
-            'preview_url' => 'https://bizbergthemes.com/ngo-charity-fundraising-pro/homepage-pro/'
+            'preview_url' => 'https://bizbergthemes.com/ngo-charity-fundraising-pro/homepage-2/'
+        ),
+        array(
+            'import_file_name'=> __('Homepage PRO 2','cdi'),
+            'categories'      =>  array( 'PRO' , 'Homepage' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/ngo-charity-fundraising-lite/homepage-pro-3.jpg',
+            'preview_url' => 'https://bizbergthemes.com/ngo-charity-fundraising-pro/homepage-3/'
+        ),
+        array(
+            'import_file_name'=> __('About Our Organization','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/ngo-charity-fundraising-lite/about-organization.jpg',
+            'preview_url' => 'https://bizbergthemes.com/ngo-charity-fundraising-pro/about-our-organization/'
+        ),
+        array(
+            'import_file_name'=> __('About Team','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/ngo-charity-fundraising-lite/team.jpg',
+            'preview_url' => 'https://bizbergthemes.com/ngo-charity-fundraising-pro/about-team/'
+        ),
+        array(
+            'import_file_name'=> __('Become a Volunteer','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/ngo-charity-fundraising-lite/volunteer.jpg',
+            'preview_url' => 'https://bizbergthemes.com/ngo-charity-fundraising-pro/become-a-volunteer/'
         ),
         array(
             'import_file_name'=> __('Our Story','cdi'),

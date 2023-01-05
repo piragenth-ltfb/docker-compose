@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2018 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,10 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'Kangaroos cannot jump here' );
+}
+
 class Ai1wm_Extensions {
 
 	/**
@@ -33,29 +37,45 @@ class Ai1wm_Extensions {
 	public static function get() {
 		$extensions = array();
 
-		// Add Microsoft Azure extension
+		// Add Microsoft Azure Extension
 		if ( defined( 'AI1WMZE_PLUGIN_NAME' ) ) {
 			$extensions[ AI1WMZE_PLUGIN_NAME ] = array(
 				'key'      => AI1WMZE_PLUGIN_KEY,
 				'title'    => AI1WMZE_PLUGIN_TITLE,
 				'about'    => AI1WMZE_PLUGIN_ABOUT,
+				'check'    => AI1WMZE_PLUGIN_CHECK,
 				'basename' => AI1WMZE_PLUGIN_BASENAME,
 				'version'  => AI1WMZE_VERSION,
-				'requires' => '1.1',
+				'requires' => '1.34',
 				'short'    => AI1WMZE_PLUGIN_SHORT,
 			);
 		}
 
-		// Add Backblaze B2 extension
+		// Add Backblaze B2 Extension
 		if ( defined( 'AI1WMAE_PLUGIN_NAME' ) ) {
 			$extensions[ AI1WMAE_PLUGIN_NAME ] = array(
 				'key'      => AI1WMAE_PLUGIN_KEY,
 				'title'    => AI1WMAE_PLUGIN_TITLE,
 				'about'    => AI1WMAE_PLUGIN_ABOUT,
+				'check'    => AI1WMAE_PLUGIN_CHECK,
 				'basename' => AI1WMAE_PLUGIN_BASENAME,
 				'version'  => AI1WMAE_VERSION,
-				'requires' => '1.3',
+				'requires' => '1.39',
 				'short'    => AI1WMAE_PLUGIN_SHORT,
+			);
+		}
+
+		// Add Backup Plugin
+		if ( defined( 'AI1WMVE_PLUGIN_NAME' ) ) {
+			$extensions[ AI1WMVE_PLUGIN_NAME ] = array(
+				'key'      => AI1WMVE_PLUGIN_KEY,
+				'title'    => AI1WMVE_PLUGIN_TITLE,
+				'about'    => AI1WMVE_PLUGIN_ABOUT,
+				'check'    => AI1WMVE_PLUGIN_CHECK,
+				'basename' => AI1WMVE_PLUGIN_BASENAME,
+				'version'  => AI1WMVE_VERSION,
+				'requires' => '1.0',
+				'short'    => AI1WMVE_PLUGIN_SHORT,
 			);
 		}
 
@@ -65,23 +85,39 @@ class Ai1wm_Extensions {
 				'key'      => AI1WMBE_PLUGIN_KEY,
 				'title'    => AI1WMBE_PLUGIN_TITLE,
 				'about'    => AI1WMBE_PLUGIN_ABOUT,
+				'check'    => AI1WMBE_PLUGIN_CHECK,
 				'basename' => AI1WMBE_PLUGIN_BASENAME,
 				'version'  => AI1WMBE_VERSION,
-				'requires' => '1.13',
+				'requires' => '1.48',
 				'short'    => AI1WMBE_PLUGIN_SHORT,
 			);
 		}
 
-		// Add DigitalOcean Extension
+		// Add DigitalOcean Spaces Extension
 		if ( defined( 'AI1WMIE_PLUGIN_NAME' ) ) {
 			$extensions[ AI1WMIE_PLUGIN_NAME ] = array(
 				'key'      => AI1WMIE_PLUGIN_KEY,
 				'title'    => AI1WMIE_PLUGIN_TITLE,
 				'about'    => AI1WMIE_PLUGIN_ABOUT,
+				'check'    => AI1WMIE_PLUGIN_CHECK,
 				'basename' => AI1WMIE_PLUGIN_BASENAME,
 				'version'  => AI1WMIE_VERSION,
-				'requires' => '1.6',
+				'requires' => '1.49',
 				'short'    => AI1WMIE_PLUGIN_SHORT,
+			);
+		}
+
+		// Add Direct Extension
+		if ( defined( 'AI1WMXE_PLUGIN_NAME' ) ) {
+			$extensions[ AI1WMXE_PLUGIN_NAME ] = array(
+				'key'      => AI1WMXE_PLUGIN_KEY,
+				'title'    => AI1WMXE_PLUGIN_TITLE,
+				'about'    => AI1WMXE_PLUGIN_ABOUT,
+				'check'    => AI1WMXE_PLUGIN_CHECK,
+				'basename' => AI1WMXE_PLUGIN_BASENAME,
+				'version'  => AI1WMXE_VERSION,
+				'requires' => '1.16',
+				'short'    => AI1WMXE_PLUGIN_SHORT,
 			);
 		}
 
@@ -91,10 +127,25 @@ class Ai1wm_Extensions {
 				'key'      => AI1WMDE_PLUGIN_KEY,
 				'title'    => AI1WMDE_PLUGIN_TITLE,
 				'about'    => AI1WMDE_PLUGIN_ABOUT,
+				'check'    => AI1WMDE_PLUGIN_CHECK,
 				'basename' => AI1WMDE_PLUGIN_BASENAME,
 				'version'  => AI1WMDE_VERSION,
-				'requires' => '3.32',
+				'requires' => '3.70',
 				'short'    => AI1WMDE_PLUGIN_SHORT,
+			);
+		}
+
+		// Add File Extension
+		if ( defined( 'AI1WMTE_PLUGIN_NAME' ) ) {
+			$extensions[ AI1WMTE_PLUGIN_NAME ] = array(
+				'key'      => AI1WMTE_PLUGIN_KEY,
+				'title'    => AI1WMTE_PLUGIN_TITLE,
+				'about'    => AI1WMTE_PLUGIN_ABOUT,
+				'check'    => AI1WMTE_PLUGIN_CHECK,
+				'basename' => AI1WMTE_PLUGIN_BASENAME,
+				'version'  => AI1WMTE_VERSION,
+				'requires' => '1.5',
+				'short'    => AI1WMTE_PLUGIN_SHORT,
 			);
 		}
 
@@ -104,9 +155,10 @@ class Ai1wm_Extensions {
 				'key'      => AI1WMFE_PLUGIN_KEY,
 				'title'    => AI1WMFE_PLUGIN_TITLE,
 				'about'    => AI1WMFE_PLUGIN_ABOUT,
+				'check'    => AI1WMFE_PLUGIN_CHECK,
 				'basename' => AI1WMFE_PLUGIN_BASENAME,
 				'version'  => AI1WMFE_VERSION,
-				'requires' => '2.37',
+				'requires' => '2.72',
 				'short'    => AI1WMFE_PLUGIN_SHORT,
 			);
 		}
@@ -117,9 +169,10 @@ class Ai1wm_Extensions {
 				'key'      => AI1WMCE_PLUGIN_KEY,
 				'title'    => AI1WMCE_PLUGIN_TITLE,
 				'about'    => AI1WMCE_PLUGIN_ABOUT,
+				'check'    => AI1WMCE_PLUGIN_CHECK,
 				'basename' => AI1WMCE_PLUGIN_BASENAME,
 				'version'  => AI1WMCE_VERSION,
-				'requires' => '1.0',
+				'requires' => '1.38',
 				'short'    => AI1WMCE_PLUGIN_SHORT,
 			);
 		}
@@ -130,22 +183,24 @@ class Ai1wm_Extensions {
 				'key'      => AI1WMGE_PLUGIN_KEY,
 				'title'    => AI1WMGE_PLUGIN_TITLE,
 				'about'    => AI1WMGE_PLUGIN_ABOUT,
+				'check'    => AI1WMGE_PLUGIN_CHECK,
 				'basename' => AI1WMGE_PLUGIN_BASENAME,
 				'version'  => AI1WMGE_VERSION,
-				'requires' => '2.36',
+				'requires' => '2.74',
 				'short'    => AI1WMGE_PLUGIN_SHORT,
 			);
 		}
 
-		// Add Amazon Glacier extension
+		// Add Amazon Glacier Extension
 		if ( defined( 'AI1WMRE_PLUGIN_NAME' ) ) {
 			$extensions[ AI1WMRE_PLUGIN_NAME ] = array(
 				'key'      => AI1WMRE_PLUGIN_KEY,
 				'title'    => AI1WMRE_PLUGIN_TITLE,
 				'about'    => AI1WMRE_PLUGIN_ABOUT,
+				'check'    => AI1WMRE_PLUGIN_CHECK,
 				'basename' => AI1WMRE_PLUGIN_BASENAME,
 				'version'  => AI1WMRE_VERSION,
-				'requires' => '1.0',
+				'requires' => '1.36',
 				'short'    => AI1WMRE_PLUGIN_SHORT,
 			);
 		}
@@ -156,9 +211,10 @@ class Ai1wm_Extensions {
 				'key'      => AI1WMEE_PLUGIN_KEY,
 				'title'    => AI1WMEE_PLUGIN_TITLE,
 				'about'    => AI1WMEE_PLUGIN_ABOUT,
+				'check'    => AI1WMEE_PLUGIN_CHECK,
 				'basename' => AI1WMEE_PLUGIN_BASENAME,
 				'version'  => AI1WMEE_VERSION,
-				'requires' => '1.10',
+				'requires' => '1.43',
 				'short'    => AI1WMEE_PLUGIN_SHORT,
 			);
 		}
@@ -169,9 +225,10 @@ class Ai1wm_Extensions {
 				'key'      => AI1WMME_PLUGIN_KEY,
 				'title'    => AI1WMME_PLUGIN_TITLE,
 				'about'    => AI1WMME_PLUGIN_ABOUT,
+				'check'    => AI1WMME_PLUGIN_CHECK,
 				'basename' => AI1WMME_PLUGIN_BASENAME,
 				'version'  => AI1WMME_VERSION,
-				'requires' => '3.59',
+				'requires' => '4.25',
 				'short'    => AI1WMME_PLUGIN_SHORT,
 			);
 		}
@@ -182,9 +239,10 @@ class Ai1wm_Extensions {
 				'key'      => AI1WMOE_PLUGIN_KEY,
 				'title'    => AI1WMOE_PLUGIN_TITLE,
 				'about'    => AI1WMOE_PLUGIN_ABOUT,
+				'check'    => AI1WMOE_PLUGIN_CHECK,
 				'basename' => AI1WMOE_PLUGIN_BASENAME,
 				'version'  => AI1WMOE_VERSION,
-				'requires' => '1.23',
+				'requires' => '1.60',
 				'short'    => AI1WMOE_PLUGIN_SHORT,
 			);
 		}
@@ -195,22 +253,52 @@ class Ai1wm_Extensions {
 				'key'      => AI1WMPE_PLUGIN_KEY,
 				'title'    => AI1WMPE_PLUGIN_TITLE,
 				'about'    => AI1WMPE_PLUGIN_ABOUT,
+				'check'    => AI1WMPE_PLUGIN_CHECK,
 				'basename' => AI1WMPE_PLUGIN_BASENAME,
 				'version'  => AI1WMPE_VERSION,
-				'requires' => '1.0',
+				'requires' => '1.35',
 				'short'    => AI1WMPE_PLUGIN_SHORT,
 			);
 		}
 
-		// Add Amazon S3 extension
+		// Add Pro Plugin
+		if ( defined( 'AI1WMKE_PLUGIN_NAME' ) ) {
+			$extensions[ AI1WMKE_PLUGIN_NAME ] = array(
+				'key'      => AI1WMKE_PLUGIN_KEY,
+				'title'    => AI1WMKE_PLUGIN_TITLE,
+				'about'    => AI1WMKE_PLUGIN_ABOUT,
+				'check'    => AI1WMKE_PLUGIN_CHECK,
+				'basename' => AI1WMKE_PLUGIN_BASENAME,
+				'version'  => AI1WMKE_VERSION,
+				'requires' => '1.0',
+				'short'    => AI1WMKE_PLUGIN_SHORT,
+			);
+		}
+
+		// Add S3 Client Extension
+		if ( defined( 'AI1WMNE_PLUGIN_NAME' ) ) {
+			$extensions[ AI1WMNE_PLUGIN_NAME ] = array(
+				'key'      => AI1WMNE_PLUGIN_KEY,
+				'title'    => AI1WMNE_PLUGIN_TITLE,
+				'about'    => AI1WMNE_PLUGIN_ABOUT,
+				'check'    => AI1WMNE_PLUGIN_CHECK,
+				'basename' => AI1WMNE_PLUGIN_BASENAME,
+				'version'  => AI1WMNE_VERSION,
+				'requires' => '1.34',
+				'short'    => AI1WMNE_PLUGIN_SHORT,
+			);
+		}
+
+		// Add Amazon S3 Extension
 		if ( defined( 'AI1WMSE_PLUGIN_NAME' ) ) {
 			$extensions[ AI1WMSE_PLUGIN_NAME ] = array(
 				'key'      => AI1WMSE_PLUGIN_KEY,
 				'title'    => AI1WMSE_PLUGIN_TITLE,
 				'about'    => AI1WMSE_PLUGIN_ABOUT,
+				'check'    => AI1WMSE_PLUGIN_CHECK,
 				'basename' => AI1WMSE_PLUGIN_BASENAME,
 				'version'  => AI1WMSE_VERSION,
-				'requires' => '3.27',
+				'requires' => '3.72',
 				'short'    => AI1WMSE_PLUGIN_SHORT,
 			);
 		}
@@ -221,9 +309,10 @@ class Ai1wm_Extensions {
 				'key'      => AI1WMUE_PLUGIN_KEY,
 				'title'    => AI1WMUE_PLUGIN_TITLE,
 				'about'    => AI1WMUE_PLUGIN_ABOUT,
+				'check'    => AI1WMUE_PLUGIN_CHECK,
 				'basename' => AI1WMUE_PLUGIN_BASENAME,
 				'version'  => AI1WMUE_VERSION,
-				'requires' => '2.18',
+				'requires' => '2.47',
 				'short'    => AI1WMUE_PLUGIN_SHORT,
 			);
 		}
@@ -234,10 +323,25 @@ class Ai1wm_Extensions {
 				'key'      => AI1WMLE_PLUGIN_KEY,
 				'title'    => AI1WMLE_PLUGIN_TITLE,
 				'about'    => AI1WMLE_PLUGIN_ABOUT,
+				'check'    => AI1WMLE_PLUGIN_CHECK,
 				'basename' => AI1WMLE_PLUGIN_BASENAME,
 				'version'  => AI1WMLE_VERSION,
-				'requires' => '2.27',
+				'requires' => '2.59',
 				'short'    => AI1WMLE_PLUGIN_SHORT,
+			);
+		}
+
+		// Add WebDAV Extension
+		if ( defined( 'AI1WMWE_PLUGIN_NAME' ) ) {
+			$extensions[ AI1WMWE_PLUGIN_NAME ] = array(
+				'key'      => AI1WMWE_PLUGIN_KEY,
+				'title'    => AI1WMWE_PLUGIN_TITLE,
+				'about'    => AI1WMWE_PLUGIN_ABOUT,
+				'check'    => AI1WMWE_PLUGIN_CHECK,
+				'basename' => AI1WMWE_PLUGIN_BASENAME,
+				'version'  => AI1WMWE_VERSION,
+				'requires' => '1.30',
+				'short'    => AI1WMWE_PLUGIN_SHORT,
 			);
 		}
 

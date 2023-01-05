@@ -13,181 +13,11 @@ use \Essential_Addons_Elementor\Elements\Woo_Checkout;
 trait Helper
 {
     use Template_Query;
-    /**
-     * This function is responsible for get the post data.
-     * It will return HTML markup with AJAX call and with normal call.
-     *
-     * @return string of an html markup with AJAX call.
-     * @return array of content and found posts count without AJAX call.
-     */
-    public function ajax_load_more()
-    {
-        $ajax   = wp_doing_ajax();
 
-        parse_str($_POST['args'], $args);
-        if ( empty( $_POST['nonce'] ) ) {
-            $err_msg = __( 'Insecure form submitted without security token', 'essential-addons-for-elementor-lite' );
-            if ( $ajax ) {
-                wp_send_json_error( $err_msg );
-            }
-            return false;
-        }
-
-        if ( ! wp_verify_nonce( $_POST['nonce'], 'load_more' ) ) {
-            $err_msg = __( 'Security token did not match', 'essential-addons-for-elementor-lite' );
-            if ( $ajax ) {
-                wp_send_json_error( $err_msg );
-            }
-            return false;
-        }
-
-        if ( ! empty( $_POST['page_id'] ) ) {
-            $page_id = intval( $_POST['page_id'], 10 );
-        } else {
-            $err_msg = __( 'Page ID is missing', 'essential-addons-for-elementor-lite' );
-            if ( $ajax ) {
-                wp_send_json_error( $err_msg );
-            }
-            return false;
-        }
-
-        if ( ! empty( $_POST['widget_id'] ) ) {
-            $widget_id = sanitize_text_field( $_POST['widget_id'] );
-        } else {
-            $err_msg = __( 'Widget ID is missing', 'essential-addons-for-elementor-lite' );
-            if ( $ajax ) {
-                wp_send_json_error( $err_msg );
-            }
-            return false;
-        }
-
-        $settings = HelperClass::eael_get_widget_settings($page_id, $widget_id);
-        if (empty($settings)) {
-            wp_send_json_error(['message' => __('Widget settings are not found. Did you save the widget before using load more??', 'essential-addons-for-elementor-lite')]);
-        }
-        $settings['eael_widget_id'] = $widget_id;
-        $html = '';
-        $class = '\\' . str_replace( '\\\\', '\\', $_REQUEST[ 'class' ] );
-        $args[ 'offset' ] = (int)$args[ 'offset' ] + ( ( (int)$_REQUEST[ 'page' ] - 1 ) * (int)$args[ 'posts_per_page' ] );
-
-        if ( isset( $_REQUEST[ 'taxonomy' ] ) && isset($_REQUEST[ 'taxonomy' ][ 'taxonomy' ]) && $_REQUEST[ 'taxonomy' ][ 'taxonomy' ] != 'all' ) {
-            $args[ 'tax_query' ] = [
-                $_REQUEST[ 'taxonomy' ],
-            ];
-        }
-
-        if ( $class == '\Essential_Addons_Elementor\Elements\Post_Grid' && $settings[ 'orderby' ] === 'rand' ) {
-            $args[ 'post__not_in' ] = array_unique( $_REQUEST[ 'post__not_in' ] );
-        }
-
-        // ensure control name compatibility to old code if it is post block
-        if ($class === '\Essential_Addons_Elementor\Pro\Elements\Post_Block' ) {
-            $settings ['post_block_hover_animation'] = $settings['eael_post_block_hover_animation'];
-            $settings ['show_read_more_button'] = $settings['eael_show_read_more_button'];
-            $settings ['eael_post_block_bg_hover_icon'] = (isset($settings['__fa4_migrated']['eael_post_block_bg_hover_icon_new']) || empty($settings['eael_post_block_bg_hover_icon'])) ? $settings['eael_post_block_bg_hover_icon_new']['value'] : $settings['eael_post_block_bg_hover_icon'];
-            $settings ['expanison_indicator'] = $settings['excerpt_expanison_indicator'];
-        }
-        if ( $class === '\Essential_Addons_Elementor\Elements\Post_Timeline' ) {
-            $settings ['expanison_indicator'] = $settings['excerpt_expanison_indicator'];
-        }
-        if ($class === '\Essential_Addons_Elementor\Pro\Elements\Dynamic_Filterable_Gallery' ) {
-            $settings['eael_section_fg_zoom_icon'] = (isset($settings['__fa4_migrated']['eael_section_fg_zoom_icon_new']) || empty($settings['eael_section_fg_zoom_icon']) ? $settings['eael_section_fg_zoom_icon_new']['value'] : $settings['eael_section_fg_zoom_icon']);
-            $settings['eael_section_fg_link_icon'] = (isset($settings['__fa4_migrated']['eael_section_fg_link_icon_new']) || empty($settings['eael_section_fg_link_icon']) ? $settings['eael_section_fg_link_icon_new']['value'] : $settings['eael_section_fg_link_icon']);
-            $settings['show_load_more_text'] = $settings['eael_fg_loadmore_btn_text'];
-            $settings['layout_mode'] = isset($settings['layout_mode']) ? $settings['layout_mode'] : 'masonry';
-
-        }
-
-        $link_settings = [
-            'image_link_nofollow' => $settings['image_link_nofollow'] ? 'rel="nofollow"' : '',
-            'image_link_target_blank' => $settings['image_link_target_blank'] ? 'target="_blank"' : '',
-            'title_link_nofollow' => $settings['title_link_nofollow'] ? 'rel="nofollow"' : '',
-            'title_link_target_blank' => $settings['title_link_target_blank'] ? 'target="_blank"' : '',
-            'read_more_link_nofollow' => $settings['read_more_link_nofollow'] ? 'rel="nofollow"' : '',
-            'read_more_link_target_blank' => $settings['read_more_link_target_blank'] ? 'target="_blank"' : '',
-        ];
-
-        $template_info = $_REQUEST['template_info'];
-
-
-        if ( $template_info ) {
-
-	        if ( $template_info[ 'dir' ] === 'theme' ) {
-		        $file_path = $this->retrive_theme_path();
-	        } else if($template_info[ 'dir' ] === 'pro') {
-		        $file_path = sprintf("%sincludes",EAEL_PRO_PLUGIN_PATH);
-            } else {
-		        $file_path = sprintf("%sincludes",EAEL_PLUGIN_PATH);
-            }
-
-            $file_path = sprintf(
-                '%s/Template/%s/%s',
-                $file_path,
-                $template_info[ 'name' ],
-                $template_info[ 'file_name' ]
-            );
-
-            if ( $file_path ) {
-                $query = new \WP_Query( $args );
-
-                $iterator = 0;
-
-                if ( $query->have_posts() ) {
-                    if ( $class === '\Essential_Addons_Elementor\Elements\Product_Grid' && boolval( $settings[ 'show_add_to_cart_custom_text' ] ) ) {
-
-                        $add_to_cart_text = [
-                            'add_to_cart_simple_product_button_text' => $settings[ 'add_to_cart_simple_product_button_text' ],
-                            'add_to_cart_variable_product_button_text' => $settings[ 'add_to_cart_variable_product_button_text' ],
-                            'add_to_cart_grouped_product_button_text' => $settings[ 'add_to_cart_grouped_product_button_text' ],
-                            'add_to_cart_external_product_button_text' => $settings[ 'add_to_cart_external_product_button_text' ],
-                            'add_to_cart_default_product_button_text' => $settings[ 'add_to_cart_default_product_button_text' ],
-                        ];
-                        $this->change_add_to_cart_text($add_to_cart_text);
-                    }
-
-
-                    while ( $query->have_posts() ) {
-                        $query->the_post();
-
-                        $html .= HelperClass::include_with_variable( $file_path, [ 'settings' => $settings, 'link_settings' => $link_settings, 'iterator' => $iterator ] );
-                        $iterator++;
-                    }
-                }
-            }
-        }
-
-
-        while ( ob_get_status() ) {
-            ob_end_clean();
-        }
-        if (function_exists( 'gzencode' ) ) {
-            $response = gzencode( wp_json_encode( $html ) );
-
-            header( 'Content-Type: application/json; charset=utf-8' );
-            header( 'Content-Encoding: gzip' );
-            header( 'Content-Length: ' . strlen( $response ) );
-
-            echo $response;
-        } else {
-            echo $html;
-        }
-        wp_die();
-    }
     /**
      * Woo Checkout
      */
-    public function woo_checkout_update_order_review() {
-        $setting = $_POST[ 'orderReviewData' ];
-        ob_start();
-        Woo_Checkout::checkout_order_review_default( $setting );
-        $woo_checkout_update_order_review = ob_get_clean();
 
-        wp_send_json(
-            array(
-                'order_review' => $woo_checkout_update_order_review,
-            )
-        );
-    }
 
     /** Filter to add plugins to the TOC list.
      *
@@ -274,197 +104,6 @@ trait Helper
         return HelperClass::get_taxonomies_by_post( $args );
     }
 
-    public function twitter_feed_render_items( $id, $settings, $class = '' ) {
-        $token = get_option( $id . '_' . $settings[ 'eael_twitter_feed_ac_name' ] . '_tf_token' );
-        $items = get_transient( $id . '_' . $settings[ 'eael_twitter_feed_ac_name' ] . '_tf_cache' );
-        $html = '';
-
-        if ( empty( $settings[ 'eael_twitter_feed_consumer_key' ] ) || empty( $settings[ 'eael_twitter_feed_consumer_secret' ] ) ) {
-            return;
-        }
-
-        if ( $items === false ) {
-            if ( empty( $token ) ) {
-                $credentials = base64_encode( $settings[ 'eael_twitter_feed_consumer_key' ] . ':' . $settings[ 'eael_twitter_feed_consumer_secret' ] );
-
-                add_filter( 'https_ssl_verify', '__return_false' );
-
-                $response = wp_remote_post( 'https://api.twitter.com/oauth2/token', [
-                    'method' => 'POST',
-                    'httpversion' => '1.1',
-                    'blocking' => true,
-                    'headers' => [
-                        'Authorization' => 'Basic ' . $credentials,
-                        'Content-Type' => 'application/x-www-form-urlencoded;charset=UTF-8',
-                    ],
-                    'body' => [ 'grant_type' => 'client_credentials' ],
-                ] );
-
-                $body = json_decode( wp_remote_retrieve_body( $response ) );
-
-                if ( $body ) {
-                    update_option( $id . '_' . $settings[ 'eael_twitter_feed_ac_name' ] . '_tf_token', $body->access_token );
-                    $token = $body->access_token;
-                }
-            }
-
-            $args = array(
-                'httpversion' => '1.1',
-                'blocking' => true,
-                'headers' => array(
-                    'Authorization' => "Bearer $token",
-                ),
-            );
-
-            add_filter( 'https_ssl_verify', '__return_false' );
-
-            $response = wp_remote_get( 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=' . $settings[ 'eael_twitter_feed_ac_name' ] . '&count=999&tweet_mode=extended', [
-                'httpversion' => '1.1',
-                'blocking' => true,
-                'headers' => [
-                    'Authorization' => "Bearer $token",
-                ],
-            ] );
-
-            if ( !is_wp_error( $response ) ) {
-                $items = json_decode( wp_remote_retrieve_body( $response ), true );
-                set_transient( $id . '_' . $settings[ 'eael_twitter_feed_ac_name' ] . '_tf_cache', $items, 1800 );
-            }
-        }
-
-        if ( empty( $items ) ) {
-            return;
-        }
-
-        if ( $settings[ 'eael_twitter_feed_hashtag_name' ] ) {
-            foreach ( $items as $key => $item ) {
-                $match = false;
-
-                if ( $item[ 'entities' ][ 'hashtags' ] ) {
-                    foreach ( $item[ 'entities' ][ 'hashtags' ] as $tag ) {
-                        if ( strcasecmp( $tag[ 'text' ], $settings[ 'eael_twitter_feed_hashtag_name' ] ) == 0 ) {
-                            $match = true;
-                        }
-                    }
-                }
-
-                if ( $match == false ) {
-                    unset( $items[ $key ] );
-                }
-            }
-        }
-
-        $items = array_splice( $items, 0, $settings[ 'eael_twitter_feed_post_limit' ] );
-
-        foreach ( $items as $item ) {
-            $delimeter = strlen( $item[ 'full_text' ] ) > $settings[ 'eael_twitter_feed_content_length' ] ? '...' : '';
-
-            $html .= '<div class="eael-twitter-feed-item ' . $class . '">
-				<div class="eael-twitter-feed-item-inner">
-				    <div class="eael-twitter-feed-item-header clearfix">';
-            if ( $settings[ 'eael_twitter_feed_show_avatar' ] == 'true' ) {
-                $html .= '<a class="eael-twitter-feed-item-avatar avatar-' . $settings[ 'eael_twitter_feed_avatar_style' ] . '" href="//twitter.com/' . $settings[ 'eael_twitter_feed_ac_name' ] . '" target="_blank">
-                                <img src="' . $item[ 'user' ][ 'profile_image_url_https' ] . '">
-                            </a>';
-            }
-
-            $html .= '<a class="eael-twitter-feed-item-meta" href="//twitter.com/' . $settings[ 'eael_twitter_feed_ac_name' ] . '" target="_blank">';
-            if ( $settings[ 'eael_twitter_feed_show_icon' ] == 'true' ) {
-                $html .= '<i class="fab fa-twitter eael-twitter-feed-item-icon"></i>';
-            }
-            $html .= '<span class="eael-twitter-feed-item-author">' . $item[ 'user' ][ 'name' ] . '</span>
-                        </a>';
-
-            if ( $settings[ 'eael_twitter_feed_show_date' ] == 'true' ) {
-                $html .= '<span class="eael-twitter-feed-item-date">' . sprintf( __( '%s ago', 'essential-addons-for-elementor-lite' ), human_time_diff( strtotime( $item[ 'created_at' ] ) ) ) . '</span>';
-            }
-            $html .= '</div>
-
-                    <div class="eael-twitter-feed-item-content">';
-            if ( isset( $item[ 'entities' ][ 'urls' ][ 0 ][ 'url' ] ) ) {
-                $html .= '<p>' . substr( str_replace( $item[ 'entities' ][ 'urls' ][ 0 ][ 'url' ], '', $item[ 'full_text' ] ), 0, $settings[ 'eael_twitter_feed_content_length' ] ) . $delimeter . '</p>';
-            }
-
-            if ( $settings[ 'eael_twitter_feed_show_read_more' ] == 'true' ) {
-                $html .= '<a href="//twitter.com/' . $item[ 'user' ][ 'screen_name' ] . '/status/' . $item[ 'id_str' ] . '" target="_blank" class="read-more-link">'.$settings['eael_twitter_feed_show_read_more_text'].' <i class="fas fa-angle-double-right"></i></a>';
-            }
-            $html .= '</div>
-                    ' . ( isset( $item[ 'extended_entities' ][ 'media' ][ 0 ] ) && $settings[ 'eael_twitter_feed_media' ] == 'true' ? ( $item[ 'extended_entities' ][ 'media' ][ 0 ][ 'type' ] == 'photo' ? '<img src="' . $item[ 'extended_entities' ][ 'media' ][ 0 ][ 'media_url_https' ] . '">' : '' ) : '' ) . '
-                </div>
-			</div>';
-        }
-
-        return $html;
-    }
-
-    public function select2_ajax_posts_filter_autocomplete() {
-        $post_type = 'post';
-        $source_name = 'post_type';
-
-        if ( !empty( $_GET[ 'post_type' ] ) ) {
-            $post_type = sanitize_text_field( $_GET[ 'post_type' ] );
-        }
-
-        if ( !empty( $_GET[ 'source_name' ] ) ) {
-            $source_name = sanitize_text_field( $_GET[ 'source_name' ] );
-        }
-
-        $search = !empty( $_GET[ 'term' ] ) ? sanitize_text_field( $_GET[ 'term' ] ) : '';
-        $results = $post_list = [];
-        switch($source_name){
-            case 'taxonomy':
-                $post_list = wp_list_pluck( get_terms( $post_type,
-                    [
-                        'hide_empty' => false,
-                        'orderby'    => 'name',
-                        'order'      => 'ASC',
-                        'search'     => $search,
-                        'number'     => '5',
-                    ]
-                ), 'name', 'term_id' );
-                break;
-            default:
-                $post_list = HelperClass::get_query_post_list( $post_type, 10, $search );
-        }
-
-        if ( !empty( $post_list ) ) {
-            foreach ( $post_list as $key => $item ) {
-                $results[] = [ 'text' => $item, 'id' => $key ];
-            }
-        }
-        wp_send_json( [ 'results' => $results ] );
-    }
-
-    public function select2_ajax_get_posts_value_titles() {
-        if ( empty( array_filter($_POST[ 'id' ]) ) ) {
-            wp_send_json_error( [] );
-        }
-        $ids          = array_map('intval',$_POST[ 'id' ]);
-        $source_name = !empty( $_POST[ 'source_name' ] ) ? sanitize_text_field( $_POST[ 'source_name' ] ) : '';
-
-        switch ( $source_name ) {
-            case 'taxonomy':
-                $response = wp_list_pluck( get_terms( sanitize_text_field( $_POST[ 'post_type' ] ),
-                    [
-                        'hide_empty' => false,
-                        'orderby'    => 'name',
-                        'order'      => 'ASC',
-                        'include'    => implode( ',', $ids ),
-                    ]
-                ), 'name', 'term_id' );
-                break;
-            default:
-                $post_info = get_posts( [ 'post_type' => sanitize_text_field( $_POST[ 'post_type' ] ), 'include' => implode( ',', $ids ) ] );
-                $response  = wp_list_pluck( $post_info, 'post_title', 'ID' );
-        }
-
-        if ( !empty( $response ) ) {
-            wp_send_json_success( [ 'results' => $response ] );
-        } else {
-            wp_send_json_error( [] );
-        }
-    }
-
 	/**
 	 * It returns the widget settings provided the page id and widget id
 	 * @param int $page_id Page ID where the widget is used
@@ -510,6 +149,10 @@ trait Helper
                 $this->page_id = null;
             }
         }
+
+	    $max_page = empty( $args['max_page'] ) ? false : $args['max_page'];
+	    unset( $args['max_page'] );
+
         $this->add_render_attribute('load-more', [
             'class'          => "eael-load-more-button",
             'id'             => "eael-load-more-btn-" . $this->get_id(),
@@ -527,8 +170,15 @@ trait Helper
             'data-page'     => 1,
             'data-args'     => http_build_query( $args ),
         ]);
-        if ( ('true' == $settings['show_load_more'] || 1 == $settings['show_load_more'] || 'yes' == $settings['show_load_more']) && $args['posts_per_page'] != '-1' ) { ?>
-            <div class="eael-load-more-button-wrap<?php echo "eael-dynamic-filterable-gallery" == $this->get_name() ? " dynamic-filter-gallery-loadmore" : ""; ?>">
+
+	    if ( $max_page ) {
+		    $this->add_render_attribute( 'load-more', [ 'data-max-page' => $max_page ] );
+	    }
+
+        if ( $args['posts_per_page'] != '-1' ) {
+            $show_or_hide = ('true' == $settings['show_load_more'] || 1 == $settings['show_load_more'] || 'yes' == $settings['show_load_more']) ? '' : ' eael-force-hide';
+            ?>
+            <div class="eael-load-more-button-wrap<?php echo "eael-dynamic-filterable-gallery" == $this->get_name() ? " dynamic-filter-gallery-loadmore" : ""; echo esc_attr( $show_or_hide ); ?>">
                 <button <?php $this->print_render_attribute_string( 'load-more' ); ?>>
                     <div class="eael-btn-loader button__loader"></div>
                     <span><?php echo esc_html($settings['show_load_more_text']) ?></span>
@@ -563,179 +213,50 @@ trait Helper
 	public function eael_rating_markup( $html, $rating, $count ) {
 
 		if ( 0 == $rating ) {
-			$html  = '<div class="star-rating">';
+			$html  = '<div class="eael-star-rating star-rating">';
 			$html .= wc_get_star_rating_html( $rating, $count );
 			$html .= '</div>';
 		}
 		return $html;
 	}
 
-	public function eael_woo_pagination_product_ajax() {
-		parse_str($_REQUEST['args'], $args);
-		parse_str($_REQUEST['settings'], $settings);
-
-		$paginationNumber = absint($_POST['number']);
-		$paginationLimit  = absint($_POST['limit']);
-
-		$args['posts_per_page'] = $paginationLimit;
-
-		if( $paginationNumber == "1" ){
-			$paginationOffsetValue = "0";
-		}else{
-			$paginationOffsetValue = ($paginationNumber-1)*$paginationLimit;
-			$args['offset'] = $paginationOffsetValue;
-		}
-
-		$template_info = $_REQUEST['templateInfo'];
-        $this->set_widget_name( $template_info['name'] );
-        $template = $this->get_template( $template_info['file_name'] );
-        ob_start();
-        $query = new \WP_Query( $args );
-        if ( $query->have_posts() ) {
-            while ( $query->have_posts() ) {
-                $query->the_post();
-                include( $template );
-            }
+    /**
+	 * Update Checkout Cart Quantity via ajax call.
+	 */
+	public function eael_checkout_cart_qty_update() {
+        if ( ! wp_verify_nonce( $_POST['nonce'], 'essential-addons-elementor' ) ) {
+            die( __('Permission Denied!') );
         }
-        echo ob_get_clean();
-        wp_die();
+
+        $cart_item_key = $_POST['cart_item_key'];
+		$cart_item = WC()->cart->get_cart_item( $cart_item_key );
+		$cart_item_quantity = apply_filters( 'woocommerce_stock_amount_cart_item', apply_filters( 'woocommerce_stock_amount', preg_replace( "/[^0-9\.]/", '', filter_var($_POST['quantity'], FILTER_SANITIZE_NUMBER_INT)) ), $cart_item_key );
+
+		$passed_validation  = apply_filters( 'woocommerce_update_cart_validation', true, $cart_item_key, $cart_item, $cart_item_quantity );
+		if ( $passed_validation ) {
+			WC()->cart->set_quantity( $cart_item_key, $cart_item_quantity, true );
+			wp_send_json_success(
+                array(
+                    'message' => __( 'Quantity updated successfully.', 'essential-addons-elementor' ),
+                    // 'cart_item_key' => $cart_item_key,
+                    'cart_item_quantity' => $cart_item_quantity,
+                    'cart_item_subtotal' => WC()->cart->get_product_subtotal( $cart_item['data'], $cart_item_quantity ),
+                    'cart_subtotal' => WC()->cart->get_cart_subtotal(),
+                    'cart_total' => WC()->cart->get_cart_total()
+                )
+            );
+		} else {
+    		wp_send_json_error(
+                array(
+                    'message' => __( 'Quantity update failed.', 'essential-addons-elementor' ),
+                )
+            );
+        }
+
+		die();
 	}
 
-	public function eael_woo_pagination_ajax() {
-		parse_str($_REQUEST['args'], $args);
-		parse_str($_REQUEST['settings'], $settings);
-		$class = '\Essential_Addons_Elementor\Elements\Product_Grid';
-
-		global $wpdb;
-		$paginationNumber = absint($_POST['number']);
-		$paginationLimit  = absint($_POST['limit']);
-
-		$pagination_args = $args;
-		$pagination_args['posts_per_page'] = -1;
-
-		$pagination_Query = new \WP_Query( $pagination_args );
-		$pagination_Count = count($pagination_Query->posts);
-		$pagination_Paginationlist = ceil($pagination_Count/$paginationLimit);
-		$last = ceil( $pagination_Paginationlist );
-		$paginationprev = $paginationNumber-1;
-		$paginationnext = $paginationNumber+1;
-		if( $paginationNumber>1 ){ $paginationprev;	}
-		if( $paginationNumber < $last ){ $paginationnext; }
-
-		$adjacents = "2";
-		$widget_id = $settings['eael_widget_id'];
-		$next_label = $settings['pagination_next_label'];
-		$prev_label = $settings['pagination_prev_label'];
-
-		$setPagination = "";
-		if( $pagination_Paginationlist > 0 ){
-
-			$setPagination .="<ul class='page-numbers'>";
-
-			if( 1< $paginationNumber ){
-				$setPagination .="<li class='pagitext'><a href='javascript:void(0);' class='page-numbers' data-template='".json_encode([ 'dir'   => 'free', 'file_name' => $settings['eael_dynamic_template_Layout'], 'name' => $settings['eael_widget_name'] ], 1)."' data-widgetid='$widget_id' data-args='".http_build_query($args)."' data-settings='".http_build_query($settings)."' data-pnumber='$paginationprev' data-plimit='$paginationLimit'>$prev_label</a></li>";
-			}
-
-			if ( $pagination_Paginationlist < 7 + ($adjacents * 2) ){
-
-				for( $pagination=1; $pagination<=$pagination_Paginationlist; $pagination++){
-
-					if( $paginationNumber ==  $pagination ){ $active="current"; }else{ $active=""; }
-					$setPagination .="<li><a href='javascript:void(0);' id='post' class='page-numbers $active' data-template='".json_encode([ 'dir'   => 'free', 'file_name' => $settings['eael_dynamic_template_Layout'], 'name' => $settings['eael_widget_name'] ], 1)."' data-widgetid='$widget_id' data-args='".http_build_query($args)."' data-settings='".http_build_query($settings)."' data-pnumber='$pagination' data-plimit='$paginationLimit'>$pagination</a></li>";
-
-				}
-
-			} else if ( $pagination_Paginationlist > 5 + ($adjacents * 2) ){
-
-				if( $paginationNumber < 1 + ($adjacents * 2) ){
-
-					for( $pagination=1; $pagination <=4 + ($adjacents * 2); $pagination++){
-
-						if( $paginationNumber ==  $pagination ){ $active="current"; }else{ $active=""; }
-						$setPagination .="<li><a href='javascript:void(0);' id='post' class='page-numbers $active' data-template='".json_encode([ 'dir'   => 'free', 'file_name' => $settings['eael_dynamic_template_Layout'], 'name' => $settings['eael_widget_name'] ], 1)."' data-widgetid='$widget_id' data-args='".http_build_query($args)."' data-settings='".http_build_query($settings)."' data-pnumber='$pagination' data-plimit='$paginationLimit'>$pagination</a></li>";
-					}
-					$setPagination .="<li class='pagitext dots'>...</li>";
-					$setPagination .="<li class='pagitext'><a href='javascript:void(0);' class='page-numbers' data-template='".json_encode([ 'dir'   => 'free', 'file_name' => $settings['eael_dynamic_template_Layout'], 'name' => $settings['eael_widget_name'] ], 1)."' data-widgetid='$widget_id' data-args='".http_build_query($args)."' data-settings='".http_build_query($settings)."' data-pnumber='$last' data-plimit='$paginationLimit'>".$last."</a></li>";
-
-				} elseif( $pagination_Paginationlist - ($adjacents * 2) > $paginationNumber && $paginationNumber > ($adjacents * 2)) {
-					$active = '';
-					$setPagination .="<li><a href='javascript:void(0);' id='post' class='page-numbers $active' data-template='".json_encode([ 'dir'   => 'free', 'file_name' => $settings['eael_dynamic_template_Layout'], 'name' => $settings['eael_widget_name'] ], 1)."' data-widgetid='$widget_id' data-args='".http_build_query($args)."' data-settings='".http_build_query($settings)."' data-pnumber='1' data-plimit='$paginationLimit'>1</a></li>";
-					$setPagination .="<li class='pagitext dots'>...</li>";
-
-					for( $pagination=$paginationNumber - $adjacents; $pagination<=$paginationNumber + $adjacents; $pagination++){
-
-						if( $paginationNumber ==  $pagination ){ $active="current"; }else{ $active=""; }
-						$setPagination .="<li><a href='javascript:void(0);' id='post' class='page-numbers $active' data-template='".json_encode([ 'dir'   => 'free', 'file_name' => $settings['eael_dynamic_template_Layout'], 'name' => $settings['eael_widget_name'] ], 1)."' data-widgetid='$widget_id' data-args='".http_build_query($args)."' data-settings='".http_build_query($settings)."' data-pnumber='$pagination' data-plimit='$paginationLimit'>$pagination</a></li>";
-
-					}
-
-					$setPagination .="<li class='pagitext dots'>...</li>";
-					$setPagination .="<li class='pagitext'><a href='javascript:void(0);' class='page-numbers' data-template='".json_encode([ 'dir'   => 'free', 'file_name' => $settings['eael_dynamic_template_Layout'], 'name' => $settings['eael_widget_name'] ], 1)."' data-widgetid='$widget_id' data-args='".http_build_query($args)."' data-settings='".http_build_query($settings)."' data-pnumber='$last' data-plimit='$paginationLimit'>".$last."</a></li>";
-
-				} else {
-					$active = '';
-					$setPagination .="<li><a href='javascript:void(0);' id='post' class='page-numbers $active' data-template='".json_encode([ 'dir'   => 'free', 'file_name' => $settings['eael_dynamic_template_Layout'], 'name' => $settings['eael_widget_name'] ], 1)."' data-widgetid='$widget_id' data-args='".http_build_query($args)."' data-settings='".http_build_query($settings)."' data-pnumber='1' data-plimit='$paginationLimit'>1</a></li>";
-					$setPagination .="<li class='pagitext dots'>...</li>";
-
-					for ($pagination = $last - (2 + ($adjacents * 2)); $pagination <= $last; $pagination++){
-
-						if( $paginationNumber ==  $pagination ){ $active="current"; }else{ $active=""; }
-						$setPagination .="<li><a href='javascript:void(0);' id='post' class='page-numbers $active' data-template='".json_encode([ 'dir'   => 'free', 'file_name' => $settings['eael_dynamic_template_Layout'], 'name' => $settings['eael_widget_name'] ], 1)."' data-widgetid='$widget_id' data-args='".http_build_query($args)."' data-settings='".http_build_query($settings)."' data-pnumber='$pagination' data-plimit='$paginationLimit'>$pagination</a></li>";
-
-					}
-
-				}
-
-			} else {
-
-				for( $pagination=1; $pagination<=$pagination_Paginationlist; $pagination++){
-					if( $paginationNumber ==  $pagination ){ $active="current"; }else{ $active=""; }
-					$setPagination .="<li><a href='javascript:void(0);' id='post' class='page-numbers $active' data-template='".json_encode([ 'dir'   => 'free', 'file_name' => $settings['eael_dynamic_template_Layout'], 'name' => $settings['eael_widget_name'] ], 1)."' data-widgetid='$widget_id' data-args='".http_build_query($args)."' data-settings='".http_build_query($settings)."' data-pnumber='$pagination' data-plimit='$paginationLimit'>$pagination</a></li>";
-				}
-
-			}
-
-			if ($paginationNumber < $pagination_Paginationlist){
-				$setPagination .="<li class='pagitext'><a href='javascript:void(0);' class='page-numbers' data-template='".json_encode([ 'dir'   => 'free', 'file_name' => $settings['eael_dynamic_template_Layout'], 'name' => $settings['eael_widget_name'] ], 1)."' data-widgetid='$widget_id' data-args='"
-				                 .http_build_query($args)."' data-settings='".http_build_query($settings)."' data-pnumber='$paginationnext' data-plimit='$paginationLimit'>$next_label</a></li>";
-			}
-
-			$setPagination .="</ul>";
-		}
-		echo $setPagination;
-		wp_die();
-	}
-
-	public function eael_product_add_to_cart () {
-
-		$ajax   = wp_doing_ajax();
-		$cart_items = isset($_POST['cart_item_data'])?$_POST['cart_item_data']:[];
-		$variation = [];
-		if(!empty($cart_items)){
-			foreach ($cart_items as $key => $value) {
-				if (preg_match("/^attribute*/", $value['name'])) {
-					$variation[$value['name']] = $value['value'];
-				}
-			}
-		}
-
-		if(isset($_POST['product_data'])){
-			foreach ($_POST['product_data'] as $item){
-				$product_id   = isset( $item['product_id'] ) ? sanitize_text_field( $item['product_id'] ) : 0;
-				$variation_id = isset( $item['variation_id'] ) ? sanitize_text_field( $item['variation_id'] ) : 0;
-				$quantity     = isset( $item['quantity'] ) ? sanitize_text_field( $item['quantity'] ) : 0;
-
-				if ( $variation_id ) {
-					WC()->cart->add_to_cart( $product_id, $quantity, $variation_id, $variation );
-				} else {
-					WC()->cart->add_to_cart( $product_id, $quantity );
-				}
-			}
-		}
-		wp_send_json_success();
-	}
-
-	public function change_add_to_cart_text( $add_to_cart_text ) {
+	public function change_add_woo_checkout_update_order_reviewto_cart_text( $add_to_cart_text ) {
 		add_filter( 'woocommerce_product_add_to_cart_text', function ( $default ) use ( $add_to_cart_text ) {
 			global $product;
 			switch ( $product->get_type() ) {
@@ -768,18 +289,18 @@ trait Helper
                     </a>
                     <div class="eael-promo-temp--left">
                         <div class="eael-promo-temp__logo">
-                            <img src="<?php echo EAEL_PLUGIN_URL . 'assets/admin/images/templately/logo.svg'; ?>" alt="">
+                            <img src="<?php echo esc_url( EAEL_PLUGIN_URL . 'assets/admin/images/templately/logo.svg' ); ?>" alt="">
                         </div>
                         <ul class="eael-promo-temp__feature__list">
-                            <li><?php _e('1,000+ Stunning Templates','essential-addons-for-elementor-lite'); ?></li>
+                            <li><?php _e('3,000+ Stunning Templates','essential-addons-for-elementor-lite'); ?></li>
                             <li><?php _e('Supports Elementor & Gutenberg','essential-addons-for-elementor-lite'); ?></li>
-                            <li><?php _e('Powering up 17,000+ Websites','essential-addons-for-elementor-lite'); ?></li>
+                            <li><?php _e('Powering up 200,000+ Websites','essential-addons-for-elementor-lite'); ?></li>
                             <li><?php _e('Cloud Collaboration with Team','essential-addons-for-elementor-lite'); ?></li>
                         </ul>
                         <form class="eael-promo-temp__form">
                             <label>
                                 <input type="radio" value="install" class="eael-temp-promo-confirmation" name='eael-promo-temp__radio' checked>
-                                <span><?php echo $button_test; ?></span>
+                                <span><?php echo esc_html( $button_test ); ?></span>
                             </label>
                             <label>
                                 <input type="radio" value="dnd" class="eael-temp-promo-confirmation" name='eael-promo-temp__radio'>
@@ -801,7 +322,7 @@ trait Helper
                         <button class="eael-prmo-status-submit" style="display: none"><?php _e('Submit','essential-addons-for-elementor-lite') ?></button>
                     </div>
                     <div class="eael-promo-temp--right">
-                        <img src="<?php echo EAEL_PLUGIN_URL . 'assets/admin/images/templately/templates-edit.jpg'; ?>" alt="">
+                        <img src="<?php echo esc_url( EAEL_PLUGIN_URL . 'assets/admin/images/templately/templates-edit.jpg' ); ?>" alt="">
                     </div>
                 </div>
             </div>
@@ -829,30 +350,7 @@ trait Helper
      *
      * @return string
 	 */
-    public function eael_product_quickview_popup(){
-	    //check nonce
-	    check_ajax_referer( 'essential-addons-elementor', 'security' );
-	    $widget_id  = sanitize_key( $_POST[ 'widget_id' ] );
-	    $product_id = absint( $_POST[ 'product_id' ] );
-	    $page_id    = absint( $_POST[ 'page_id' ] );
 
-	    if ( $widget_id == '' && $product_id == '' && $page_id == '' ) {
-		    wp_send_json_error();
-	    }
-
-	    global $post, $product;
-	    $product = wc_get_product( $product_id );
-	    $post    = get_post( $product_id );
-	    setup_postdata( $post );
-
-	    $settings = $this->eael_get_widget_settings( $page_id, $widget_id );
-	    ob_start();
-	    HelperClass::eael_product_quick_view( $product, $settings, $widget_id );
-	    $data = ob_get_clean();
-	    wp_reset_postdata();
-
-	    wp_send_json_success( $data );
-    }
 
     /**
 	 * return file path which are store in theme Template directory
@@ -874,18 +372,261 @@ trait Helper
 	 */
 	public function eael_forcefully_remove_action( $tag, $function_to_remove, $priority ) {
 		global $wp_filter;
-
-		if ( ! isset( $wp_filter[ $tag ][ $priority ] ) && ! is_array( $wp_filter[ $tag ][ $priority ] ) ) {
-			return;
-		}
-
-		foreach ( $wp_filter[ $tag ][ $priority ] as $callback_function => $registration ) {
-			if ( strlen( $callback_function ) > 32 && strpos( $callback_function, $function_to_remove, 32 ) !== false || $callback_function === $function_to_remove ) {
-				remove_action( $tag, $callback_function, $priority );
-				break;
+		if (  isset( $wp_filter[ $tag ][ $priority ] ) &&  is_array( $wp_filter[ $tag ][ $priority ] ) ) {
+			foreach ( $wp_filter[ $tag ][ $priority ] as $callback_function => $registration ) {
+				if ( strlen( $callback_function ) > 32 && strpos( $callback_function, $function_to_remove, 32 ) !== false || $callback_function === $function_to_remove ) {
+					remove_action( $tag, $callback_function, $priority );
+					break;
+				}
 			}
 		}
 	}
-	
+
+	/**
+	 * eael_wpml_template_translation
+	 * @param $id
+	 * @return mixed|void
+	 */
+    public function eael_wpml_template_translation($id){
+	    $postType = get_post_type( $id );
+	    if ( 'elementor_library' === $postType ) {
+		    return apply_filters( 'wpml_object_id', $id, $postType, true );
+	    }
+	    return $id;
+    }
+
+	/**
+	 * eael_sanitize_template_param
+     * Removes special characters that are illegal in filenames
+     *
+	 * @param array $template_info
+	 *
+     * @access public
+	 * @return array
+     * @since 5.0.4
+	 */
+    public function eael_sanitize_template_param( $template_info ){
+	    $template_info = array_map( 'sanitize_text_field', $template_info );
+	    return array_map( 'sanitize_file_name', $template_info );
+    }
+
+	/**
+	 * sanitize_taxonomy_data
+     * Sanitize all value for tax query
+     *
+	 * @param array $tax_list taxonomy param list
+	 *
+     * @access protected
+	 * @return array|array[]|string[]
+	 * @since 5.0.4
+	 */
+    protected function sanitize_taxonomy_data( $tax_list ){
+	    return array_map( function ( $param ) {
+		    return is_array( $param ) ? array_map( 'sanitize_text_field', $param ) : sanitize_text_field( $param );
+	    }, $tax_list );
+    }
+
+	/**
+	 * eael_clear_widget_cache_data
+     * Remove cache from transient which contains widget data
+     *
+     * @access public
+     * @return array
+     * @since 5.0.7
+	 */
+	public function eael_clear_widget_cache_data() {
+		global $wpdb;
+
+		check_ajax_referer( 'essential-addons-elementor', 'security' );
+
+		$ac_name     = sanitize_text_field( $_POST['ac_name'] );
+		$hastag      = sanitize_text_field( $_POST['hastag'] );
+		$c_key       = sanitize_text_field( $_POST['c_key'] );
+		$c_secret    = sanitize_text_field( $_POST['c_secret'] );
+		$key_pattern = '_transient_' . $ac_name . '%' . md5( $hastag . $c_key . $c_secret ) . '_tf_cache';
+
+		$sql     = "SELECT `option_name` AS `name`
+            FROM  $wpdb->options
+            WHERE `option_name` LIKE '$key_pattern'
+            ORDER BY `option_name`";
+		$results = $wpdb->get_results( $sql );
+
+		foreach ( $results as $transient ) {
+			$cache_key = substr( $transient->name, 11 );
+			delete_transient( $cache_key );
+		}
+
+		wp_send_json_success();
+	}
+
+	public function promotion_message_on_admin_screen() {
+		?>
+        <div id="eael-admin-promotion-message" class="eael-admin-promotion-message">
+            <i class="e-notice__dismiss eael-admin-promotion-close" role="button" aria-label="Dismiss" tabindex="0"></i>
+			<?php printf( __( "<p> <i>📣</i> NEW: Essential Addons 5.5 is here, with new '<a target='_blank' href='%s'>NFT Gallery</a>' widget & more! Check out the <a target='_blank' href='%s'>Changelog</a> for more details 🎉</p>", "essential-addons-for-elementor-lite" ), esc_url( 'https://essential-addons.com/elementor/nft-gallery/' ), esc_url( 'https://essential-addons.com/elementor/changelog/' ) ); ?>
+        </div>
+		<?php
+	}
+
+	/**
+	 * remove_admin_notice
+	 *
+	 *
+	 * @return void
+	 */
+	public function remove_admin_notice() {
+		$current_screen = get_current_screen();
+		if ( $current_screen->id == 'toplevel_page_eael-settings' ) {
+
+			remove_all_actions( 'user_admin_notices' );
+			remove_all_actions( 'admin_notices' );
+
+            // To showing notice in EA settings page we have to use 'eael_admin_notices' action hook
+			add_action( 'admin_notices', function () {
+				do_action( 'eael_admin_notices' );
+			} );
+
+			/*Added admin notice which is basically uses for display new promotion message*/
+			if ( get_option( 'eael_admin_promotion' ) < self::EAEL_PROMOTION_FLAG ) {
+				add_action( 'eael_admin_notices', array( $this, 'promotion_message_on_admin_screen' ) );
+			}
+		}
+	}
+
+	/**
+	 * eael_show_admin_menu_notice
+     *
+     * Update flag if user visit Essential Addons setting page only first time
+     * @return void
+     * @since 5.1.0
+	 */
+	public function eael_show_admin_menu_notice() {
+		if ( get_option( 'eael_admin_menu_notice' ) < self::EAEL_ADMIN_MENU_FLAG ) {
+            update_option( 'eael_admin_menu_notice',self::EAEL_ADMIN_MENU_FLAG,'no' );
+		}
+	}
+
+	/**
+	 * Checking that is actually elementor activated and works
+     *
+	 * @return bool
+	 */
+	public function is_activate_elementor() {
+		return defined( 'ELEMENTOR_VERSION' ) && class_exists( 'Elementor\Plugin' );
+	}
+
+	public function essential_blocks_promo_admin_js_template() {
+		$eb_logo          = EAEL_PLUGIN_URL . 'assets/admin/images/eb.svg';
+		$eb_promo_cross   = EAEL_PLUGIN_URL . 'assets/admin/images/essential-blocks/cross.svg';
+		$eb_promo_img1    = EAEL_PLUGIN_URL . 'assets/admin/images/essential-blocks/eb-promo-img1.gif';
+		$eb_promo_img2    = EAEL_PLUGIN_URL . 'assets/admin/images/essential-blocks/eb-promo-img2.gif';
+		$eb_promo_img3    = EAEL_PLUGIN_URL . 'assets/admin/images/essential-blocks/eb-promo-img3.gif';
+		$eb_promo_img4    = EAEL_PLUGIN_URL . 'assets/admin/images/essential-blocks/eb-promo-img4.gif';
+		$eb_promo_img5    = EAEL_PLUGIN_URL . 'assets/admin/images/essential-blocks/eb-promo-img5.png';
+		$eb_not_installed = HelperClass::get_local_plugin_data( 'essential-blocks/essential-blocks.php' ) === false;
+		$action           = $eb_not_installed ? 'install' : 'activate';
+		$button_title     = $eb_not_installed ? esc_html__( 'Try Essential Blocks', 'essential-addons-for-elementor-lite' ) : esc_html__( 'Activate', 'essential-addons-for-elementor-lite' );
+		$nonce            = wp_create_nonce( 'essential-addons-elementor' );
+		?>
+        <script id="eael-gb-eb-button-template" type="text/html">
+            <button id="eael-eb-popup-button" type="button" class="components-button is-primary">
+                <img width="20" src="<?php echo esc_url( $eb_logo ); ?>" alt=""><?php esc_html_e( 'Essential Blocks', 'essential-addons-for-elementor-lite' ); ?>
+            </button>
+        </script>
+
+        <script id="eael-gb-eb-popup-template" type="text/html">
+            <div class="eael-gb-eb-popup">
+                <div class="eael-gb-eb-header">
+                    <img src="<?php echo esc_url( $eb_promo_cross ); ?>" class="eael-gb-eb-dismiss" alt="">
+                    <div class="eael-gb-eb-tooltip"><?php esc_html_e( 'Close dialog', 'essential-addons-for-elementor-lite' ); ?></div>
+                </div>
+                <div class="eael-gb-eb-popup-content --page-1">
+                    <div class="eael-gb-eb-content">
+                        <div class="eael-gb-eb-content-image">
+                            <img src="<?php echo esc_url( $eb_promo_img1 ); ?>" alt="">
+                        </div>
+                        <div class="eael-gb-eb-content-pagination">
+                            <span class="active" data-page="1"></span>
+                            <span data-page="2"></span>
+                            <span data-page="3"></span>
+                            <span data-page="4"></span>
+                            <span data-page="5"></span>
+                        </div>
+                        <div class="eael-gb-eb-content-info">
+                            <h3><?php esc_html_e( 'Supercharge Your Gutenberg Experience With Essential Blocks', 'essential-addons-for-elementor-lite' ); ?></h3>
+                            <p><?php esc_html_e( 'If you like Essential Addons for Elementor, check out Essential Blocks, the ultimate block library for Gutenberg, and build powerful websites with ease without any coding.', 'essential-addons-for-elementor-lite' ); ?></p>
+                        </div>
+                    </div>
+                    <div class="eael-gb-eb-footer">
+                        <button class="eael-gb-eb-prev"><?php esc_html_e( 'Previous', 'essential-addons-for-elementor-lite' ); ?></button>
+                        <button class="eael-gb-eb-next"><?php esc_html_e( 'Next', 'essential-addons-for-elementor-lite' ); ?></button>
+                    </div>
+                </div>
+            </div>
+        </script>
+
+        <script id="eael-gb-eb-button-template-page-1" type="text/html">
+            <div>
+                <div class="eael-gb-eb-content-image">
+                    <img src="<?php echo esc_url( $eb_promo_img1 ); ?>" alt="">
+                </div>
+                <div class="eael-gb-eb-content-info">
+                    <h3><?php esc_html_e( 'Supercharge Your Gutenberg Experience With Essential Blocks', 'essential-addons-for-elementor-lite' ); ?></h3>
+                    <p><?php esc_html_e( 'If you like Essential Addons for Elementor, check out Essential Blocks, the ultimate block library for Gutenberg, and build powerful websites with ease without any coding.', 'essential-addons-for-elementor-lite' ) ?></p>
+                </div>
+            </div>
+        </script>
+
+        <script id="eael-gb-eb-button-template-page-2" type="text/html">
+            <div>
+                <div class="eael-gb-eb-content-image">
+                    <img src="<?php echo esc_url( $eb_promo_img2 ); ?>" alt="">
+                </div>
+                <div class="eael-gb-eb-content-info">
+                    <h3><?php esc_html_e( '40+ Amazing Gutenberg Blocks', 'essential-addons-for-elementor-lite' ); ?></h3>
+                    <p><?php esc_html_e( 'Create & design your WordPress websites just the way you want with more than 35 amazing, ready blocks from Essential Blocks for Gutenberg.', 'essential-addons-for-elementor-lite' ) ?></p>
+                </div>
+            </div>
+        </script>
+
+        <script id="eael-gb-eb-button-template-page-3" type="text/html">
+            <div>
+                <div class="eael-gb-eb-content-image">
+                    <img src="<?php echo esc_url( $eb_promo_img3 ); ?>" alt="">
+                </div>
+                <div class="eael-gb-eb-content-info">
+                    <h3><?php esc_html_e( 'Useful Block Control Option', 'essential-addons-for-elementor-lite' ); ?></h3>
+                    <p><?php esc_html_e( 'Get the fastest loading time and smoothest experience on your web page by enabling and disabling individual blocks as per your requirements.', 'essential-addons-for-elementor-lite' ) ?></p>
+                </div>
+            </div>
+        </script>
+
+        <script id="eael-gb-eb-button-template-page-4" type="text/html">
+            <div>
+                <div class="eael-gb-eb-content-image">
+                    <img src="<?php echo esc_url( $eb_promo_img4 ); ?>" alt="">
+                </div>
+                <div class="eael-gb-eb-content-info">
+                    <h3><?php esc_html_e( 'Endless Customization Options', 'essential-addons-for-elementor-lite' ); ?></h3>
+                    <p><?php esc_html_e( 'Design unique and creative layouts on your website using the endless customization of Essential Blocks with absolute ease and instantly grab attention.', 'essential-addons-for-elementor-lite' ) ?></p>
+                </div>
+            </div>
+        </script>
+
+        <script id="eael-gb-eb-button-template-page-5" type="text/html">
+            <div>
+                <div class="eael-gb-eb-content-image">
+                    <img src="<?php echo esc_url( $eb_promo_img5 ); ?>" alt="">
+                </div>
+                <div class="eael-gb-eb-content-info">
+                    <h3><?php esc_html_e( 'Try Essential Blocks Today!', 'essential-addons-for-elementor-lite' ); ?></h3>
+                    <p><?php printf( __( 'Want to get started with Essential Blocks now? Check out the %scomplete demos for each blocks%s to learn more about this ultimate block library for Gutenberg.', 'essential-addons-for-elementor-lite' ), '<a href="https://essential-blocks.com/demo" target="_blank">', '</a>' ) ?></p>
+                    <button class="eael-gb-eb-install components-button is-primary" data-action="<?php echo esc_attr( $action ); ?>" data-nonce="<?php echo esc_attr( $nonce ); ?>"><?php echo esc_html( $button_title ); ?></button>
+                    <button class="eael-gb-eb-never-show" data-nonce="<?php echo esc_attr( $nonce ); ?>"><?php esc_html_e( 'Never Show Again', 'essential-addons-for-elementor-lite' ); ?></button>
+                </div>
+            </div>
+        </script>
+		<?php
+	}
 }
 

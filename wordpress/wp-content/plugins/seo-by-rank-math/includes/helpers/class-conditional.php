@@ -93,6 +93,10 @@ trait Conditional {
 	 * @return bool
 	 */
 	public static function is_invalid_registration() {
+		if ( defined( 'RANK_MATH_REGISTRATION_SKIP' ) && RANK_MATH_REGISTRATION_SKIP ) {
+			return false;
+		}
+
 		$is_skipped = Helper::is_plugin_active_for_network() ? get_blog_option( get_main_site_id(), 'rank_math_registration_skip' ) : get_option( 'rank_math_registration_skip' );
 		if ( true === boolval( $is_skipped ) ) {
 			return false;
@@ -259,5 +263,20 @@ trait Conditional {
 	 */
 	public static function is_wizard() {
 		return ( filter_input( INPUT_GET, 'page' ) === 'rank-math-wizard' || filter_input( INPUT_POST, 'action' ) === 'rank_math_save_wizard' );
+	}
+
+	/**
+	 * Is filesystem method direct.
+	 *
+	 * @since 1.0.71.1
+	 *
+	 * @return boolean
+	 */
+	public static function is_filesystem_direct() {
+		if ( ! function_exists( 'get_filesystem_method' ) ) {
+			require_once ABSPATH . '/wp-admin/includes/file.php';
+		}
+
+		return 'direct' === get_filesystem_method();
 	}
 }

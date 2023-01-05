@@ -220,7 +220,7 @@ class PrliLinksController extends PrliBaseController {
     global $prli_link, $prli_link_meta;
 
     $values = array();
-    $values['link_id'] = $record->id;
+    $values['link_id'] = isset($record->id) ? $record->id : null;
     $values['url'] =  ((isset($_REQUEST['url']) and $record == null)?esc_url_raw(trim(stripslashes($_REQUEST['url']))):stripslashes($record->url));
     $values['slug'] = ((isset($_REQUEST['slug']) and $record == null)?sanitize_text_field(stripslashes($_REQUEST['slug'])):stripslashes($record->slug));
     $values['name'] = ((isset($_REQUEST['name']) and $record == null)?sanitize_text_field(stripslashes($_REQUEST['name'])):stripslashes($record->name));
@@ -1001,4 +1001,3 @@ class PrliLinksController extends PrliBaseController {
   }
 
 }
-

@@ -18,44 +18,104 @@ function cdi_import_files() {
             'preview_url' => 'https://bizbergthemes.com/education-business-pro/'
         ),
         array(
-            'import_file_name'=> __('Homepage Slider 1','cdi'),
+            'import_file_name'=> __('Higher Education Business PRO','cdi'),
             'categories'      =>  array( 'PRO' , 'Homepage' ),
-            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/homepage-slider-1.jpg',
-            'preview_url' => 'https://bizbergthemes.com/education-business-pro/homepage-slider-1/'
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/homepage-higher-education.jpg',
+            'preview_url' => 'https://bizbergthemes.com/education-business-pro/higher-education-business-pro/'
         ),
         array(
-            'import_file_name'=> __('Homepage Slider 2','cdi'),
+            'import_file_name'=> __('Education Shop PRO','cdi'),
             'categories'      =>  array( 'PRO' , 'Homepage' ),
-            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/homepage-slider-2.jpg',
-            'preview_url' => 'https://bizbergthemes.com/education-business-pro/homepage-slider-2/'
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/homepage-pro-shop.jpg',
+            'preview_url' => 'https://bizbergthemes.com/education-business-pro/education-shop-pro/'
         ),
         array(
             'import_file_name'=> __('Services','cdi'),
-            'categories'      =>  array( 'PRO' ),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
             'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/services.jpg',
             'preview_url' => 'https://bizbergthemes.com/education-business-pro/services/'
         ),
         array(
+            'import_file_name'=> __('Course List','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/course-1.jpg',
+            'preview_url' => 'https://bizbergthemes.com/education-business-pro/courses-1/'
+        ),
+        array(
+            'import_file_name'=> __('Course Grid','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/course-grid.jpg',
+            'preview_url' => 'https://bizbergthemes.com/education-business-pro/courses-2/'
+        ),
+        array(
+            'import_file_name'=> __('Event List','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/event-list.jpg',
+            'preview_url' => 'https://bizbergthemes.com/education-business-pro/event-listing-list/'
+        ),
+        array(
+            'import_file_name'=> __('Event Grid','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/event-grid.jpg',
+            'preview_url' => 'https://bizbergthemes.com/education-business-pro/event-listing-grid/'
+        ),
+        array(
+            'import_file_name'=> __('Meeting List','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/meeting-list.jpg',
+            'preview_url' => 'https://bizbergthemes.com/education-business-pro/meeting-1/'
+        ),
+        array(
+            'import_file_name'=> __('Meeting Grid','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/meeting-grid.jpg',
+            'preview_url' => 'https://bizbergthemes.com/education-business-pro/meeting-2/'
+        ),
+        array(
+            'import_file_name'=> __('Our Instructor','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/our-instructor.jpg',
+            'preview_url' => 'https://bizbergthemes.com/education-business-pro/instructor/'
+        ),
+        array(
+            'import_file_name'=> __('Pricing Plan 1','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/pricing-plan-1.jpg',
+            'preview_url' => 'https://bizbergthemes.com/education-business-pro/pricing-plan-1/'
+        ),
+        array(
+            'import_file_name'=> __('Pricing Plan 2','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/pricing-plan-2.jpg',
+            'preview_url' => 'https://bizbergthemes.com/education-business-pro/pricing-plan-2/'
+        ),
+        array(
+            'import_file_name'=> __('Pricing Plan 3','cdi'),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/pricing-plan-3.jpg',
+            'preview_url' => 'https://bizbergthemes.com/education-business-pro/pricing-plan-3/'
+        ),
+        array(
             'import_file_name'=> __('Gallery 1','cdi'),
-            'categories'      =>  array( 'PRO' ),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
             'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/gallery-1.jpg',
             'preview_url' => 'https://bizbergthemes.com/education-business-pro/gallery-1/'
         ),
         array(
             'import_file_name'=> __('Gallery 2','cdi'),
-            'categories'      =>  array( 'PRO' ),
+            'categories'      =>  array( 'PRO', 'Pages' ),
             'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/gallery-2.jpg',
             'preview_url' => 'https://bizbergthemes.com/education-business-pro/gallery-2/'
         ),
         array(
             'import_file_name'=> __('Contact Us 1','cdi'),
-            'categories'      =>  array( 'PRO'),
+            'categories'      =>  array( 'PRO', 'Pages' ),
             'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/contact-1.jpg',
             'preview_url' => 'https://bizbergthemes.com/education-business-pro/contact-us-1/'
         ),
         array(
             'import_file_name'=> __('Contact Us 2','cdi'),
-            'categories'      =>  array( 'PRO' ),
+            'categories'      =>  array( 'PRO' , 'Pages' ),
             'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/contact-2.jpg',
             'preview_url' => 'https://bizbergthemes.com/education-business-pro/contact-us-2/'
         ),

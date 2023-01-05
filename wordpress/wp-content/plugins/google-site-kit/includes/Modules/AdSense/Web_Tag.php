@@ -13,6 +13,7 @@ namespace Google\Site_Kit\Modules\AdSense;
 use Google\Site_Kit\Core\Modules\Tags\Module_Web_Tag;
 use Google\Site_Kit\Core\Util\Method_Proxy_Trait;
 use Google\Site_Kit\Core\Tags\Tag_With_DNS_Prefetch_Trait;
+use Google\Site_Kit\Core\Util\BC_Functions;
 
 /**
  * Class for Web tag.
@@ -51,21 +52,48 @@ class Web_Tag extends Module_Web_Tag {
 	protected function render() {
 		// If we haven't completed the account connection yet, we still insert the AdSense tag
 		// because it is required for account verification.
-		printf(
-			'<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"%s></script>', // // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
-			$this->get_tag_blocked_on_consent_attribute() // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+		$adsense_script_src = sprintf(
+			'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=%s&host=%s',
+			esc_attr( $this->tag_id ), // Site owner's web property code.
+			'ca-host-pub-2644536267352236' // SiteKit's web property code.
 		);
 
-		printf(
-			'<script>(adsbygoogle = window.adsbygoogle || []).push(%s);</script>',
-			wp_json_encode(
-				array(
-					'google_ad_client'      => $this->tag_id,
-					'enable_page_level_ads' => true,
-					'tag_partner'           => 'site_kit',
-				)
-			)
+		$adsense_script_attributes = array(
+			'async'       => true,
+			'src'         => $adsense_script_src,
+			'crossorigin' => 'anonymous',
 		);
+
+		$adsense_attributes = $this->get_tag_blocked_on_consent_attribute_array();
+
+		$auto_ads_opt = array();
+
+		$auto_ads_opt_filtered = apply_filters( 'googlesitekit_auto_ads_opt', $auto_ads_opt, $this->tag_id );
+
+		if ( is_array( $auto_ads_opt_filtered ) && ! empty( $auto_ads_opt_filtered ) ) {
+			$strip_attributes = array(
+				'google_ad_client'      => '',
+				'enable_page_level_ads' => '',
+			);
+
+			$auto_ads_opt_filtered = array_diff_key( $auto_ads_opt_filtered, $strip_attributes );
+
+			$auto_ads_opt_sanitized = array();
+
+			foreach ( $auto_ads_opt_filtered as $key => $value ) {
+				$new_key  = 'data-';
+				$new_key .= str_replace( '_', '-', $key );
+
+				$auto_ads_opt_sanitized[ $new_key ] = $value;
+			}
+
+			$adsense_attributes = array_merge( $adsense_attributes, $auto_ads_opt_sanitized );
+		}
+
+		printf( "\n<!-- %s -->\n", esc_html__( 'Google AdSense snippet added by Site Kit', 'google-site-kit' ) );
+		BC_Functions::wp_print_script_tag( array_merge( $adsense_script_attributes, $adsense_attributes ) );
+		printf( "\n<!-- %s -->\n", esc_html__( 'End Google AdSense snippet added by Site Kit', 'google-site-kit' ) );
 	}
 
 }

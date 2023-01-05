@@ -24,7 +24,10 @@ use Google\Site_Kit\Core\Modules\Module_With_Owner;
 use Google\Site_Kit\Core\Modules\Module_With_Owner_Trait;
 use Google\Site_Kit\Core\Authentication\Clients\Google_Site_Kit_Client;
 use Google\Site_Kit\Core\Util\Debug_Data;
+use Google\Site_Kit\Core\Util\Method_Proxy_Trait;
 use Google\Site_Kit\Modules\Optimize\Settings;
+use Google\Site_Kit\Modules\Optimize\Web_Tag;
+use Google\Site_Kit\Modules\Optimize\Tag_Guard;
 
 /**
  * Class representing the Optimize module.
@@ -35,7 +38,12 @@ use Google\Site_Kit\Modules\Optimize\Settings;
  */
 final class Optimize extends Module
 	implements Module_With_Settings, Module_With_Debug_Fields, Module_With_Assets, Module_With_Owner, Module_With_Deactivation {
-	use Module_With_Settings_Trait, Module_With_Assets_Trait, Module_With_Owner_Trait;
+	use Module_With_Settings_Trait, Module_With_Assets_Trait, Module_With_Owner_Trait, Method_Proxy_Trait;
+
+	/**
+	 * Module slug name.
+	 */
+	const MODULE_SLUG = 'optimize';
 
 	/**
 	 * Registers functionality through WordPress hooks.
@@ -62,6 +70,9 @@ final class Optimize extends Module
 				return $this->amp_data_load_experiment_component( $data );
 			}
 		);
+
+		// Optimize tag placement logic.
+		add_action( 'template_redirect', $this->get_method_proxy( 'register_tag' ) );
 	}
 
 	/**
@@ -93,7 +104,7 @@ final class Optimize extends Module
 	}
 
 	/**
-	 * Expands gtag config options with optimize ID.
+	 * Expands gtag config options with Optimize Container ID.
 	 *
 	 * @since 1.0.0
 	 *
@@ -147,7 +158,7 @@ final class Optimize extends Module
 
 		return array(
 			'optimize_id' => array(
-				'label' => __( 'Optimize ID', 'google-site-kit' ),
+				'label' => __( 'Optimize Container ID', 'google-site-kit' ),
 				'value' => $settings['optimizeID'],
 				'debug' => Debug_Data::redact_debug_value( $settings['optimizeID'], 7 ),
 			),
@@ -240,9 +251,35 @@ final class Optimize extends Module
 						'googlesitekit-modules',
 						'googlesitekit-datastore-site',
 						'googlesitekit-datastore-forms',
+						'googlesitekit-components',
 					),
 				)
 			),
 		);
+	}
+
+	/**
+	 * Registers the Optimize tag.
+	 *
+	 * @since 1.39.0
+	 */
+	private function register_tag() {
+		$is_amp          = $this->context->is_amp();
+		$module_settings = $this->get_settings();
+		$settings        = $module_settings->get();
+
+		if ( $is_amp ) {
+			return false;
+		}
+
+		$tag = new Web_Tag( $settings['optimizeID'], self::MODULE_SLUG );
+
+		if ( ! $tag->is_tag_blocked() ) {
+			$tag->use_guard( new Tag_Guard( $module_settings ) );
+
+			if ( $tag->can_register() ) {
+				$tag->register();
+			}
+		}
 	}
 }

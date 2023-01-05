@@ -41,7 +41,7 @@ function i2pc_ce_editor_popup()
                     <div class="clear"></div>
                 </div>
                 <div class="i2pc-fr">
-                    <a href="<?php echo I2PC_MORE_THEMES_PLUGINS_URL; ?>/how-to-install-and-use-i2-pros-and-cons-classic-editor/" target="_blank" class="i2pc-button"><i class="dashicons dashicons-editor-help"></i> How to use?</a>
+                    <a href="<?php echo I2PC_MORE_THEMES_PLUGINS_URL; ?>/docs-category/how-to-install-and-use-i2-pros-and-cons-classic-editor/" target="_blank" class="i2pc-button"><i class="dashicons dashicons-editor-help"></i> How to use?</a>
                     <!-- <a href="<?php echo I2PC_MORE_THEMES_PLUGINS_URL; ?>" target="_blank" class="i2pc-button">More WP Themes &amp; Plugins for Amazon</a> -->
                 </div>
                 <div class="clear"></div>

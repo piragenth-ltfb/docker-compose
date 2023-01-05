@@ -90,16 +90,6 @@ class Page_Title extends Widget_Base {
 	/**
 	 * Register Page Title controls.
 	 *
-	 * @since 1.3.0
-	 * @access protected
-	 */
-	protected function _register_controls() { // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
-		$this->register_controls();
-	}
-
-	/**
-	 * Register Page Title controls.
-	 *
 	 * @since 1.5.7
 	 * @access protected
 	 */
@@ -251,9 +241,9 @@ class Page_Title extends Widget_Base {
 		$this->add_responsive_control(
 			'align',
 			[
-				'label'     => __( 'Alignment', 'header-footer-elementor' ),
-				'type'      => Controls_Manager::CHOOSE,
-				'options'   => [
+				'label'              => __( 'Alignment', 'header-footer-elementor' ),
+				'type'               => Controls_Manager::CHOOSE,
+				'options'            => [
 					'left'    => [
 						'title' => __( 'Left', 'header-footer-elementor' ),
 						'icon'  => 'eicon-text-align-left',
@@ -271,10 +261,11 @@ class Page_Title extends Widget_Base {
 						'icon'  => 'eicon-text-align-justify',
 					],
 				],
-				'default'   => '',
-				'selectors' => [
+				'default'            => '',
+				'selectors'          => [
 					'{{WRAPPER}} .hfe-page-title-wrapper' => 'text-align: {{VALUE}};',
 				],
+				'frontend_available' => true,
 			]
 		);
 
@@ -525,19 +516,5 @@ class Page_Title extends Widget_Base {
 			<# } #>			
 		</div>
 		<?php
-	}
-
-	/**
-	 * Render page title output in the editor.
-	 *
-	 * Written as a Backbone JavaScript template and used to generate the live preview.
-	 *
-	 * Remove this after Elementor v3.3.0
-	 *
-	 * @since 1.3.0
-	 * @access protected
-	 */
-	protected function _content_template() {
-		$this->content_template();
 	}
 }

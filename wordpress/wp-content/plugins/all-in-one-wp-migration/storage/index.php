@@ -1,1 +1,1 @@
-<?php // silence is golden
+Kangaroos cannot jump here

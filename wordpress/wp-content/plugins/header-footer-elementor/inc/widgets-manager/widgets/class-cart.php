@@ -85,17 +85,6 @@ class Cart extends Widget_Base {
 	/**
 	 * Register cart controls.
 	 *
-	 * @since 1.4.0
-	 * @access protected
-	 */
-	protected function _register_controls() { // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
-
-		$this->register_controls();
-	}
-
-	/**
-	 * Register cart controls.
-	 *
 	 * @since 1.5.7
 	 * @access protected
 	 */
@@ -204,9 +193,9 @@ class Cart extends Widget_Base {
 		$this->add_responsive_control(
 			'align',
 			[
-				'label'        => __( 'Alignment', 'header-footer-elementor' ),
-				'type'         => Controls_Manager::CHOOSE,
-				'options'      => [
+				'label'              => __( 'Alignment', 'header-footer-elementor' ),
+				'type'               => Controls_Manager::CHOOSE,
+				'options'            => [
 					'left'   => [
 						'title' => __( 'Left', 'header-footer-elementor' ),
 						'icon'  => 'eicon-text-align-left',
@@ -220,8 +209,9 @@ class Cart extends Widget_Base {
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
-				'prefix_class' => 'elementor%s-align-',
-				'default'      => '',
+				'frontend_available' => true,
+				'prefix_class'       => 'elementor%s-align-',
+				'default'            => '',
 			]
 		);
 
@@ -318,15 +308,16 @@ class Cart extends Widget_Base {
 		$this->add_responsive_control(
 			'toggle_button_padding',
 			[
-				'label'      => __( 'Padding', 'header-footer-elementor' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', 'em' ],
-				'selectors'  => [
+				'label'              => __( 'Padding', 'header-footer-elementor' ),
+				'type'               => Controls_Manager::DIMENSIONS,
+				'size_units'         => [ 'px', 'em' ],
+				'selectors'          => [
 					'{{WRAPPER}} .hfe-menu-cart__toggle .elementor-button' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}',
 				],
-				'condition'  => [
+				'condition'          => [
 					'hfe_cart_type' => 'custom',
 				],
+				'frontend_available' => true,
 			]
 		);
 
@@ -679,19 +670,5 @@ class Cart extends Widget_Base {
 	 * @access protected
 	 */
 	protected function content_template() {
-	}
-
-	/**
-	 * Render cart output in the editor.
-	 *
-	 * Written as a Backbone JavaScript template and used to generate the live preview.
-	 *
-	 * Remove this after Elementor v3.3.0
-	 *
-	 * @since 1.4.0
-	 * @access protected
-	 */
-	protected function _content_template() {
-		$this->content_template();
 	}
 }

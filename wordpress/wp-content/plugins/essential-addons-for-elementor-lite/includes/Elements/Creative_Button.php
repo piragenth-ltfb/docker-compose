@@ -62,7 +62,7 @@ class Creative_Button extends Widget_Base
         return 'https://essential-addons.com/elementor/docs/creative-buttons/';
     }
 
-    protected function _register_controls()
+    protected function register_controls()
     {
 
         if ( !apply_filters( 'eael/pro_enabled', false ) ) {
@@ -201,7 +201,7 @@ class Creative_Button extends Widget_Base
                         ],
                     ],
                     'default'     => '1',
-                    'description' => '<span class="pro-feature"> Get the  <a href="https://wpdeveloper.net/in/upgrade-essential-addons-elementor" target="_blank">Pro version</a> for more stunning elements and customization options.</span>',
+                    'description' => '<span class="pro-feature"> Get the  <a href="https://wpdeveloper.com/upgrade/ea-pro" target="_blank">Pro version</a> for more stunning elements and customization options.</span>',
                 ]
             );
 
@@ -241,7 +241,7 @@ class Creative_Button extends Widget_Base
                         'eael-creative-button--quidel'  => esc_html__('Quidel (Pro)', 'essential-addons-for-elementor-lite'),
                         'eael-creative-button--shikoba' => esc_html__('Shikoba (Pro)', 'essential-addons-for-elementor-lite'),
                     ],
-                    'description' => '10 more effects on <a href="https://wpdeveloper.net/in/upgrade-essential-addons-elementor">Pro version</a>',
+                    'description' => '10 more effects on <a href="https://wpdeveloper.com/in/upgrade-essential-addons-elementor">Pro version</a>',
                 ]
             );
             $this->add_control(
@@ -373,6 +373,7 @@ class Creative_Button extends Widget_Base
                     'selectors' => [
                         '{{WRAPPER}} .eael-creative-button:hover .cretive-button-text' => 'color: {{VALUE}};',
                         '{{WRAPPER}} .eael-creative-button.eael-creative-button--winona::after' => 'color: {{VALUE}};',
+                        '{{WRAPPER}} .eael-creative-button.eael-creative-button--rayen:hover::before' => 'color: {{VALUE}};',
                     ],
                 ]
             );
@@ -389,6 +390,7 @@ class Creative_Button extends Widget_Base
                         '{{WRAPPER}} .eael-creative-button.eael-creative-button--wayra:hover::before' => 'background-color: {{VALUE}};',
                         '{{WRAPPER}} .eael-creative-button.eael-creative-button--tamaya:hover'        => 'background-color: {{VALUE}};',
                         '{{WRAPPER}} .eael-creative-button.eael-creative-button--rayen::before'       => 'background-color: {{VALUE}};',
+                        '{{WRAPPER}} .eael-creative-button.eael-creative-button--rayen:hover::before'       => 'background-color: {{VALUE}};',
                     ],
                     'condition' => [
                         'use_gradient_background' => '',
@@ -407,6 +409,7 @@ class Creative_Button extends Widget_Base
 						{{WRAPPER}} .eael-creative-button.eael-creative-button--wayra:hover::before,
 						{{WRAPPER}} .eael-creative-button.eael-creative-button--tamaya:hover,
 						{{WRAPPER}} .eael-creative-button.eael-creative-button--rayen::before
+                        {{WRAPPER}} .eael-creative-button.eael-creative-button--rayen:hover::before
 					',
                     'condition' => [
                         'use_gradient_background' => 'yes',
@@ -443,15 +446,15 @@ class Creative_Button extends Widget_Base
                     'options'     => [
                         'flex-start' => [
                             'title' => esc_html__('Left', 'essential-addons-for-elementor-lite'),
-                            'icon'  => 'fa fa-align-left',
+                            'icon'  => 'eicon-text-align-left',
                         ],
                         'center'     => [
                             'title' => esc_html__('Center', 'essential-addons-for-elementor-lite'),
-                            'icon'  => 'fa fa-align-center',
+                            'icon'  => 'eicon-text-align-center',
                         ],
                         'flex-end'   => [
                             'title' => esc_html__('Right', 'essential-addons-for-elementor-lite'),
-                            'icon'  => 'fa fa-align-right',
+                            'icon'  => 'eicon-text-align-right',
                         ],
                     ],
                     'default'     => '',
@@ -489,7 +492,7 @@ class Creative_Button extends Widget_Base
                 [
                     'name'     => 'eael_creative_button_typography',
                     'scheme'   => Typography::TYPOGRAPHY_1,
-                    'selector' => '{{WRAPPER}} .eael-creative-button .cretive-button-text, {{WRAPPER}} .eael-creative-button--winona::after',
+                    'selector' => '{{WRAPPER}} .eael-creative-button .cretive-button-text, {{WRAPPER}} .eael-creative-button--winona::after, {{WRAPPER}} .eael-creative-button--rayen::before, {{WRAPPER}} .eael-creative-button--tamaya::after, {{WRAPPER}} .eael-creative-button--tamaya::before',
                 ]
             );
 
@@ -581,6 +584,10 @@ class Creative_Button extends Widget_Base
 
             <a <?php echo $this->get_render_attribute_string('eael_creative_button'); ?>>
 
+	    <?php if ($settings['creative_button_effect'] === 'eael-creative-button--tamaya' ) : ?>
+            <div class="eael-creative-button--tamaya-secondary eael-creative-button--tamaya-before"><span><?php echo Helper::eael_wp_kses($settings['creative_button_secondary_text']); ?></span></div>
+        <?php endif; ?>
+
                 <div class="creative-button-inner">
 
                     <?php if ($settings['creative_button_effect'] !== 'eael-creative-button--tamaya' && $settings['eael_creative_button_icon_alignment'] == 'left') : ?>
@@ -605,6 +612,9 @@ class Creative_Button extends Widget_Base
                         <?php } ?>
                     <?php endif; ?>
                 </div>
+	            <?php if ($settings['creative_button_effect'] === 'eael-creative-button--tamaya' ) : ?>
+                    <div class="eael-creative-button--tamaya-secondary eael-creative-button--tamaya-after"><span><?php echo Helper::eael_wp_kses($settings['creative_button_secondary_text']); ?></span></div>
+	            <?php endif; ?>
             </a>
         </div>
 <?php

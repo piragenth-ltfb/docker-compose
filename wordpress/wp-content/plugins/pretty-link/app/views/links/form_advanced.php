@@ -101,5 +101,6 @@
       ?>
     </td>
   </tr>
+  <?php do_action('prli_link_form_advanced'); ?>
 </table>
 

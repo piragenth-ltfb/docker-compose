@@ -67,6 +67,7 @@ class Snippet_Shortcode {
 	 * @return string Shortcode output.
 	 */
 	public function rich_snippet( $atts ) {
+
 		$atts = shortcode_atts(
 			[
 				'id'        => false,
@@ -90,7 +91,9 @@ class Snippet_Shortcode {
 		$schemas = ! empty( $atts['id'] ) ? [ $data['schema'] ] : $data['schema'];
 
 		$html = '';
+
 		foreach ( $schemas as $schema ) {
+
 			$schema = $this->replace_variables( $schema, $post );
 			$schema = $this->do_filter( 'schema/shortcode/filter_attributes', $schema, $atts );
 
@@ -125,7 +128,7 @@ class Snippet_Shortcode {
 		$this->post   = $post;
 		$this->schema = $schema;
 
-		if ( in_array( $type, [ 'article' ], true ) ) {
+		if ( in_array( $type, [ 'article', 'blogposting', 'newsarticle' ], true ) ) {
 			return;
 		}
 
@@ -148,6 +151,8 @@ class Snippet_Shortcode {
 				if ( file_exists( $file ) ) {
 					include $file;
 				}
+
+				$this->do_action( 'snippet/after_schema_content', $this );
 				?>
 
 			</div>

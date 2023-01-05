@@ -14,8 +14,6 @@ use Google\Site_Kit\Core\Modules\Module;
 use Google\Site_Kit\Core\Modules\Module_Settings;
 use Google\Site_Kit\Core\Modules\Module_With_Deactivation;
 use Google\Site_Kit\Core\Modules\Module_With_Debug_Fields;
-use Google\Site_Kit\Core\Modules\Module_With_Screen;
-use Google\Site_Kit\Core\Modules\Module_With_Screen_Trait;
 use Google\Site_Kit\Core\Modules\Module_With_Scopes;
 use Google\Site_Kit\Core\Modules\Module_With_Scopes_Trait;
 use Google\Site_Kit\Core\Modules\Module_With_Settings;
@@ -25,22 +23,30 @@ use Google\Site_Kit\Core\Modules\Module_With_Assets_Trait;
 use Google\Site_Kit\Core\Modules\Module_With_Owner;
 use Google\Site_Kit\Core\Modules\Module_With_Owner_Trait;
 use Google\Site_Kit\Core\REST_API\Exception\Invalid_Datapoint_Exception;
+use Google\Site_Kit\Core\Validation\Exception\Invalid_Report_Metrics_Exception;
+use Google\Site_Kit\Core\Validation\Exception\Invalid_Report_Dimensions_Exception;
 use Google\Site_Kit\Core\Assets\Asset;
 use Google\Site_Kit\Core\Assets\Script;
 use Google\Site_Kit\Core\Authentication\Clients\Google_Site_Kit_Client;
+use Google\Site_Kit\Core\Modules\Module_With_Service_Entity;
 use Google\Site_Kit\Core\REST_API\Data_Request;
-use Google\Site_Kit\Core\Tags\Guards\Tag_Production_Guard;
+use Google\Site_Kit\Core\Tags\Guards\Tag_Environment_Type_Guard;
 use Google\Site_Kit\Core\Tags\Guards\Tag_Verify_Guard;
 use Google\Site_Kit\Core\Util\Debug_Data;
+use Google\Site_Kit\Core\Util\Feature_Flags;
 use Google\Site_Kit\Core\Util\Method_Proxy_Trait;
 use Google\Site_Kit\Modules\AdSense\AMP_Tag;
 use Google\Site_Kit\Modules\AdSense\Settings;
 use Google\Site_Kit\Modules\AdSense\Tag_Guard;
+use Google\Site_Kit\Modules\AdSense\Auto_Ad_Guard;
 use Google\Site_Kit\Modules\AdSense\Web_Tag;
 use Google\Site_Kit_Dependencies\Google\Model as Google_Model;
 use Google\Site_Kit_Dependencies\Google\Service\Adsense as Google_Service_Adsense;
 use Google\Site_Kit_Dependencies\Google\Service\Adsense\Alert as Google_Service_Adsense_Alert;
 use Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface;
+use Exception;
+use Google\Site_Kit\Core\Util\Sort;
+use Google\Site_Kit\Core\Util\URL;
 use WP_Error;
 
 /**
@@ -51,12 +57,11 @@ use WP_Error;
  * @ignore
  */
 final class AdSense extends Module
-	implements Module_With_Screen, Module_With_Scopes, Module_With_Settings, Module_With_Assets, Module_With_Debug_Fields, Module_With_Owner, Module_With_Deactivation {
+	implements Module_With_Scopes, Module_With_Settings, Module_With_Assets, Module_With_Debug_Fields, Module_With_Owner, Module_With_Service_Entity, Module_With_Deactivation {
 	use Method_Proxy_Trait;
 	use Module_With_Assets_Trait;
 	use Module_With_Owner_Trait;
 	use Module_With_Scopes_Trait;
-	use Module_With_Screen_Trait;
 	use Module_With_Settings_Trait;
 
 	/**
@@ -72,7 +77,7 @@ final class AdSense extends Module
 	public function register() {
 		$this->register_scopes_hook();
 
-		$this->register_screen_hook();
+		add_action( 'wp_head', $this->get_method_proxy_once( 'render_platform_meta_tags' ) );
 
 		if ( $this->is_connected() ) {
 			/**
@@ -163,6 +168,10 @@ final class AdSense extends Module
 				'label' => __( 'AdSense account status', 'google-site-kit' ),
 				'value' => $settings['accountStatus'],
 			),
+			'adsense_site_status'           => array(
+				'label' => __( 'AdSense site status', 'google-site-kit' ),
+				'value' => $settings['siteStatus'],
+			),
 			'adsense_use_snippet'           => array(
 				'label' => __( 'AdSense snippet placed', 'google-site-kit' ),
 				'value' => $settings['useSnippet'] ? __( 'Yes', 'google-site-kit' ) : __( 'No', 'google-site-kit' ),
@@ -185,14 +194,17 @@ final class AdSense extends Module
 	 */
 	protected function get_datapoint_definitions() {
 		return array(
-			'GET:adunits'        => array( 'service' => 'adsense' ),
-			'GET:accounts'       => array( 'service' => 'adsense' ),
-			'GET:alerts'         => array( 'service' => 'adsense' ),
-			'GET:clients'        => array( 'service' => 'adsense' ),
-			'GET:earnings'       => array( 'service' => 'adsense' ),
-			'GET:notifications'  => array( 'service' => '' ),
-			'GET:tag-permission' => array( 'service' => '' ),
-			'GET:urlchannels'    => array( 'service' => 'adsense' ),
+			'GET:adunits'       => array( 'service' => 'adsense' ),
+			'GET:accounts'      => array( 'service' => 'adsense' ),
+			'GET:alerts'        => array( 'service' => 'adsense' ),
+			'GET:clients'       => array( 'service' => 'adsense' ),
+			'GET:report'        => array(
+				'service'   => 'adsense',
+				'shareable' => Feature_Flags::enabled( 'dashboardSharing' ),
+			),
+			'GET:notifications' => array( 'service' => '' ),
+			'GET:urlchannels'   => array( 'service' => 'adsense' ),
+			'GET:sites'         => array( 'service' => 'adsense' ),
 		);
 	}
 
@@ -249,7 +261,7 @@ final class AdSense extends Module
 				}
 				$service = $this->get_service( 'adsense' );
 				return $service->accounts_adclients->listAccountsAdclients( self::normalize_account_id( $data['accountID'] ) );
-			case 'GET:earnings':
+			case 'GET:report':
 				$start_date = $data['startDate'];
 				$end_date   = $data['endDate'];
 				if ( ! strtotime( $start_date ) || ! strtotime( $end_date ) ) {
@@ -268,11 +280,29 @@ final class AdSense extends Module
 
 				$metrics = $this->parse_string_list( $data['metrics'] );
 				if ( ! empty( $metrics ) ) {
+					try {
+						$this->validate_report_metrics( $metrics );
+					} catch ( Invalid_Report_Metrics_Exception $exception ) {
+						return new WP_Error(
+							'invalid_adsense_report_metrics',
+							$exception->getMessage()
+						);
+					}
+
 					$args['metrics'] = $metrics;
 				}
 
 				$dimensions = $this->parse_string_list( $data['dimensions'] );
 				if ( ! empty( $dimensions ) ) {
+					try {
+						$this->validate_report_dimensions( $dimensions );
+					} catch ( Invalid_Report_Dimensions_Exception $exception ) {
+						return new WP_Error(
+							'invalid_adsense_report_dimensions',
+							$exception->getMessage()
+						);
+					}
+
 					$args['dimensions'] = $dimensions;
 				}
 
@@ -323,22 +353,17 @@ final class AdSense extends Module
 						),
 					);
 				};
-			case 'GET:tag-permission':
-				return function() use ( $data ) {
-					if ( ! isset( $data['clientID'] ) ) {
-						return new WP_Error(
-							'missing_required_param',
-							/* translators: %s: Missing parameter name */
-							sprintf( __( 'Request parameter is empty: %s.', 'google-site-kit' ), 'clientID' ),
-							array( 'status' => 400 )
-						);
-					}
-
-					return array_merge(
-						array( 'clientID' => $data['clientID'] ),
-						$this->has_access_to_client( $data['clientID'] )
+			case 'GET:sites':
+				if ( ! isset( $data['accountID'] ) ) {
+					return new WP_Error(
+						'missing_required_param',
+						/* translators: %s: Missing parameter name */
+						sprintf( __( 'Request parameter is empty: %s.', 'google-site-kit' ), 'accountID' ),
+						array( 'status' => 400 )
 					);
-				};
+				}
+				$service = $this->get_service( 'adsense' );
+				return $service->accounts_sites->listAccountsSites( self::normalize_account_id( $data['accountID'] ) );
 			case 'GET:urlchannels':
 				if ( ! isset( $data['accountID'] ) ) {
 					return new WP_Error(
@@ -376,7 +401,11 @@ final class AdSense extends Module
 	protected function parse_data_response( Data_Request $data, $response ) {
 		switch ( "{$data->method}:{$data->datapoint}" ) {
 			case 'GET:accounts':
-				return array_map( array( self::class, 'filter_account_with_ids' ), $response->getAccounts() );
+				$accounts = array_filter( $response->getAccounts(), array( self::class, 'is_account_not_closed' ) );
+				return Sort::case_insensitive_list_sort(
+					array_map( array( self::class, 'filter_account_with_ids' ), $accounts ),
+					'displayName'
+				);
 			case 'GET:adunits':
 				return array_map( array( self::class, 'filter_adunit_with_ids' ), $response->getAdUnits() );
 			case 'GET:alerts':
@@ -385,11 +414,25 @@ final class AdSense extends Module
 				return array_map( array( self::class, 'filter_client_with_ids' ), $response->getAdClients() );
 			case 'GET:urlchannels':
 				return $response->getUrlChannels();
-			case 'GET:earnings':
+			case 'GET:report':
 				return $response;
+			case 'GET:sites':
+				return $response->getSites();
 		}
 
 		return parent::parse_data_response( $data, $response );
+	}
+
+	/**
+	 * Checks for the state of an Account, whether closed or not.
+	 *
+	 * @since 1.73.0
+	 *
+	 * @param Google_Model $account Account model.
+	 * @return bool Whether the account is not closed.
+	 */
+	public static function is_account_not_closed( $account ) {
+		return 'CLOSED' !== $account->getState();
 	}
 
 	/**
@@ -412,7 +455,7 @@ final class AdSense extends Module
 		if ( ! empty( $option['accountID'] ) ) {
 			$url = sprintf( 'https://www.google.com/adsense/new/%s/home', $option['accountID'] );
 		} else {
-			$url = 'https://www.google.com/adsense/signup/new';
+			$url = 'https://www.google.com/adsense/signup';
 		}
 
 		if ( $profile->has() ) {
@@ -557,7 +600,7 @@ final class AdSense extends Module
 		}
 
 		// @see https://developers.google.com/adsense/management/reporting/filtering?hl=en#OR
-		$site_hostname         = wp_parse_url( $this->context->get_reference_site_url(), PHP_URL_HOST );
+		$site_hostname         = URL::parse( $this->context->get_reference_site_url(), PHP_URL_HOST );
 		$opt_params['filters'] = join(
 			',',
 			array_map(
@@ -650,95 +693,11 @@ final class AdSense extends Module
 						'googlesitekit-modules',
 						'googlesitekit-datastore-site',
 						'googlesitekit-datastore-user',
-						'googlesitekit-google-charts',
+						'googlesitekit-components',
 					),
 				)
 			),
 		);
-	}
-
-	/**
-	 * Verifies that user has access to the given client and account.
-	 *
-	 * @since 1.9.0
-	 *
-	 * @param string $client_id  Client found in the existing tag.
-	 * @return array {
-	 *      AdSense account access data.
-	 *      @type string $account_id The AdSense account ID for the given client.
-	 *      @type bool   $permission Whether the user has access to this account and client.
-	 * }
-	 */
-	protected function has_access_to_client( $client_id ) {
-		if ( empty( $client_id ) ) {
-			return array(
-				'account_id' => '',
-				'permission' => false,
-			);
-		}
-
-		$account_has_client = function ( $account_id ) use ( $client_id ) {
-			// Try to get clients for that account.
-			$clients = $this->get_data( 'clients', array( 'accountID' => $account_id ) );
-			if ( is_wp_error( $clients ) ) {
-				// No access to the account.
-				return false;
-			}
-			// Ensure there is access to the client.
-			foreach ( $clients as $client ) {
-				if ( $client->_id === $client_id ) {
-					return true;
-				}
-			}
-
-			return false;
-		};
-
-		$parsed_account_id = $this->parse_account_id( $client_id );
-
-		if ( $account_has_client( $parsed_account_id ) ) {
-			return array(
-				'account_id' => $parsed_account_id,
-				'permission' => true,
-			);
-		}
-
-		$accounts = $this->get_data( 'accounts' );
-		if ( is_wp_error( $accounts ) ) {
-			$accounts = array();
-		}
-
-		foreach ( $accounts as $account ) {
-			if ( $account->_id === $parsed_account_id ) {
-				continue;
-			}
-			if ( $account_has_client( $account->_id ) ) {
-				return array(
-					'account_id' => $account->_id,
-					'permission' => true,
-				);
-			}
-		}
-
-		return array(
-			'account_id' => $parsed_account_id,
-			'permission' => false,
-		);
-	}
-
-	/**
-	 * Determines the AdSense account ID from a given AdSense client ID.
-	 *
-	 * @since 1.9.0
-	 *
-	 * @param string $client_id AdSense client ID.
-	 * @return string AdSense account ID, or empty string if invalid client ID.
-	 */
-	protected function parse_account_id( $client_id ) {
-		if ( ! preg_match( '/^ca-(pub-[0-9]+)$/', $client_id, $matches ) ) {
-			return '';
-		}
-		return $matches[1];
 	}
 
 	/**
@@ -765,7 +724,8 @@ final class AdSense extends Module
 		if ( ! $tag->is_tag_blocked() ) {
 			$tag->use_guard( new Tag_Verify_Guard( $this->context->input() ) );
 			$tag->use_guard( new Tag_Guard( $module_settings ) );
-			$tag->use_guard( new Tag_Production_Guard() );
+			$tag->use_guard( new Auto_Ad_Guard( $module_settings ) );
+			$tag->use_guard( new Tag_Environment_Type_Guard() );
 
 			if ( $tag->can_register() ) {
 				$tag->register();
@@ -861,4 +821,143 @@ final class AdSense extends Module
 		return 'accounts/' . $account_id . '/adclients/' . $client_id;
 	}
 
+	/**
+	 * Outputs the Adsense for Platforms meta tags.
+	 *
+	 * @since 1.43.0
+	 */
+	private function render_platform_meta_tags() {
+		printf( "\n<!-- %s -->\n", esc_html__( 'Google AdSense snippet added by Site Kit', 'google-site-kit' ) );
+		echo '<meta name="google-adsense-platform-account" content="ca-host-pub-2644536267352236">';
+		echo "\n";
+		echo '<meta name="google-adsense-platform-domain" content="sitekit.withgoogle.com">';
+		printf( "\n<!-- %s -->\n", esc_html__( 'End Google AdSense snippet added by Site Kit', 'google-site-kit' ) );
+	}
+
+	/**
+	 * Checks if the current user has access to the current configured service entity.
+	 *
+	 * @since 1.70.0
+	 *
+	 * @return boolean|WP_Error
+	 */
+	public function check_service_entity_access() {
+		$data_request = array(
+			'start_date' => gmdate( 'Y-m-d' ),
+			'end_date'   => gmdate( 'Y-m-d' ),
+			'limit'      => 1,
+		);
+
+		try {
+			$request = $this->create_adsense_earning_data_request( $data_request );
+
+			if ( is_wp_error( $request ) ) {
+				return $request;
+			}
+		} catch ( Exception $e ) {
+			if ( $e->getCode() === 403 ) {
+				return false;
+			}
+			return $this->exception_to_error( $e );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Validates the report metrics.
+	 *
+	 * @since 1.83.0
+	 *
+	 * @param string[] $metrics The metrics to validate.
+	 * @throws Invalid_Report_Metrics_Exception Thrown if the metrics are invalid.
+	 */
+	protected function validate_report_metrics( $metrics ) {
+		if ( false === $this->is_using_shared_credentials ) {
+			return;
+		}
+
+		$valid_metrics = apply_filters(
+			'googlesitekit_shareable_adsense_metrics',
+			array(
+				'ESTIMATED_EARNINGS',
+				'IMPRESSIONS',
+				'PAGE_VIEWS_CTR',
+				'PAGE_VIEWS_RPM',
+			)
+		);
+
+		$invalid_metrics = array_diff( $metrics, $valid_metrics );
+
+		if ( count( $invalid_metrics ) > 0 ) {
+			$message = count( $invalid_metrics ) > 1 ? sprintf(
+				/* translators: %s: is replaced with a comma separated list of the invalid metrics. */
+				__(
+					'Unsupported metrics requested: %s',
+					'google-site-kit'
+				),
+				join(
+					/* translators: used between list items, there is a space after the comma. */
+					__( ', ', 'google-site-kit' ),
+					$invalid_metrics
+				)
+			) : sprintf(
+				/* translators: %s: is replaced with the invalid metric. */
+				__(
+					'Unsupported metric requested: %s',
+					'google-site-kit'
+				),
+				$invalid_metrics
+			);
+
+			throw new Invalid_Report_Metrics_Exception( $message );
+		}
+	}
+
+	/**
+	 * Validates the report dimensions.
+	 *
+	 * @since 1.83.0
+	 *
+	 * @param string[] $dimensions The dimensions to validate.
+	 * @throws Invalid_Report_Dimensions_Exception Thrown if the dimensions are invalid.
+	 */
+	protected function validate_report_dimensions( $dimensions ) {
+		if ( false === $this->is_using_shared_credentials ) {
+			return;
+		}
+
+		$valid_dimensions = apply_filters(
+			'googlesitekit_shareable_adsense_dimensions',
+			array(
+				'DATE',
+			)
+		);
+
+		$invalid_dimensions = array_diff( $dimensions, $valid_dimensions );
+
+		if ( count( $invalid_dimensions ) > 0 ) {
+			$message = count( $invalid_dimensions ) > 1 ? sprintf(
+				/* translators: %s: is replaced with a comma separated list of the invalid dimensions. */
+				__(
+					'Unsupported dimensions requested: %s',
+					'google-site-kit'
+				),
+				join(
+					/* translators: used between list items, there is a space after the comma. */
+					__( ', ', 'google-site-kit' ),
+					$invalid_dimensions
+				)
+			) : sprintf(
+				/* translators: %s: is replaced with the invalid dimension. */
+				__(
+					'Unsupported dimension requested: %s',
+					'google-site-kit'
+				),
+				$invalid_dimensions
+			);
+
+			throw new Invalid_Report_Dimensions_Exception( $message );
+		}
+	}
 }

@@ -21,20 +21,32 @@ class Manager {
 
 	const OPTION_ACTIVE = 'elementor_active_kit';
 
+	const OPTION_PREVIOUS = 'elementor_previous_kit';
+
 	const E_HASH_COMMAND_OPEN_SITE_SETTINGS = 'e:run:panel/global/open';
+
+	private $should_skip_trash_kit_confirmation = false;
 
 	public function get_active_id() {
 		return get_option( self::OPTION_ACTIVE );
 	}
 
-	public function get_active_kit() {
-		$kit = Plugin::$instance->documents->get( $this->get_active_id() );
+	public function get_previous_id() {
+		return get_option( self::OPTION_PREVIOUS );
+	}
+
+	public function get_kit( $kit_id ) {
+		$kit = Plugin::$instance->documents->get( $kit_id );
 
 		if ( ! $this->is_valid_kit( $kit ) ) {
 			return $this->get_empty_kit_instance();
 		}
 
 		return $kit;
+	}
+
+	public function get_active_kit() {
+		return $this->get_kit( $this->get_active_id() );
 	}
 
 	public function get_active_kit_for_frontend() {
@@ -116,12 +128,32 @@ class Manager {
 
 		$kit = Plugin::$instance->documents->create( 'kit', $kit_data, $kit_meta_data );
 
+		if ( isset( $kit_data['settings'] ) ) {
+			$kit->save( [ 'settings' => $kit_data['settings'] ] );
+		}
+
 		return $kit->get_id();
+	}
+
+	public function create_new_kit( $kit_name = '', $settings = [], $active = true ) {
+		$kit_name = $kit_name ? $kit_name : esc_html__( 'Custom', 'elementor' );
+
+		$id = $this->create( [
+			'post_title' => $kit_name,
+			'settings' => $settings,
+		] );
+
+		if ( $active ) {
+			update_option( self::OPTION_PREVIOUS, $this->get_active_id() );
+			update_option( self::OPTION_ACTIVE, $id );
+		}
+
+		return $id;
 	}
 
 	public function create_default() {
 		return $this->create( [
-			'post_title' => __( 'Default Kit', 'elementor' ),
+			'post_title' => esc_html__( 'Default Kit', 'elementor' ),
 		] );
 	}
 
@@ -139,7 +171,7 @@ class Manager {
 		}
 
 		$id = wp_insert_post( [
-			'post_title' => __( 'Default Kit', 'elementor' ),
+			'post_title' => esc_html__( 'Default Kit', 'elementor' ),
 			'post_type' => Source_Local::CPT,
 			'post_status' => 'publish',
 			'meta_input' => [
@@ -151,6 +183,33 @@ class Manager {
 		update_option( self::OPTION_ACTIVE, $id );
 
 		return $id;
+	}
+
+	/**
+	 * @param $imported_kit_id int The id of the imported kit that should be deleted.
+	 * @param $active_kit_id int The id of the kit that should set as 'active_kit' after the deletion.
+	 * @param $previous_kit_id int The id of the kit that should set as 'previous_kit' after the deletion.
+	 * @return void
+	 */
+	public function revert( int $imported_kit_id, int $active_kit_id, int $previous_kit_id ) {
+		// If the kit that should set as active is not a valid kit then abort the revert.
+		if ( ! $this->is_kit( $active_kit_id ) ) {
+			return;
+		}
+
+		// This a hacky solution to avoid from the revert process to be interrupted by the `trash_kit_confirmation`.
+		$this->should_skip_trash_kit_confirmation = true;
+
+		$kit = $this->get_kit( $imported_kit_id );
+		$kit->force_delete();
+
+		$this->should_skip_trash_kit_confirmation = false;
+
+		update_option( self::OPTION_ACTIVE, $active_kit_id );
+
+		if ( $this->is_kit( $previous_kit_id ) ) {
+			update_option( self::OPTION_PREVIOUS, $previous_kit_id );
+		}
 	}
 
 	/**
@@ -287,7 +346,7 @@ class Manager {
 	public function register_controls() {
 		$controls_manager = Plugin::$instance->controls_manager;
 
-		$controls_manager->register_control( Repeater::CONTROL_TYPE, new Repeater() );
+		$controls_manager->register( new Repeater() );
 	}
 
 	public function is_custom_colors_enabled() {
@@ -319,6 +378,10 @@ class Manager {
 	 * @param false $is_permanently_delete
 	 */
 	private function before_delete_kit( $post_id, $is_permanently_delete = false ) {
+		if ( $this->should_skip_trash_kit_confirmation ) {
+			return;
+		}
+
 		$document = Plugin::$instance->documents->get( $post_id );
 
 		if (
@@ -335,9 +398,8 @@ class Manager {
 
 		$confirmation_content = ob_get_clean();
 
-		wp_die(
-			new \WP_Error( 'cant_delete_kit', $confirmation_content )
-		);
+		// PHPCS - the content does not contain user input value.
+		wp_die( new \WP_Error( 'cant_delete_kit', $confirmation_content ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -364,8 +426,8 @@ class Manager {
 		if ( $document ) {
 			$admin_bar_config['elementor_edit_page']['children'][] = [
 				'id' => 'elementor_site_settings',
-				'title' => __( 'Site Settings', 'elementor' ),
-				'sub_title' => __( 'Site', 'elementor' ),
+				'title' => esc_html__( 'Site Settings', 'elementor' ),
+				'sub_title' => esc_html__( 'Site', 'elementor' ),
 				'href' => $document->get_edit_url() . '#' . self::E_HASH_COMMAND_OPEN_SITE_SETTINGS,
 				'class' => 'elementor-site-settings',
 				'parent_class' => 'elementor-second-section',
@@ -381,7 +443,7 @@ class Manager {
 		add_filter( 'elementor/editor/footer', [ $this, 'render_panel_html' ] );
 		add_action( 'elementor/frontend/after_enqueue_styles', [ $this, 'frontend_before_enqueue_styles' ], 0 );
 		add_action( 'elementor/preview/enqueue_styles', [ $this, 'preview_enqueue_styles' ], 0 );
-		add_action( 'elementor/controls/controls_registered', [ $this, 'register_controls' ] );
+		add_action( 'elementor/controls/register', [ $this, 'register_controls' ] );
 
 		add_action( 'wp_trash_post', function ( $post_id ) {
 			$this->before_delete_kit( $post_id );

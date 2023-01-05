@@ -89,8 +89,8 @@ class Posts extends Objects {
 		);
 
 		return apply_filters( 'rank_math/analytics/post_data', $data, $request );
-
 	}
+
 	/**
 	 * Get posts by objects.
 	 *
@@ -102,6 +102,13 @@ class Posts extends Objects {
 		$pre = apply_filters( 'rank_math/analytics/get_posts_rows_by_objects', false, $request );
 		if ( false !== $pre ) {
 			return $pre;
+		}
+
+		$cache_group = 'rank_math_posts_rows_by_objects';
+		$cache_key   = $this->generate_hash( $request );
+		$data        = $this->get_cache( $cache_key, $cache_group );
+		if ( false !== $data ) {
+			return rest_ensure_response( $data );
 		}
 
 		// Pagination.
@@ -135,7 +142,7 @@ class Posts extends Objects {
 			$new_rows[ $page ] = $object;
 		}
 
-		$count    = count( $new_rows );
+		$count = count( $new_rows );
 
 		if ( $offset + 25 <= $count ) {
 			$new_rows = array_slice( $new_rows, $offset, 25 );
@@ -144,10 +151,17 @@ class Posts extends Objects {
 			$rest     = $count - $offset;
 			$new_rows = array_slice( $new_rows, $offset, $rest );
 		}
+		if ( empty( $new_rows ) ) {
+			$new_rows['response'] = 'No Data';
+		}
 
-		return [
+		$output = [
 			'rows'      => $new_rows,
 			'rowsFound' => $objects['rowsFound'],
 		];
+
+		$this->set_cache( $cache_key, $output, $cache_group, DAY_IN_SECONDS );
+
+		return rest_ensure_response( $output );
 	}
 }

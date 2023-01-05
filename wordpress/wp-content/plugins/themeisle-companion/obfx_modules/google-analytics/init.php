@@ -93,7 +93,6 @@ class Google_Analytics_OBFX_Module extends Orbit_Fox_Module_Abstract {
 	 */
 	public function hooks() {
 		$this->loader->add_action( 'rest_api_init', $this, 'register_endpoints' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_analytics_scripts' );
 		$this->loader->add_action( 'wp_head', $this, 'output_analytics_code', 0 );
 	}
 
@@ -129,7 +128,7 @@ class Google_Analytics_OBFX_Module extends Orbit_Fox_Module_Abstract {
 
 		$obfx_token = get_option( 'obfx_token', '' );
 
-		if ( ( $_POST['deactivate'] === 'unregister' ) ) { //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		if ( ( $_POST['deactivate'] === 'unregister' ) ) { //phpcs:ignore WordPress.Security
 			return $this->unregister_website( $obfx_token );
 		}
 		if ( empty( $obfx_token ) ) {
@@ -179,31 +178,6 @@ class Google_Analytics_OBFX_Module extends Orbit_Fox_Module_Abstract {
 	 */
 	public function public_enqueue() {
 		return array();
-	}
-
-	/**
-	 * Enqueue JavaScript that requires localization.
-	 */
-	public function enqueue_analytics_scripts() {
-		$current_screen = get_current_screen();
-		if ( ! isset( $current_screen->id ) ) {
-			return array();
-		}
-		if ( $current_screen->id != 'toplevel_page_obfx_companion' ) {
-			return array();
-		}
-
-		$script_handle = $this->slug . '-script';
-		wp_register_script( $script_handle, plugin_dir_url( $this->get_dir() ) . $this->slug . '/js/script.js', array( 'jquery' ), $this->version, true );
-		wp_localize_script(
-			$script_handle,
-			'obfxAnalyticsObj',
-			array(
-				'url'   => $this->get_endpoint_url( '/obfx-analytics' ),
-				'nonce' => wp_create_nonce( 'wp_rest' ),
-			)
-		);
-		wp_enqueue_script( $script_handle );
 	}
 
 	/**
@@ -281,15 +255,17 @@ class Google_Analytics_OBFX_Module extends Orbit_Fox_Module_Abstract {
 				'type'    => 'select',
 				'options' => $options,
 				'default' => '-',
+				'title'   => 'Tracking code',
 			),
 			array(
-				'id'         => 'analytics_accounts_unregister',
-				'name'       => 'analytics_accounts_unregister',
-				'type'       => 'link',
-				'link-class' => 'btn btn-sm',
-				'link-id'    => 'unregister-analytics',
-				'text'       => '<i class="dashicons dashicons-no"></i>' . __( 'Unregister Site', 'themeisle-companion' ),
-				'url'        => '',
+				'id'            => 'analytics_accounts_unregister',
+				'name'          => 'analytics_accounts_unregister',
+				'type'          => 'link',
+				'link-class'    => 'btn btn-sm',
+				'link-id'       => 'unregister-analytics',
+				'text'          => '<i class="dashicons dashicons-no"></i>' . __( 'Unregister Site', 'themeisle-companion' ),
+				'url'           => '',
+				'unregisterURL' => $this->get_endpoint_url( '/obfx-analytics' ),
 			),
 		);
 	}

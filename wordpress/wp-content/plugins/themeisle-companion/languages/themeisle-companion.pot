@@ -1,15 +1,15 @@
-# Copyright (C) 2021 Themeisle
+# Copyright (C) 2022 Themeisle
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: Orbit Fox Companion 2.10.7\n"
+"Project-Id-Version: Orbit Fox Companion 2.10.22\n"
 "Report-Msgid-Bugs-To: "
 "https://github.com/Codeinwp/themeisle-companion/issues\n"
-"POT-Creation-Date: 2021-08-02 13:00:35+00:00\n"
+"POT-Creation-Date: 2022-11-30 21:10:58+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2021-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2022-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Themeisle Translate Team <friends@themeisle.com>\n"
 "Language-Team: Themeisle Translate <friends@themeisle.com>\n"
 "Language: en\n"
@@ -55,110 +55,62 @@ msgstr ""
 msgid "50"
 msgstr ""
 
-#: core/app/class-orbit-fox-admin.php:117
-msgid "Activating "
+#: core/app/class-orbit-fox-admin.php:104
+msgid "Bad request!"
 msgstr ""
 
-#: core/app/class-orbit-fox-admin.php:118
-msgid "Installing ... "
+#: core/app/class-orbit-fox-admin.php:113
+msgid "Module not found!"
 msgstr ""
 
-#: core/app/class-orbit-fox-admin.php:138
-#: core/app/class-orbit-fox-admin.php:139 core/app/views/modules-page.php:45
+#: core/app/class-orbit-fox-admin.php:134
+msgid "Data unchanged!"
+msgstr ""
+
+#: core/app/class-orbit-fox-admin.php:253
+#: core/app/class-orbit-fox-admin.php:254 core/app/views/modules-page.php:45
 msgid "Orbit Fox"
 msgstr ""
 
-#: core/app/class-orbit-fox-admin.php:149
+#: core/app/class-orbit-fox-admin.php:264
 msgid "Orbit Fox General Options"
 msgstr ""
 
-#: core/app/class-orbit-fox-admin.php:149
+#: core/app/class-orbit-fox-admin.php:264
 msgid "General Settings"
 msgstr ""
 
-#: core/app/class-orbit-fox-admin.php:178
-msgid "opens in a new tab"
-msgstr ""
-
-#: core/app/class-orbit-fox-admin.php:188
-#. translators: %1$s first alternative url, %2$s second alternative url, %3$s
-#. third alternative url.
-msgid ""
-"We have retired the free uptime monitoring module in OrbitFox since we "
-"haven't been able to dedicate more time to its development and direction. "
-"Instead, we recommend using services like %1$s, %2$s, or %3$s, which "
-"provide more options/integrations and faster checks."
-msgstr ""
-
-#: core/app/class-orbit-fox-admin.php:219
+#: core/app/class-orbit-fox-admin.php:295
 #. translators: Go to url.
 msgid ""
 "You have activated Orbit Fox plugin! Go to the %s to get started with the "
 "extra features."
 msgstr ""
 
-#: core/app/class-orbit-fox-admin.php:219
+#: core/app/class-orbit-fox-admin.php:295
 msgid "Dashboard Page"
 msgstr ""
 
-#: core/app/class-orbit-fox-admin.php:271
-#: core/app/class-orbit-fox-admin.php:379
-msgid "Could not process the request!"
-msgstr ""
-
-#: core/app/class-orbit-fox-admin.php:296
+#: core/app/class-orbit-fox-admin.php:351
 msgid "No module found! No data was updated."
 msgstr ""
 
-#: core/app/class-orbit-fox-admin.php:302
+#: core/app/class-orbit-fox-admin.php:357
 msgid "Something went wrong, data might not be saved!"
 msgstr ""
 
-#: core/app/class-orbit-fox-admin.php:306
+#: core/app/class-orbit-fox-admin.php:361
 msgid "Options updated, successfully!"
 msgstr ""
 
-#: core/app/class-orbit-fox-admin.php:404
-msgid "No module found!"
+#: core/app/class-orbit-fox-admin.php:386
+msgid ""
+"Turn WordPress into a landing page powerhouse with Landing Kit. Map domains "
+"to pages or any other published resource."
 msgstr ""
 
-#: core/app/class-orbit-fox-admin.php:408
-msgid "Something went wrong, can not change module status!"
-msgstr ""
-
-#: core/app/class-orbit-fox-admin.php:413
-msgid "Module status changed!"
-msgstr ""
-
-#: core/app/class-orbit-fox-admin.php:531
-msgid "No modules found."
-msgstr ""
-
-#: core/app/class-orbit-fox-admin.php:532
-msgid "Please contact support for more help."
-msgstr ""
-
-#: core/app/class-orbit-fox-admin.php:539
-msgid "No active modules."
-msgstr ""
-
-#: core/app/class-orbit-fox-admin.php:540
-msgid "Activate a module using the toggles above."
-msgstr ""
-
-#: core/app/class-orbit-fox-plugin-install.php:160
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:457
-msgid "Install and activate"
-msgstr ""
-
-#: core/app/class-orbit-fox-plugin-install.php:164
-#: core/app/views/partials/module-tile-tpl.php:67
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:468
-msgid "Activate"
-msgstr ""
-
-#: core/app/class-orbit-fox-plugin-install.php:179
-msgid "Deactivate"
+#: core/app/class-orbit-fox-admin.php:398
+msgid "Conversion-focused features for your online store."
 msgstr ""
 
 #: core/app/helpers/class-orbit-fox-render-helper.php:123
@@ -171,6 +123,10 @@ msgstr ""
 
 #: core/app/views/modules-page.php:72
 msgid "Recommended Plugins"
+msgstr ""
+
+#: core/app/views/modules-page.php:92
+msgid "Activated Modules Options"
 msgstr ""
 
 #: core/app/views/modules-page.php:94
@@ -207,6 +163,10 @@ msgstr ""
 
 #: core/app/views/partials/module-tile-tpl.php:42
 msgid "Got it!"
+msgstr ""
+
+#: core/app/views/partials/module-tile-tpl.php:67
+msgid "Activate"
 msgstr ""
 
 #: core/app/views/partials/module-tile-tpl.php:72
@@ -285,7 +245,7 @@ msgstr ""
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/contact_admin.php:147
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/elementor_widget_base.php:361
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/elementor_widget_base.php:836
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:184
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:186
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/registration_admin.php:121
 msgid "Left"
 msgstr ""
@@ -316,7 +276,7 @@ msgstr ""
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/contact_admin.php:155
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/elementor_widget_base.php:369
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/elementor_widget_base.php:844
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:192
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:194
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/registration_admin.php:129
 msgid "Right"
 msgstr ""
@@ -684,7 +644,7 @@ msgstr ""
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/contact_admin.php:151
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/elementor_widget_base.php:365
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/elementor_widget_base.php:840
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:188
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:190
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/registration_admin.php:125
 msgid "Center"
 msgstr ""
@@ -991,7 +951,6 @@ msgstr ""
 #: vendor/codeinwp/elementor-extra-widgets/widgets/elementor/pricing-table.php:181
 #: vendor/codeinwp/elementor-extra-widgets/widgets/elementor/pricing-table.php:182
 #: vendor/codeinwp/elementor-extra-widgets/widgets/elementor/pricing-table.php:562
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-review-block.php:74
 msgid "Price"
 msgstr ""
 
@@ -1303,7 +1262,7 @@ msgstr ""
 #: vendor/codeinwp/elementor-extra-widgets/widgets/elementor/pricing-table.php:362
 #: vendor/codeinwp/elementor-extra-widgets/widgets/elementor/services.php:106
 #: vendor/codeinwp/elementor-extra-widgets/widgets/elementor/services.php:139
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:130
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:132
 msgid "Icon"
 msgstr ""
 
@@ -1312,17 +1271,6 @@ msgstr ""
 #: vendor/codeinwp/elementor-extra-widgets/widgets/elementor/services.php:43
 #: vendor/codeinwp/elementor-extra-widgets/widgets/elementor/services.php:92
 #: vendor/codeinwp/elementor-extra-widgets/widgets/elementor/services.php:189
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:171
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:180
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:189
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:198
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:207
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:216
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:225
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:234
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:243
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:252
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:261
 msgid "Services"
 msgstr ""
 
@@ -1374,7 +1322,7 @@ msgstr ""
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/beaver_widget_base.php:617
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/contact_admin.php:141
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/elementor_widget_base.php:830
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:178
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:180
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/registration_admin.php:115
 msgid "Alignment"
 msgstr ""
@@ -1402,9 +1350,9 @@ msgstr ""
 #: obfx_modules/companion-legacy/inc/hestia/inc/customizer.php:38
 #: obfx_modules/companion-legacy/inc/hestia/inc/customizer.php:51
 #: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-features-section.php:29
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-features-section.php:200
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-features-section.php:207
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-features-section.php:214
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-features-section.php:225
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-features-section.php:232
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-features-section.php:239
 #: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:32
 #: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-testimonials-section.php:29
 msgid ""
@@ -1511,10 +1459,6 @@ msgstr ""
 
 #: obfx_modules/companion-legacy/inc/hestia/inc/features/feature-team-section.php:26
 #: obfx_modules/companion-legacy/inc/hestia/inc/features/feature-team-section.php:37
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:405
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:414
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:423
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:432
 msgid "Team"
 msgstr ""
 
@@ -1532,12 +1476,6 @@ msgstr ""
 
 #: obfx_modules/companion-legacy/inc/hestia/inc/features/feature-testimonials-section.php:26
 #: obfx_modules/companion-legacy/inc/hestia/inc/features/feature-testimonials-section.php:37
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:441
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:450
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:459
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:468
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:477
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:486
 msgid "Testimonials"
 msgstr ""
 
@@ -1553,113 +1491,113 @@ msgstr ""
 msgid "Testimonial"
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-features-section.php:199
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-features-section.php:224
 msgid "Responsive"
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-features-section.php:206
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-features-section.php:231
 msgid "Quality"
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-features-section.php:213
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-features-section.php:238
 msgid "Support"
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:263
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:268
 msgid "Desmond Purpleson"
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:264
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:269
 msgid "CEO"
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:265
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:270
 msgid ""
 "Locavore pinterest chambray affogato art party, forage coloring book "
 "typewriter. Bitters cold selfies, retro celiac sartorial mustache."
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:294
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:299
 msgid "Parsley Pepperspray"
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:295
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:300
 msgid "Marketing Specialist"
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:296
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:301
 msgid ""
 "Craft beer salvia celiac mlkshk. Pinterest celiac tumblr, portland salvia "
 "skateboard cliche thundercats. Tattooed chia austin hell."
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:325
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:330
 msgid "Desmond Eagle"
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:326
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:331
 msgid "Graphic Designer"
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:327
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:332
 msgid ""
 "Pok pok direct trade godard street art, poutine fam typewriter food truck "
 "narwhal kombucha wolf cardigan butcher whatever pickled you."
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:356
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:361
 msgid "Ruby Von Rails"
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:357
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:362
 msgid "Lead Developer"
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:358
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-team-section.php:363
 msgid ""
 "Small batch vexillologist 90's blue bottle stumptown bespoke. Pok pok tilde "
 "fixie chartreuse, VHS gluten-free selfies wolf hot."
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-testimonials-section.php:226
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-testimonials-section.php:231
 msgid "Inverness McKenzie"
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-testimonials-section.php:227
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-testimonials-section.php:232
 msgid "Business Owner"
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-testimonials-section.php:228
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-testimonials-section.php:233
 msgid ""
 "\"We have no regrets! After using your product my business skyrocketed! I "
 "made back the purchase price in just 48 hours! I couldn't have asked for "
 "more than this.\""
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-testimonials-section.php:233
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-testimonials-section.php:238
 msgid "Hanson Deck"
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-testimonials-section.php:234
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-testimonials-section.php:239
 msgid "Independent Artist"
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-testimonials-section.php:235
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-testimonials-section.php:240
 msgid ""
 "\"Your company is truly upstanding and is behind its product 100 percent. "
 "Hestia is worth much more than I paid. I like Hestia more each day because "
 "it makes easier.\""
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-testimonials-section.php:240
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-testimonials-section.php:245
 msgid "Natalya Undergrowth"
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-testimonials-section.php:241
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-testimonials-section.php:246
 msgid "Freelancer"
 msgstr ""
 
-#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-testimonials-section.php:242
+#: obfx_modules/companion-legacy/inc/hestia/inc/sections/hestia-testimonials-section.php:247
 msgid ""
 "\"Thank you for making it painless, pleasant and most of all hassle free! I "
 "am so pleased with this product. Dude, your stuff is great! I will refer "
@@ -1821,7 +1759,6 @@ msgstr ""
 
 #: obfx_modules/companion-legacy/inc/shop-isle/customizer.php:420
 #: obfx_modules/companion-legacy/inc/shop-isle/customizer.php:734
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-review-block.php:82
 msgid "Easy to use"
 msgstr ""
 
@@ -1951,7 +1888,7 @@ msgid "Author details"
 msgstr ""
 
 #: obfx_modules/companion-legacy/init.php:67
-msgid "%s enhancements "
+msgid "%s enhancements"
 msgstr ""
 
 #: obfx_modules/companion-legacy/init.php:68
@@ -2095,6 +2032,21 @@ msgstr ""
 msgid "Upload custom fonts and use them anywhere on your site."
 msgstr ""
 
+#: obfx_modules/elementor-widgets/init.php:40
+#. translators: %1$s is the features, %2$s is the plugin name
+msgid ""
+"You can get access to %1$s, including Instagram integration, display "
+"conditions and more in %2$s."
+msgstr ""
+
+#: obfx_modules/elementor-widgets/init.php:43
+msgid "10+ more Elementor and Gutenberg widgets"
+msgstr ""
+
+#: obfx_modules/elementor-widgets/init.php:59
+msgid "Learn more"
+msgstr ""
+
 #: obfx_modules/google-analytics/init.php:31
 msgid "Analytics Integration"
 msgstr ""
@@ -2103,51 +2055,16 @@ msgstr ""
 msgid "A module to integrate Google Analytics into your site easily."
 msgstr ""
 
-#: obfx_modules/google-analytics/init.php:259
+#: obfx_modules/google-analytics/init.php:233
 msgid "Authenticate with Google"
 msgstr ""
 
-#: obfx_modules/google-analytics/init.php:264
+#: obfx_modules/google-analytics/init.php:238
 msgid "Select a tracking code"
 msgstr ""
 
-#: obfx_modules/google-analytics/init.php:291
+#: obfx_modules/google-analytics/init.php:266
 msgid "Unregister Site"
-msgstr ""
-
-#: obfx_modules/gutenberg-blocks/init.php:25
-msgid "Gutenberg Blocks"
-msgstr ""
-
-#: obfx_modules/gutenberg-blocks/init.php:30
-#. translators: %1$s Start anchor tag, %2$s End anchor tag
-msgid "A set of awesome Gutenberg Blocks provided by %1$sOtter's%2$s plugin!"
-msgstr ""
-
-#: obfx_modules/gutenberg-blocks/init.php:35
-#. translators: %s Otter plugin link
-msgid ""
-"This module will soon be removed form Orbit Fox. To keep the content you "
-"created with this module, please install %s"
-msgstr ""
-
-#: obfx_modules/gutenberg-blocks/init.php:145
-msgid "Blocks by OrbitFox and Otter"
-msgstr ""
-
-#: obfx_modules/gutenberg-blocks/init.php:176
-msgid "It seems you are using the Gutenberg Blocks module from Orbit Fox."
-msgstr ""
-
-#: obfx_modules/gutenberg-blocks/init.php:181
-#. translators: %s Otter plugin link
-msgid ""
-"This module will soon be removed. In order to keep the content you created "
-"with this module, please install %s"
-msgstr ""
-
-#: obfx_modules/gutenberg-blocks/init.php:184
-msgid "Dismiss this notice."
 msgstr ""
 
 #: obfx_modules/header-footer-scripts/init.php:30
@@ -2348,11 +2265,11 @@ msgstr ""
 msgid "Accept"
 msgstr ""
 
-#: obfx_modules/policy-notice/init.php:359
+#: obfx_modules/policy-notice/init.php:361
 msgid "Not Set"
 msgstr ""
 
-#: obfx_modules/policy-notice/init.php:362
+#: obfx_modules/policy-notice/init.php:364
 msgid "Default Core Policy"
 msgstr ""
 
@@ -2385,36 +2302,55 @@ msgid ""
 "templates that you can import straight into your website."
 msgstr ""
 
-#: obfx_modules/template-directory/init.php:101
-#: vendor/codeinwp/templates-directory/views/template-directory-page-tpl.php:20
+#: obfx_modules/template-directory/init.php:73
+#: obfx_modules/template-directory/init.php:120
 msgid "Orbit Fox Template Directory"
 msgstr ""
 
-#: vendor/codeinwp/elementor-extra-widgets/class-elementor-extra-widgets.php:57
+#: obfx_modules/template-directory/init.php:74
+msgid "Template Directory"
+msgstr ""
+
+#: obfx_modules/template-directory/init.php:216
+msgid ""
+"In order to import any starter sites, Neve theme & Templates Cloud plugin "
+"need to be installed and activated. Click the button below to install and "
+"activate Neve."
+msgstr ""
+
+#: obfx_modules/template-directory/init.php:217
+msgid ""
+"In order to import any starter sites, Neve theme & Templates Cloud plugin "
+"need to be installed and activated. Click the button below to activate Neve."
+msgstr ""
+
+#: obfx_modules/template-directory/init.php:218
+msgid ""
+"In order to import any starter sites, Neve theme & Templates Cloud plugin "
+"need to be installed and activated. Click the button below to install and "
+"activate Templates Cloud."
+msgstr ""
+
+#: obfx_modules/template-directory/init.php:219
+msgid ""
+"In order to import any starter sites, Neve theme & Templates Cloud plugin "
+"need to be installed and activated. Click the button below to activate "
+"Templates Cloud."
+msgstr ""
+
+#: vendor/codeinwp/elementor-extra-widgets/class-elementor-extra-widgets.php:65
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/elementor_widget_manager.php:45
 msgid "Orbit Fox Addons"
 msgstr ""
 
-#: vendor/codeinwp/elementor-extra-widgets/class-elementor-extra-widgets.php:263
-#: vendor/codeinwp/elementor-extra-widgets/class-elementor-extra-widgets.php:275
+#: vendor/codeinwp/elementor-extra-widgets/class-elementor-extra-widgets.php:272
+#: vendor/codeinwp/elementor-extra-widgets/class-elementor-extra-widgets.php:284
 #: vendor/codeinwp/full-width-page-templates/builders/class-elementor-full-width-templates.php:107
 #: vendor/codeinwp/full-width-page-templates/builders/class-elementor-full-width-templates.php:119
 #: vendor/codeinwp/full-width-page-templates/builders/class-none-full-width-templates.php:79
 #: vendor/codeinwp/full-width-page-templates/builders/class-none-full-width-templates.php:91
 #: vendor/codeinwp/full-width-page-templates/class-full-width-templates.php:197
 #: vendor/codeinwp/full-width-page-templates/class-full-width-templates.php:209
-#: vendor/codeinwp/gutenberg-blocks/inc/css/class-block-frontend.php:472
-#: vendor/codeinwp/gutenberg-blocks/inc/css/class-block-frontend.php:484
-#: vendor/codeinwp/gutenberg-blocks/inc/css/class-css-handler.php:346
-#: vendor/codeinwp/gutenberg-blocks/inc/css/class-css-handler.php:358
-#: vendor/codeinwp/gutenberg-blocks/inc/plugins/class-options-settings.php:144
-#: vendor/codeinwp/gutenberg-blocks/inc/plugins/class-options-settings.php:156
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-plugin-card-server.php:243
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-plugin-card-server.php:255
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:735
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:747
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:602
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:614
 #: vendor/codeinwp/themeisle-content-forms/form_manager.php:198
 #: vendor/codeinwp/themeisle-content-forms/form_manager.php:210
 msgid "Cheatin&#8217; huh?"
@@ -2618,12 +2554,10 @@ msgid "Button border radius"
 msgstr ""
 
 #: vendor/codeinwp/elementor-extra-widgets/widgets/elementor/posts-grid.php:1572
-#: vendor/codeinwp/templates-directory/views/template-directory-page-tpl.php:62
 msgid "Previous"
 msgstr ""
 
 #: vendor/codeinwp/elementor-extra-widgets/widgets/elementor/posts-grid.php:1573
-#: vendor/codeinwp/templates-directory/views/template-directory-page-tpl.php:64
 msgid "Next"
 msgstr ""
 
@@ -2649,14 +2583,6 @@ msgstr ""
 
 #: vendor/codeinwp/elementor-extra-widgets/widgets/elementor/posts-grid.php:1702
 msgid "% comments"
-msgstr ""
-
-#: vendor/codeinwp/elementor-extra-widgets/widgets/elementor/premium-placeholder.php:77
-msgid "This widget is part of the pro version of Sizzify."
-msgstr ""
-
-#: vendor/codeinwp/elementor-extra-widgets/widgets/elementor/premium-placeholder.php:79
-msgid "Upgrade Here!"
 msgstr ""
 
 #: vendor/codeinwp/elementor-extra-widgets/widgets/elementor/pricing-table.php:35
@@ -2734,12 +2660,11 @@ msgstr ""
 
 #: vendor/codeinwp/elementor-extra-widgets/widgets/elementor/pricing-table.php:387
 #: vendor/codeinwp/elementor-extra-widgets/widgets/elementor/pricing-table.php:780
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:159
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:161
 msgid "Icon Spacing"
 msgstr ""
 
 #: vendor/codeinwp/elementor-extra-widgets/widgets/elementor/pricing-table.php:412
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:153
 msgid "Header"
 msgstr ""
 
@@ -2805,7 +2730,7 @@ msgstr ""
 
 #: vendor/codeinwp/elementor-extra-widgets/widgets/elementor/pricing-table.php:760
 #: vendor/codeinwp/elementor-extra-widgets/widgets/elementor/pricing-table.php:857
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:139
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:141
 msgid "Icon Size"
 msgstr ""
 
@@ -3005,532 +2930,6 @@ msgstr ""
 msgid "Page Builder - Full Width"
 msgstr ""
 
-#: vendor/codeinwp/gutenberg-blocks/inc/class-main.php:100
-msgid "A set of awesome Gutenberg Blocks!"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/class-main.php:732
-#: vendor/codeinwp/gutenberg-blocks/inc/class-main.php:749
-msgid "Skill"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/css/class-css-handler.php:55
-msgid "ID of the Post."
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/css/class-css-handler.php:79
-msgid "ID of the Reusable Block."
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/css/class-css-handler.php:110
-#: vendor/codeinwp/gutenberg-blocks/inc/css/class-css-handler.php:181
-msgid "CSS updated."
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/plugins/class-options-settings.php:42
-msgid "Google Map API key for the Google Maps Gutenberg Block."
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/plugins/class-options-settings.php:54
-msgid "Make Section block your default block for Pages?"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/plugins/class-options-settings.php:66
-msgid "Global defaults for Gutenberg Blocks."
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/plugins/class-options-settings.php:78
-msgid "Allow JSON Upload to Media Library."
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-plugin-card-block.php:101
-msgid "Plugin Stats"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-plugin-card-block.php:105
-msgid "active installs"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-plugin-card-block.php:109
-msgid "version"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-plugin-card-block.php:113
-msgid "tested up to"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-plugin-card-block.php:119
-msgid "Download"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-plugin-card-block.php:141
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-plugin-card-server.php:108
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-plugin-card-server.php:169
-#: vendor/codeinwp/themeisle-content-forms/includes/rest/server.php:106
-msgid "Something went wrong"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-posts-grid-block.php:224
-msgid "on"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-posts-grid-block.php:233
-msgid "by"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-review-block.php:62
-msgid "Stability"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-review-block.php:66
-msgid "Ease of Use"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-review-block.php:70
-msgid "Look & Feel"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-review-block.php:83
-msgid "Good price"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-review-block.php:84
-msgid "Sturdy build and ergonomics"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-review-block.php:90
-msgid "Incompatible with old versions"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-review-block.php:91
-msgid "Hard to assemble"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-review-block.php:92
-msgid "Bad color combination"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-review-block.php:99
-msgid "Buy on Amazon"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-review-block.php:104
-msgid "Buy on eBay"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-review-block.php:150
-#. translators: Overall rating from 0 to 10.
-msgid "%s out of 10"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-review-block.php:201
-msgid "Pros"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-review-block.php:214
-msgid "Cons"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-review-block.php:228
-msgid "Buy this product"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-sharing-icons-block.php:75
-msgid "Facebook"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-sharing-icons-block.php:81
-msgid "Twitter"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-sharing-icons-block.php:87
-msgid "Linkedin"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-sharing-icons-block.php:93
-msgid "Pinterest"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-sharing-icons-block.php:99
-msgid "Tumblr"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/render/class-sharing-icons-block.php:105
-msgid "Reddit"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-plugin-card-server.php:60
-msgid "Search query."
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-plugin-card-server.php:81
-msgid "Slug of the plugin."
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:78
-msgid "URL of the JSON file."
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:83
-msgid "Load for Block Preview."
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:108
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:126
-msgid "Header with Features"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:110
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:119
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:128
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:137
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:146
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:155
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:164
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:173
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:182
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:191
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:200
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:209
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:218
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:227
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:236
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:245
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:254
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:263
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:272
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:281
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:290
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:299
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:308
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:317
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:326
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:335
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:344
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:353
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:362
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:371
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:380
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:389
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:398
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:407
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:416
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:425
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:434
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:443
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:452
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:461
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:470
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:479
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:488
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:497
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:506
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:515
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:524
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:533
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:542
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:551
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:560
-msgid "Otter"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:117
-msgid "Header with Solid Background"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:135
-msgid "Header with Image Background"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:144
-msgid "Header with Image"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:162
-msgid "Blogger Header"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:270
-msgid "Content with Left Image"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:279
-msgid "Content with Right Image"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:288
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:351
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:360
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:369
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:378
-msgid "Content with Images"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:297
-msgid "About with Video"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:306
-msgid "FAQ"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:315
-msgid "Content Two Columns"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:324
-msgid "Content with Sharing Icons"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:333
-msgid "Content with Image"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:342
-msgid "Video with Features"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:387
-msgid "Content with Features"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:396
-msgid "Blogger About"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:495
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:504
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:513
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:522
-msgid "Call to Action"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:531
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:540
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:549
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:558
-msgid "Footer"
-msgstr ""
-
-#: vendor/codeinwp/gutenberg-blocks/inc/server/class-template-library-server.php:600
-msgid "File doesn't exist"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:176
-msgid "A new Orbit Fox Template"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:178
-msgid "This is an awesome Orbit Fox Template."
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:181
-msgid "Elementor Page Builder"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:186
-msgid "About Our Business"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:187
-msgid ""
-"Use this layout to present your business in a fancy way. Add an interactive "
-"header, shwocase your services via progress bars, introduce your team "
-"members, and locate your headquarters on Google Maps. Last but not least, "
-"beautify the design by adding catchy images."
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:193
-msgid "Contact Us"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:194
-msgid ""
-"A clean and simple template for your Contact page, where we integrated our "
-"Pirate Forms plugin. It will let your customers send you a message using an "
-"intuitive form. A Google map, together with a few other details about your "
-"business, completes the section."
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:200
-msgid "Pricing"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:201
-msgid ""
-"If you plan to sell your products online, this layout offers you elegant "
-"pricing tables so you can differentiate the features and services for your "
-"clients. Also, for a better clarification, the template provides a FAQ area "
-"where you can answer people's questions."
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:207
-msgid "Material Homepage"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:208
-msgid ""
-"This layout could be your main website homepage (or you can use it as an "
-"alternative homepage, if you wish). It was built on material design and "
-"comes with call to action, catchy icons, testimonials, blog posts, pricing "
-"plans, and other sections that you can add yourself by customizing it."
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:214
-msgid "Ether - Landing Page"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:215
-msgid ""
-"An elegant and modern landing page for e-commerce, coming with a clean "
-"interface, beautiful typography, photo galleries, and call to action. If "
-"you have an online shop and want to promote a certain product, use this "
-"layout to tell people why they should buy it."
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:221
-msgid "Jason - Landing Page"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:222
-msgid ""
-"A classy template for freelancers, where you can put your skills and "
-"knowldge in the spotlight for potential clients. Talk about yourself, your "
-"projects, awards, and let people contact you easily. The template is "
-"designed to feature one-page scrolling."
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:228
-msgid "Pulse - Landing Page"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:229
-msgid ""
-"A good-looking landing page for products and apps, built to mark the "
-"features and services that they offer. The layout provides customer "
-"reviews, call to action, beautiful pricing tables, an About section, and a "
-"creative design. If you want to promote and sell your brand product, this "
-"template might help."
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:235
-msgid "Ascend - Landing Page"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:236
-msgid ""
-"A resume-like template, built for outdoor enthusiasts and nature lovers. "
-"Its design and layout make it flexible for any other purpose too, so do not "
-"hesitate to showcase any kind of skills and activities, even "
-"business-oriented."
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:242
-msgid "Path - Landing Page"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:243
-msgid ""
-"If you are a business consultant - agency or working on your own - have a "
-"look at this template! It comes with a clean design, call to action, "
-"statistics, and sections that put your services first."
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:249
-msgid "Mocha - Landing Page"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:250
-msgid ""
-"An elegant and modern template for cafes and pubs, where you can display "
-"your menu in a mouth-watering way. Call to action, blog posts, attractive "
-"images, tabbed menus, and a catchy design will help you convince more "
-"people to stop by."
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:256
-msgid "Rik - Landing Page"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:257
-msgid ""
-"This is a clean Landing page, ready to be used for an app presentation. It "
-"features beautiful gradients and great layouts for showcasing your product."
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:263
-msgid "Zelle Lite - One Page Template"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:264
-msgid ""
-"A friendly one-page multipurpose page, with a full-width image in the "
-"background. It comes with an elegant and modern design, which could fit "
-"very well any kind of business. Zelle Lite has an interactive and colorful "
-"interface, with classy parallax effect and lively animations. You can use "
-"it for your online shop as well."
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:270
-msgid "Notify - Landing Page"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:271
-msgid ""
-"A beautiful landing page to showcase your new application. It has a "
-"features section to present your app, a subscribe section where you can "
-"also add a video showcasing your new app and a testimonials section so you "
-"can present the feedback from your beta testers."
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/class-page-templates-directory.php:320
-msgid "Template Directory"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/views/template-directory-page-tpl.php:21
-msgid "Sync Templates"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/views/template-directory-page-tpl.php:33
-msgid "More Details"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/views/template-directory-page-tpl.php:44
-msgid "Preview"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/views/template-directory-page-tpl.php:59
-msgid "Close"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/views/template-directory-page-tpl.php:66
-msgid "Import"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/views/template-directory-page-tpl.php:68
-msgid "See Pro Version"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/views/template-directory-page-tpl.php:101
-msgid "Required Plugins"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/views/template-directory-page-tpl.php:132
-msgid "Collapse"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/views/template-directory-page-tpl.php:137
-msgid "Enter desktop preview mode"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/views/template-directory-page-tpl.php:140
-msgid "Enter tablet preview mode"
-msgstr ""
-
-#: vendor/codeinwp/templates-directory/views/template-directory-page-tpl.php:143
-msgid "Enter mobile preview mode"
-msgstr ""
-
 #: vendor/codeinwp/themeisle-content-forms/includes/rest/server.php:36
 msgid "What type of form is submitted."
 msgstr ""
@@ -3558,6 +2957,10 @@ msgstr ""
 
 #: vendor/codeinwp/themeisle-content-forms/includes/rest/server.php:94
 msgid "Invalid Data "
+msgstr ""
+
+#: vendor/codeinwp/themeisle-content-forms/includes/rest/server.php:106
+msgid "Something went wrong"
 msgstr ""
 
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/beaver_widget_base.php:52
@@ -3745,7 +3148,7 @@ msgstr ""
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/contact_admin.php:133
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/contact_admin.php:134
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/elementor_widget_base.php:956
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:122
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:124
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/registration_admin.php:107
 msgid "Submit"
 msgstr ""
@@ -3786,9 +3189,9 @@ msgid "The %s setting is required!"
 msgstr ""
 
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/beaver_widget_base.php:724
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-newsletter.php:108
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-newsletter.php:111
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/elementor_widget_base.php:993
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:221
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:223
 msgid "Access Key"
 msgstr ""
 
@@ -3810,32 +3213,32 @@ msgid "Send to Email Address"
 msgstr ""
 
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/beaver_widget_base.php:849
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:255
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:259
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:257
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:261
 msgid "Address Line 2"
 msgstr ""
 
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/beaver_widget_base.php:850
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:269
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:273
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:271
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:275
 msgid "City"
 msgstr ""
 
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/beaver_widget_base.php:851
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:283
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:287
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:285
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:289
 msgid "State/Province/Region"
 msgstr ""
 
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/beaver_widget_base.php:852
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:297
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:301
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:299
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:303
 msgid "Postal / Zip Code"
 msgstr ""
 
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/beaver_widget_base.php:853
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:311
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:315
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:313
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:317
 msgid "Country"
 msgstr ""
 
@@ -3890,16 +3293,16 @@ msgid ""
 msgstr ""
 
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-contact.php:122
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-newsletter.php:116
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-newsletter.php:119
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/contact_admin.php:105
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:103
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:105
 msgid "Success message"
 msgstr ""
 
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-contact.php:127
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-newsletter.php:121
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-newsletter.php:124
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/contact_admin.php:114
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:112
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:114
 msgid "Error message"
 msgstr ""
 
@@ -3929,19 +3332,19 @@ msgid "Newsletter Form"
 msgstr ""
 
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-newsletter.php:54
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:123
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:125
 msgid "Join Newsletter"
 msgstr ""
 
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-newsletter.php:55
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:104
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-public/newsletter_public.php:80
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:106
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-public/newsletter_public.php:78
 msgid "Welcome to our newsletter!"
 msgstr ""
 
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-newsletter.php:56
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:113
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-public/newsletter_public.php:79
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:115
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-public/newsletter_public.php:77
 msgid "Action failed!"
 msgstr ""
 
@@ -3955,33 +3358,33 @@ msgstr ""
 
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-newsletter.php:83
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-registration.php:102
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:244
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:246
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/registration_admin.php:164
 msgid "Map field to"
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-newsletter.php:99
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:88
-msgid "Subscribe to"
-msgstr ""
-
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-newsletter.php:101
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:90
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-newsletter.php:97
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:84
 msgid "MailChimp"
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-newsletter.php:102
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:91
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-newsletter.php:98
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:85
 msgid "Sendinblue "
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-newsletter.php:103
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:92
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-newsletter.php:101
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:88
 msgid "MailerLite"
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-newsletter.php:112
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:229
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-newsletter.php:106
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:94
+msgid "Subscribe to"
+msgstr ""
+
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/beaver/class-themeisle-content-forms-beaver-newsletter.php:115
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:231
 msgid "List ID"
 msgstr ""
 
@@ -4070,73 +3473,73 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:213
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:215
 msgid "Provider Settings"
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:247
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:249
 msgid ""
 "If you're using SendInBlue or MailerLite and you map the field to address, "
 "please ignore the additional settings."
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:254
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:256
 msgid "Line 2 Label"
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:258
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:260
 msgid "Line 2 Placeholder"
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:262
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:264
 msgid "Line 2 Width"
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:268
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:270
 msgid "City Label"
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:272
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:274
 msgid "City Placeholder"
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:276
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:278
 msgid "City Width"
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:282
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:284
 msgid "State Label"
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:286
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:288
 msgid "State Placeholder"
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:290
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:292
 msgid "State Width"
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:296
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:298
 msgid "Zip Code Label"
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:300
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:302
 msgid "Zip Code Placeholder"
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:304
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:306
 msgid "Zip Code Width"
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:310
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:312
 msgid "Country Label"
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:314
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:316
 msgid " Country Placeholder"
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:318
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-admin/elementor/newsletter_admin.php:320
 msgid "Country Width"
 msgstr ""
 
@@ -4145,7 +3548,7 @@ msgid "We failed to send your message!"
 msgstr ""
 
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-public/contact_public.php:54
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-public/newsletter_public.php:61
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-public/newsletter_public.php:59
 msgid "Wrong email configuration! Please contact administration!"
 msgstr ""
 
@@ -4154,7 +3557,7 @@ msgid "Missing %s"
 msgstr ""
 
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-public/contact_public.php:74
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-public/newsletter_public.php:52
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-public/newsletter_public.php:50
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-public/registration_public.php:36
 msgid "Invalid email."
 msgstr ""
@@ -4173,7 +3576,7 @@ msgid ""
 "form settings on "
 msgstr ""
 
-#: vendor/codeinwp/themeisle-content-forms/includes/widgets-public/newsletter_public.php:47
+#: vendor/codeinwp/themeisle-content-forms/includes/widgets-public/newsletter_public.php:45
 msgid "The email field cannot be empty."
 msgstr ""
 
@@ -4199,6 +3602,11 @@ msgstr ""
 
 #: vendor/codeinwp/themeisle-content-forms/includes/widgets-public/widget_actions_base.php:166
 msgid "Could not retrieve the info because the user is not logged in."
+msgstr ""
+
+#: vendor/codeinwp/themeisle-sdk/src/Modules/Promotions.php:478
+#. translators: %s is the product name.
+msgid "Recommended by %s"
 msgstr ""
 
 #. Plugin Name of the plugin/theme

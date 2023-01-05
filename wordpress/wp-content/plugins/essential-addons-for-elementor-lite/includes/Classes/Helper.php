@@ -7,6 +7,7 @@ if (!defined('ABSPATH')) {
 } // Exit if accessed directly
 
 use \Elementor\Controls_Manager;
+use Elementor\Icons_Manager;
 use \Elementor\Utils;
 use Elementor\Plugin;
 
@@ -32,6 +33,40 @@ class Helper
 		'section',
 		'span',
 	];
+
+    /**
+     * It stores all faqs data for all ea elements
+     * @since 5.1.9
+     */
+    public static $eael_advanced_accordion_faq = [];
+    
+    /**
+     * Returns all the faqs in one instance
+     *
+     * @since 5.1.9
+     * @return array
+     */
+    public static function get_eael_advanced_accordion_faq(){
+        $json = [];
+        if( count( self::$eael_advanced_accordion_faq ) ) {
+            $json = [
+                '@context' => 'https://schema.org',
+                '@type' => 'FAQPage',
+                'mainEntity' => self::$eael_advanced_accordion_faq,
+            ];
+        }
+        
+        return $json;
+    }
+
+    /**
+     * Adds faq to the faq list
+     * @since 5.1.9
+     * @param array $faq single faq data - question and answer
+     */
+    public static function set_eael_advanced_accordion_faq( $faq ){
+        return self::$eael_advanced_accordion_faq[] = $faq;
+    }
 
     /**
      * Include a file with variables
@@ -84,6 +119,21 @@ class Helper
 
         return in_array($template_name, $template_list);
     }
+
+	public static function str_to_css_id( $str ) {
+		$str = strtolower( $str );
+
+		//Make alphanumeric (removes all other characters)
+		$str = preg_replace( "/[^a-z0-9_\s-]/", "", $str );
+
+		//Clean up multiple dashes or whitespaces
+		$str = preg_replace( "/[\s-]+/", " ", $str );
+
+		//Convert whitespaces and underscore to dash
+		$str = preg_replace( "/[\s_]/", "-", $str );
+
+		return $str;
+	}
 
     public static function fix_old_query($settings)
     {
@@ -203,7 +253,7 @@ class Helper
                     ],
                 ],
                 'default' => '1',
-                'description' => '<span class="pro-feature"> Get the  <a href="http://essential-addons.com/elementor/#pricing" target="_blank">Pro version</a> for more stunning elements and customization options.</span>',
+                'description' => '<span class="pro-feature"> Get the  <a href="https://wpdeveloper.com/upgrade/ea-pro" target="_blank">Pro version</a> for more stunning elements and customization options.</span>',
             ]
         );
 
@@ -321,23 +371,30 @@ class Helper
      *
      * @return array
      */
-    public static function get_authors_list()
-    {
-        $users = get_users([
-            'who' => 'authors',
-            'has_published_posts' => true,
-            'fields' => [
-                'ID',
-                'display_name',
-            ],
-        ]);
+	public static function get_authors_list() {
+		$args = [
+			'capability'          => [ 'edit_posts' ],
+			'has_published_posts' => true,
+			'fields'              => [
+				'ID',
+				'display_name',
+			],
+		];
 
-        if (!empty($users)) {
-            return wp_list_pluck($users, 'display_name', 'ID');
-        }
+		// Capability queries were only introduced in WP 5.9.
+		if ( version_compare( $GLOBALS['wp_version'], '5.9-alpha', '<' ) ) {
+			$args['who'] = 'authors';
+			unset( $args['capability'] );
+		}
 
-        return [];
-    }
+		$users = get_users( $args );
+
+		if ( ! empty( $users ) ) {
+			return wp_list_pluck( $users, 'display_name', 'ID' );
+		}
+
+		return [];
+	}
 
     /**
      * Get all Tags
@@ -558,33 +615,7 @@ class Helper
         return $options;
     }
 
-    /**
-     * Get FluentForms List
-     *
-     * @return array
-     */
-    public static function get_fluent_forms_list()
-    {
 
-        $options = array();
-
-        if (defined('FLUENTFORM')) {
-            global $wpdb;
-
-            $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}fluentform_forms");
-            if ($result) {
-                $options[0] = esc_html__('Select a Fluent Form', 'essential-addons-for-elementor-lite');
-                foreach ($result as $form) {
-                    $options[$form->id] = $form->title;
-                }
-            } else {
-                $options[0] = esc_html__('Create a Form First', 'essential-addons-for-elementor-lite');
-            }
-        }
-
-        return $options;
-
-    }
 
     public static function get_ninja_tables_list()
     {
@@ -603,6 +634,8 @@ class Helper
 
     public static function get_terms_as_list($term_type = 'category', $length = 1)
     {
+	    $terms = get_the_terms( get_the_ID(), $term_type );
+
         if ($term_type === 'category') {
             $terms = get_the_category();
         }
@@ -675,7 +708,7 @@ class Helper
 
     public static function get_dynamic_args(array $settings, array $args)
     {
-        if ($settings['post_type'] === 'source_dynamic' && is_archive()) {
+	    if ( $settings['post_type'] === 'source_dynamic' && ( is_archive() || is_search() ) ) {
             $data = get_queried_object();
 
             if (isset($data->post_type)) {
@@ -848,64 +881,60 @@ class Helper
 
         return false;
     }
+
 	/**
-	 * Product grid
+	 * eael_pagination
+     * Generate post pagination
+     *
+	 * @param $args array wp_query param
+	 * @param $settings array Elementor widget setting data
+	 *
+     * @access public
+	 * @return string|void
+     * @since 3.3.0
 	 */
 	public static function eael_pagination ($args, $settings) {
-		$args['posts_per_page'] = -1;
 
-		$pagination_Query = new \WP_Query($args);
-		$pagination_Count = count($pagination_Query->posts);
-		$paginationLimit = $settings['eael_product_grid_products_count'] ?: 4;
-		$pagination_Paginationlist = ceil($pagination_Count/$paginationLimit);
-		$last = ceil( $pagination_Paginationlist );
+		$pagination_Count          = intval( $args['total_post'] );
+		$paginationLimit           = intval( $settings['eael_product_grid_products_count'] ) ?: 4;
+		$pagination_Paginationlist = ceil( $pagination_Count / $paginationLimit );
+		$widget_id                 = sanitize_key( $settings['eael_widget_id'] );
+		$page_id                   = intval( $settings['eael_page_id'] );
+		$next_label                = $settings['pagination_next_label'];
+		$adjacents                 = "2";
+		$setPagination             = "";
+		$template_info             = [
+			'dir'       => 'free',
+			'file_name'  => $settings['eael_dynamic_template_Layout'],
+			'name'      => $settings['eael_widget_name']
+		];
 
-		$widget_id = $settings['eael_widget_id'];
-		$next_label = $settings['pagination_next_label'];
-		$prev_label = $settings['pagination_prev_label'];
-
-		$adjacents = "2";
-		$setPagination = "";
 		if( $pagination_Paginationlist > 0 ){
 
-			$setPagination .="<nav class='eael-woo-pagination'>";
-			$setPagination .="<ul class='page-numbers'>";
-//			$setPagination .="<li class='pagitext'><a href='javascript:void(0);' class='page-numbers'
-// data-widgetid='$widget_id' data-args='".http_build_query($args)."' data-settings='".http_build_query($settings)."'
-// data-pnumber='1' data-plimit='$paginationLimit'>$prev_label</a></li>";
+			$setPagination .="<nav id='{$widget_id}-eael-pagination' class='eael-woo-pagination' data-plimit='$paginationLimit' data-totalpage ='{$args['total_post']}' data-widgetid='{$widget_id}' data-pageid='$page_id' data-args='".http_build_query( $args )."'  data-template='".json_encode( $template_info, 1 )."'>";
+			    $setPagination .="<ul class='page-numbers'>";
 
-			if ( $pagination_Paginationlist < 7 + ($adjacents * 2) ){
+                    if ( $pagination_Paginationlist < 7 + ($adjacents * 2) ){
+                        for ( $pagination = 1; $pagination <= $pagination_Paginationlist; $pagination ++ ) {
+                            $active        = ( $pagination == 0 || $pagination == 1 ) ? 'current' : '';
+	                        $setPagination .= sprintf("<li><a href='javascript:void(0);' id='post' class='page-numbers %s' data-pnumber='%2\$d'>%2\$d</a></li>" ,$active ,$pagination);
+                        }
 
-				for( $pagination=1; $pagination<=$pagination_Paginationlist; $pagination++){
+                    } else if ( $pagination_Paginationlist >= 5 + ($adjacents * 2) ){
+                        for ( $pagination = 1; $pagination <= 4 + ( $adjacents * 2 ); $pagination ++ ) {
+                            $active        = ( $pagination == 0 || $pagination == 1 ) ? 'current' : '';
+	                        $setPagination .= sprintf("<li><a href='javascript:void(0);' id='post' class='page-numbers %s' data-pnumber='%2\$d'>%2\$d</a></li>" ,$active ,$pagination);
+                        }
 
-					if( $pagination ==  0 || $pagination ==  1 ){ $active="current"; }else{ $active=""; }
-					$setPagination .="<li><a href='javascript:void(0);' id='post' class='page-numbers $active' data-template='".json_encode([ 'dir'   => 'free', 'file_name' => $settings['eael_dynamic_template_Layout'], 'name' => $settings['eael_widget_name'] ], 1)."' data-widgetid='$widget_id' data-args='".http_build_query($args)."' data-settings='".http_build_query($settings)."' data-pnumber='$pagination' data-plimit='$paginationLimit'>$pagination</a></li>";
+                        $setPagination .="<li class='pagitext dots'>...</li>";
+                        $setPagination .= sprintf("<li><a href='javascript:void(0);' id='post' class='page-numbers %s' data-pnumber='%2\$d'>%2\$d</a></li>" ,$active ,$pagination);
+                    }
 
-				}
+                    if ($pagination_Paginationlist > 1) {
+                        $setPagination .= "<li class='pagitext'><a href='javascript:void(0);' class='page-numbers' data-pnumber='2'>".esc_html( $next_label )."</a></li>";
+                    }
 
-			} else if ( $pagination_Paginationlist > 5 + ($adjacents * 2) ){
-
-				for( $pagination=1; $pagination <= 4 + ($adjacents * 2); $pagination++){
-					if( $pagination ==  0 || $pagination ==  1 ){ $active="current"; }else{ $active=""; }
-
-					$setPagination .="<li><a href='javascript:void(0);' id='post' class='page-numbers $active' data-template='".json_encode([ 'dir'   => 'free', 'file_name' => $settings['eael_dynamic_template_Layout'], 'name' => $settings['eael_widget_name'] ], 1)."' data-widgetid='$widget_id' data-args='".http_build_query($args)."' data-settings='".http_build_query($settings)."' data-pnumber='$pagination' data-plimit='$paginationLimit'>$pagination</a></li>";
-				}
-
-				$setPagination .="<li class='pagitext dots'>...</li>";
-				$setPagination .="<li><a href='javascript:void(0);' id='post' class='page-numbers $active' data-template='".json_encode([ 'dir'   => 'free', 'file_name' => $settings['eael_dynamic_template_Layout'], 'name' => $settings['eael_widget_name'] ], 1)."' data-widgetid='$widget_id' data-args='".http_build_query($args)."' data-settings='".http_build_query($settings)."' data-pnumber='$pagination' data-plimit='$paginationLimit'>$pagination</a></li>";
-
-			} else {
-
-				for( $pagination=1; $pagination<=$pagination_Paginationlist; $pagination++){
-					if( $pagination ==  0 || $pagination ==  1 ){ $active="current"; }else{ $active=""; }
-					$setPagination .="<li><a href='javascript:void(0);' id='post' class='page-numbers $active' data-template='".json_encode([ 'dir'   => 'free', 'file_name' => $settings['eael_dynamic_template_Layout'], 'name' => $settings['eael_widget_name'] ], 1)."' data-widgetid='$widget_id' data-args='".http_build_query($args)."' data-settings='".http_build_query($settings)."' data-pnumber='$pagination' data-plimit='$paginationLimit'>$pagination</a></li>";
-				}
-
-			}
-			if ($pagination_Paginationlist > 1) {
-				$setPagination .= "<li class='pagitext'><a href='javascript:void(0);' class='page-numbers' data-template='".json_encode([ 'dir'   => 'free', 'file_name' => $settings['eael_dynamic_template_Layout'], 'name' => $settings['eael_widget_name'] ], 1)."' data-widgetid='$widget_id' data-args='" . http_build_query( $args ) . "' data-settings='" . http_build_query( $settings ) . "' data-pnumber='2' data-plimit='$paginationLimit'>$next_label</a></li>";
-			}
-			$setPagination .="</ul>";
+                $setPagination .="</ul>";
 			$setPagination .="</nav>";
 
 			return $setPagination;
@@ -913,26 +942,28 @@ class Helper
 	}
 
 	public static function eael_product_quick_view ($product, $settings, $widget_id) {
-		$sale_badge_align = isset( $settings['eael_product_sale_badge_alignment'] ) ? $settings['eael_product_sale_badge_alignment'] : '';
-		$sale_badge_preset = isset($settings['eael_product_sale_badge_preset']) ? $settings['eael_product_sale_badge_preset'] : '';
-		$sale_text = !empty($settings['eael_product_carousel_sale_text']) ? $settings['eael_product_carousel_sale_text'] : 'Sale!';
-		$stockout_text = !empty($settings['eael_product_carousel_stockout_text']) ? $settings['eael_product_carousel_stockout_text'] : 'Stock Out';
-        $tag = !empty($settings['eael_product_quick_view_title_tag']) ? self::eael_validate_html_tag($settings['eael_product_quick_view_title_tag']) : 'h1';
+
+		$sale_badge_align  = isset( $settings['eael_product_sale_badge_alignment'] ) ? $settings['eael_product_sale_badge_alignment'] : '';
+		$sale_badge_preset = isset( $settings['eael_product_sale_badge_preset'] ) ? $settings['eael_product_sale_badge_preset'] : '';
+		$sale_text         = ! empty( $settings['eael_product_carousel_sale_text'] ) ? $settings['eael_product_carousel_sale_text'] : (! empty( $settings['eael_product_sale_text'] ) ? $settings['eael_product_sale_text'] :'Sale!');
+		$stockout_text     = ! empty( $settings['eael_product_carousel_stockout_text'] ) ? $settings['eael_product_carousel_stockout_text'] : (! empty( $settings['eael_product_stockout_text'] ) ? $settings['eael_product_stockout_text'] :'Stock Out');
+		$tag               = ! empty( $settings['eael_product_quick_view_title_tag'] ) ? self::eael_validate_html_tag( $settings['eael_product_quick_view_title_tag'] ) : 'h1';
         
         remove_action( 'eael_woo_single_product_summary', 'woocommerce_template_single_title', 5 );
         add_action( 'eael_woo_single_product_summary', function () use ( $tag ) {
-            the_title( '<' . $tag . ' class="eael-product-quick-view-title product_title entry-title">', '</' . $tag . '>' );
+            printf('<%1$s class="eael-product-quick-view-title product_title entry-title">%2$s</%1$s>',$tag,Helper::eael_wp_kses( get_the_title() ));
         }, 5 );
-        
+
 	    ?>
-		<div id="eaproduct<?php echo $widget_id.$product->get_id(); ?>" class="eael-product-popup
+
+		<div id="eaproduct<?php echo esc_attr( $widget_id . $product->get_id() ); ?>" class="eael-product-popup
 		eael-product-zoom-in woocommerce">
 			<div class="eael-product-modal-bg"></div>
 			<div class="eael-product-popup-details">
-				<div id="product-<?php the_ID(); ?>" <?php post_class( 'product' ); ?>>
+				<div id="product-<?php esc_attr( get_the_ID() ); ?>" <?php post_class( 'product' ); ?>>
 					<div class="eael-product-image-wrap">
 						<?php
-						echo ( ! $product->managing_stock() && ! $product->is_in_stock() ? '<span class="eael-onsale outofstock '.$sale_badge_preset.' '.$sale_badge_align.'">'. $stockout_text .'</span>' : ($product->is_on_sale() ? '<span class="eael-onsale '.$sale_badge_preset.' '.$sale_badge_align.'">' . $sale_text . '</span>' : '') );
+						echo ( ! $product->is_in_stock() ? '<span class="eael-onsale outofstock '.esc_attr( $sale_badge_preset ).' '.esc_attr( $sale_badge_align ).'">'. esc_html( $stockout_text ) .'</span>' : ($product->is_on_sale() ? '<span class="eael-onsale '.esc_attr( $sale_badge_preset ).' '.esc_attr( $sale_badge_align ).'">' . esc_html( $sale_text ) . '</span>' : '') );
 						do_action( 'eael_woo_single_product_image' );
 						?>
 					</div>
@@ -944,7 +975,8 @@ class Helper
 			</div>
 
 		</div>
-	<?php }
+	<?php
+	}
 
 	public static function eael_avoid_redirect_to_single_page() {
 		return '';
@@ -1175,6 +1207,119 @@ class Helper
                 'id' => [],
                 'style' => [],
             ],
+            'center' => [
+	            'class' => [],
+	            'id'    => [],
+	            'style' => [],
+            ],
+            'ul' => [
+	            'class' => [],
+	            'id'    => [],
+	            'style' => [],
+            ],
+            'ol' => [
+	            'class' => [],
+	            'id'    => [],
+	            'style' => [],
+            ],
+            'li' => [
+	            'class' => [],
+	            'id'    => [],
+	            'style' => [],
+            ],
         ];
     }
+
+    public static function eael_fetch_color_or_global_color($settings, $control_name=''){
+        if( !isset($settings[$control_name])) {
+            return '';
+        }
+
+        $color = $settings[$control_name];
+
+        if(!empty($settings['__globals__']) && !empty($settings['__globals__'][$control_name])){
+            $color = $settings['__globals__'][$control_name];
+            $color_arr = explode('?id=', $color); //E.x. 'globals/colors/?id=primary'
+
+            $color_name = count($color_arr) > 1 ? $color_arr[1] : '';
+            if( !empty($color_name) ) {
+                $color = "var( --e-global-color-$color_name )";
+            }
+        }
+
+        return $color;
+    }
+
+	/**
+	 * Get Render Icon
+	 *
+	 * Used to get render Icon for \Elementor\Controls_Manager::ICONS
+	 * @param array $icon             Icon Type, Icon value
+	 * @param array $attributes       Icon HTML Attributes
+	 * @param string $tag             Icon HTML tag, defaults to <i>
+	 *
+	 * @return mixed|string
+	 */
+	public static function get_render_icon( $icon, $attributes = [], $tag = 'i' ) {
+		if ( empty( $icon['library'] ) ) {
+			return false;
+		}
+
+		$output = '';
+
+		/**
+		 * When the library value is svg it means that it's a SVG media attachment uploaded by the user.
+		 * Otherwise, it's the name of the font family that the icon belongs to.
+		 */
+		if ( 'svg' === $icon['library'] ) {
+			$output = method_exists( 'Elementor\Icons_Manager', 'render_uploaded_svg_icon' ) ? Icons_Manager::render_uploaded_svg_icon( $icon['value'] ) : '';
+		} else {
+			$output = method_exists( 'Elementor\Icons_Manager', 'render_font_icon' ) ? Icons_Manager::render_font_icon( $icon, $attributes, $tag ) : '';
+		}
+
+		return $output;
+	}
+    
+    /**
+     * Get product image src and Product gallery's first image src
+     * 
+     * @since 5.1.9
+     * @return array 
+     */
+    public static function eael_get_woo_product_gallery_image_srcs( $product, $image_size ){
+        $image_id = $product->get_image_id();
+        $image_gallery_ids = $product->get_gallery_image_ids();
+
+        $src = function_exists('wc_placeholder_img_src') ? wc_placeholder_img_src() : '';
+
+        if ( $image_id ) {
+            $src = wp_get_attachment_image_src( $image_id, $image_size );
+            $src = is_array($src) ? $src[0] : $src;
+        }
+
+        $src_hover = count( $image_gallery_ids ) ? wp_get_attachment_image_src( $image_gallery_ids[0], $image_size ) : '';
+        $src_hover = is_array($src_hover) ? $src_hover[0] : $src_hover;
+        
+        return [
+            'src' => $src,
+            'src_hover' => $src_hover,
+        ];
+    }
+
+	/**
+	 * Sanitize a 'relation' operator.
+	 *
+	 * @param string $relation Raw relation key from the query argument.
+	 *
+	 * @return string Sanitized relation ('AND' or 'OR').
+	 * @since 5.3.2
+	 *
+	 */
+	public static function eael_sanitize_relation( $relation ) {
+		if ( 'OR' === strtoupper( $relation ) ) {
+			return 'OR';
+		} else {
+			return 'AND';
+		}
+	}
 }

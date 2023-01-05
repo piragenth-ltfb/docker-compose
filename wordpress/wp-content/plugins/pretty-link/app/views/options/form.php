@@ -107,7 +107,7 @@
                     <label for="<?php echo esc_attr($link_nofollow); ?>"><?php esc_html_e('Enable No Follow', 'pretty-link'); ?></label>
                     <?php PrliAppHelper::info_tooltip('prli-options-add-nofollow',
                                                       esc_html__('Add No Follow', 'pretty-link'),
-                                                      esc_html__('Add the \'nofollow\' attribute by default to new links. This will add nofollow and noindex in the HTTP Response headers when enabled.', 'pretty-link'));
+                                                      esc_html__('Defaults \'No Follow\' to be enabled on new links. This will add the nofollow and noindex in the HTTP Reponse headers when enabled on the link.', 'pretty-link'));
                     ?>
                   </th>
                   <td>
@@ -1092,7 +1092,7 @@
       var dialog = row.find('.pretty-link-upgrade');
       if ( dialog.data('offset') ) {
         dialog.css('top', '-' + dialog.data('offset') + 'px');
-      } else {
+      } else if(row.is(':visible')) {
         var moveUp = row.offset().top - wrap.offset().top;
         dialog.data('offset', moveUp);
         dialog.css('top', '-' + moveUp + 'px');

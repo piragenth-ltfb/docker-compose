@@ -571,7 +571,7 @@ class Filesystem
         if ($symlink) {
             $return['subpath'] = DIRECTORY_SEPARATOR . basename(dirname($real_path)) . DIRECTORY_SEPARATOR . $entry;
         } else {
-            $return['subpath'] = preg_replace("#^(themes|plugins|{$uploads_folder})#", '', $return['wp_content_path']);
+            $return['subpath'] = preg_replace("#^(themes|plugins|mu-plugins|{$uploads_folder})#", '', $return['wp_content_path']);
         }
 
         $exploded              = explode(DIRECTORY_SEPARATOR, $return['subpath']);
@@ -938,7 +938,7 @@ class Filesystem
 
     public function format_backup_name($file_name)
     {
-        $new_name = preg_replace('/-\w{5}.sql/', '.sql${1}', $file_name);
+        $new_name = preg_replace('/-\w{5}.sql/', '.sql', $file_name);
 
         return $new_name;
     }
@@ -999,6 +999,15 @@ class Filesystem
                 $network_plugins = array_keys($network_plugins);
                 $active_plugins  = array_merge($active_plugins, $network_plugins);
             }
+            $sites = get_sites();
+            if (!empty($sites)) {
+                foreach($sites as $site) {
+                    $site_plugins   = get_blog_option($site->blog_id, 'active_plugins');
+                    if (is_array($site_plugins)) {
+                        $active_plugins = array_merge($active_plugins, $site_plugins);
+                    }   
+                } 
+            }
         }
 
         return $active_plugins;
@@ -1058,9 +1067,10 @@ class Filesystem
             $plugin_path       = array_key_exists($base_folder, $plugin_paths) ? $plugin_paths[$base_folder] : false;
             $plugin_list[$key] = array(
                 array(
-                    'name'   => $plugin['Name'],
-                    'active' => in_array($key, $active_plugins),
-                    'path'   => $plugin_path,
+                    'name'    => $plugin['Name'],
+                    'active'  => in_array($key, $active_plugins),
+                    'path'    => $plugin_path,
+                    'version' => $plugin['Version'],
                 ),
             );
         }

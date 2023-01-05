@@ -3,9 +3,11 @@ namespace Elementor\Core\Base;
 
 use Elementor\Core\Base\Elements_Iteration_Actions\Assets as Assets_Iteration_Action;
 use Elementor\Core\Base\Elements_Iteration_Actions\Base as Elements_Iteration_Action;
+use Elementor\Core\Behaviors\Interfaces\Lock_Behavior;
 use Elementor\Core\Files\CSS\Post as Post_CSS;
 use Elementor\Core\Settings\Page\Model as Page_Model;
 use Elementor\Core\Utils\Exceptions;
+use Elementor\Includes\Elements\Container;
 use Elementor\Plugin;
 use Elementor\Controls_Manager;
 use Elementor\Controls_Stack;
@@ -15,6 +17,7 @@ use Elementor\Core\Settings\Manager as SettingsManager;
 use Elementor\Utils;
 use Elementor\Widget_Base;
 use Elementor\Core\Settings\Page\Manager as PageManager;
+use ElementorPro\Modules\Library\Widgets\Template;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -142,8 +145,8 @@ abstract class Document extends Controls_Stack {
 			'has_elements' => static::get_property( 'has_elements' ),
 			'support_kit' => static::get_property( 'support_kit' ),
 			'messages' => [
-				/* translators: %s: the document title. */
-				'publish_notification' => sprintf( __( 'Hurray! Your %s is live.', 'elementor' ), static::get_title() ),
+				/* translators: %s: Document title. */
+				'publish_notification' => sprintf( esc_html__( 'Hurray! Your %s is live.', 'elementor' ), static::get_title() ),
 			],
 		];
 	}
@@ -160,11 +163,15 @@ abstract class Document extends Controls_Stack {
 	 * @return string Element title.
 	 */
 	public static function get_title() {
-		return __( 'Document', 'elementor' );
+		return esc_html__( 'Document', 'elementor' );
 	}
 
 	public static function get_plural_title() {
 		return static::get_title();
+	}
+
+	public static function get_add_new_title() {
+		return sprintf( esc_html__( 'Add New %s', 'elementor' ), static::get_title() );
 	}
 
 	/**
@@ -200,9 +207,16 @@ abstract class Document extends Controls_Stack {
 	}
 
 	public static function get_create_url() {
-		$base_create_url = Plugin::$instance->documents->get_create_new_post_url( Source_Local::CPT );
+		$properties = static::get_properties();
 
-		return add_query_arg( [ 'template_type' => static::get_type() ], $base_create_url );
+		// BC Support - Each document should define it own CPT this code is for BC support.
+		$cpt = Source_Local::CPT;
+
+		if ( isset( $properties['cpt'][0] ) ) {
+			$cpt = $properties['cpt'][0];
+		}
+
+		return Plugin::$instance->documents->get_create_new_post_url( $cpt, static::get_type() );
 	}
 
 	public function get_name() {
@@ -245,6 +259,13 @@ abstract class Document extends Controls_Stack {
 		}
 
 		return $this->main_id;
+	}
+
+	/**
+	 * @return null|Lock_Behavior
+	 */
+	public static function get_lock_behavior_v2() {
+		return null;
 	}
 
 	/**
@@ -301,10 +322,14 @@ abstract class Document extends Controls_Stack {
 		if ( Plugin::$instance->preview->is_preview() ) {
 			$attributes['data-elementor-title'] = static::get_title();
 		} else {
-			$attributes['data-elementor-settings'] = wp_json_encode( $this->get_frontend_settings() );
+			$elementor_settings = $this->get_frontend_settings();
+			if ( ! empty( $elementor_settings ) ) {
+				$attributes['data-elementor-settings'] = wp_json_encode( $elementor_settings );
+			}
 		}
 
-		return $attributes;
+		// apply this filter to allow the attributes to be modified by different sources
+		return apply_filters( 'elementor/document/wrapper_attributes', $attributes, $this );
 	}
 
 	/**
@@ -316,8 +341,10 @@ abstract class Document extends Controls_Stack {
 		$document = $this;
 
 		// Ajax request from editor.
-		if ( ! empty( $_POST['initial_document_id'] ) ) {
-			$document = Plugin::$instance->documents->get( $_POST['initial_document_id'] );
+		// PHPCS - only reading the value from $_POST['initial_document_id'].
+		if ( ! empty( $_POST['initial_document_id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			// PHPCS - only reading the value from $_POST['initial_document_id'].
+			$document = Plugin::$instance->documents->get( $_POST['initial_document_id'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
 		$url = get_preview_post_link(
@@ -361,6 +388,60 @@ abstract class Document extends Controls_Stack {
 		 * @param Document $this The document instance.
 		 */
 		$url = apply_filters( 'elementor/document/urls/exit_to_dashboard', $url, $this );
+
+		return $url;
+	}
+
+	/**
+	 * Get All Post Type URL
+	 *
+	 * Get url of the page which display all the posts of the current active document's post type.
+	 *
+	 * @since 3.7.0
+	 *
+	 * @return string $url
+	 */
+	public function get_all_post_type_url() {
+		$post_type = get_post_type( $this->get_main_id() );
+
+		$url = get_admin_url() . 'edit.php';
+
+		if ( 'post' !== $post_type ) {
+			$url .= '?post_type=' . $post_type;
+		}
+
+		/**
+		 * Document "display all post type" URL.
+		 *
+		 * @since 3.7.0
+		 *
+		 * @param string $url The URL.
+		 * @param Document $this The document instance.
+		 */
+		$url = apply_filters( 'elementor/document/urls/all_post_type', $url, $this );
+
+		return $url;
+	}
+
+	/**
+	 * Get Main WP dashboard URL.
+	 *
+	 * @since 3.7.0
+	 *
+	 * @return string $url
+	 */
+	protected function get_main_dashboard_url() {
+		$url = get_dashboard_url();
+
+		/**
+		 * Document "Main Dashboard" URL.
+		 *
+		 * @since 3.7.0
+		 *
+		 * @param string $url The URL.
+		 * @param Document $this The document instance.
+		 */
+		$url = apply_filters( 'elementor/document/urls/main_dashboard', $url, $this );
 
 		return $url;
 	}
@@ -526,20 +607,47 @@ abstract class Document extends Controls_Stack {
 				'locked' => $locked_user,
 			],
 			'urls' => [
-				'exit_to_dashboard' => $this->get_exit_to_dashboard_url(),
+				'exit_to_dashboard' => $this->get_exit_to_dashboard_url(), // WP post type edit page
+				'all_post_type' => $this->get_all_post_type_url(),
 				'preview' => $this->get_preview_url(),
 				'wp_preview' => $this->get_wp_preview_url(),
 				'permalink' => $this->get_permalink(),
 				'have_a_look' => $this->get_have_a_look_url(),
+				'main_dashboard' => $this->get_main_dashboard_url(),
 			],
 		];
 
+		do_action( 'elementor/document/before_get_config', $this );
+
 		if ( static::get_property( 'has_elements' ) ) {
+			$container_config = [];
+			$experiments_manager = Plugin::$instance->experiments;
+
+			if ( $experiments_manager->is_feature_active( 'container' ) ) {
+				$container_config = [
+					'container' => Plugin::$instance->elements_manager->get_element_types( 'container' )->get_config(),
+				];
+			}
+
 			$config['elements'] = $this->get_elements_raw_data( null, true );
-			$config['widgets'] = Plugin::$instance->widgets_manager->get_widget_types_config();
+			$config['widgets'] = $container_config + Plugin::$instance->widgets_manager->get_widget_types_config();
 		}
 
-		$additional_config = apply_filters( 'elementor/document/config', [], $this->get_main_id() );
+		$additional_config = [];
+
+		/**
+		 * Additional document configuration.
+		 *
+		 * Filters the document configuration by adding additional configuration.
+		 * External developers can use this hook to add custom configuration in
+		 * addition to Elementor's initial configuration.
+		 *
+		 * Use the $post_id to add custom configuration for different pages.
+		 *
+		 * @param array $additional_config The additional document configuration.
+		 * @param int   $post_id           The post ID of the document.
+		 */
+		$additional_config = apply_filters( 'elementor/document/config', $additional_config, $this->get_main_id() );
 
 		if ( ! empty( $additional_config ) ) {
 			$config = array_replace_recursive( $config, $additional_config );
@@ -554,10 +662,13 @@ abstract class Document extends Controls_Stack {
 	 */
 	protected function register_controls() {
 		$this->register_document_controls();
+
 		/**
 		 * Register document controls.
 		 *
 		 * Fires after Elementor registers the document controls.
+		 *
+		 * External developers can use this hook to add new controls to the document.
 		 *
 		 * @since 2.0.0
 		 *
@@ -576,12 +687,17 @@ abstract class Document extends Controls_Stack {
 	 */
 	public function save( $data ) {
 		/**
-		 * Fires when document save starts on Elementor.
+		 * Document save data.
 		 *
-		 * @param array $data.
-		 * @param \Elementor\Core\Base\Document $this The current document.
+		 * Filter the document data before saving process starts.
+		 *
+		 * External developers can use this hook to change the data before
+		 * saving it to the database.
 		 *
 		 * @since 3.3.0
+		 *
+		 * @param array                         $data The document data.
+		 * @param \Elementor\Core\Base\Document $this The document instance.
 		 */
 		$data = apply_filters( 'elementor/document/save/data', $data, $this );
 
@@ -799,6 +915,14 @@ abstract class Document extends Controls_Stack {
 		return $meta;
 	}
 
+	public function update_json_meta( $key, $value ) {
+		$this->update_meta(
+			$key,
+			// `wp_slash` in order to avoid the unslashing during the `update_post_meta`
+			wp_slash( wp_json_encode( $value ) )
+		);
+	}
+
 	/**
 	 * @since 2.0.0
 	 * @access public
@@ -823,13 +947,26 @@ abstract class Document extends Controls_Stack {
 		$editor_data = [];
 
 		foreach ( $data as $element_data ) {
+			if ( ! is_array( $element_data ) ) {
+				throw new \Exception( 'Invalid data: ' . wp_json_encode( [
+					'data' => $data,
+					'element' => $element_data,
+				] ) );
+			}
+
 			$element = Plugin::$instance->elements_manager->create_element_instance( $element_data );
 
 			if ( ! $element ) {
 				continue;
 			}
 
-			$editor_data[] = $element->get_raw_data( $with_html_content );
+			if ( $this->is_saving ) {
+				$element_data = $element->get_data_for_save();
+			} else {
+				$element_data = $element->get_raw_data( $with_html_content );
+			}
+
+			$editor_data[] = $element_data;
 		} // End foreach().
 
 		Plugin::$instance->documents->restore_document();
@@ -950,16 +1087,16 @@ abstract class Document extends Controls_Stack {
 
 		$is_dom_optimization_active = Plugin::$instance->experiments->is_feature_active( 'e_dom_optimization' );
 		?>
-		<div <?php echo Utils::render_html_attributes( $this->get_container_attributes() ); ?>>
-			<?php if ( ! $is_dom_optimization_active ) { ?>
+		<div <?php Utils::print_html_attributes( $this->get_container_attributes() ); ?>>
+			<?php if ( ! $is_dom_optimization_active ) : ?>
 			<div class="elementor-inner">
-			<?php } ?>
 				<div class="elementor-section-wrap">
-					<?php $this->print_elements( $elements_data ); ?>
+			<?php endif; ?>
+				<?php $this->print_elements( $elements_data ); ?>
+			<?php if ( ! $is_dom_optimization_active ) : ?>
 				</div>
-			<?php if ( ! $is_dom_optimization_active ) { ?>
 			</div>
-			<?php } ?>
+			<?php endif; ?>
 		</div>
 		<?php
 	}
@@ -978,8 +1115,8 @@ abstract class Document extends Controls_Stack {
 	 */
 	public function get_panel_page_settings() {
 		return [
-			/* translators: %s: Document title */
-			'title' => sprintf( __( '%s Settings', 'elementor' ), static::get_title() ),
+			/* translators: %s: Document title. */
+			'title' => sprintf( esc_html__( '%s Settings', 'elementor' ), static::get_title() ),
 		];
 	}
 
@@ -1019,6 +1156,44 @@ abstract class Document extends Controls_Stack {
 		}
 
 		return $deleted && ! is_wp_error( $deleted );
+	}
+
+	public function force_delete() {
+		$deleted = wp_delete_post( $this->post->ID, true );
+
+		return $deleted && ! is_wp_error( $deleted );
+	}
+
+	/**
+	 * On import update dynamic content (e.g. post and term IDs).
+	 *
+	 * @since 3.8.0
+	 *
+	 * @param array      $config   The config of the passed element.
+	 * @param array      $data     The data that requires updating/replacement when imported.
+	 * @param array|null $controls The available controls.
+	 *
+	 * @return array Element data.
+	 */
+	public static function on_import_update_dynamic_content( array $config, array $data, $controls = null ) : array {
+		foreach ( $config as &$element_config ) {
+			$element_instance = Plugin::$instance->elements_manager->create_element_instance( $element_config );
+
+			if ( is_null( $element_instance ) ) {
+				continue;
+			}
+
+			if ( $element_instance->has_own_method( 'on_import_replace_dynamic_content' ) ) {
+				// TODO: Remove this check in the future.
+				$element_config = $element_instance::on_import_replace_dynamic_content( $element_config, $data['post_ids'] );
+			} else {
+				$element_config = $element_instance::on_import_update_dynamic_content( $element_config, $data, $element_instance->get_controls() );
+			}
+
+			$element_config['elements'] = static::on_import_update_dynamic_content( $element_config['elements'], $data );
+		}
+
+		return $config;
 	}
 
 	/**
@@ -1224,11 +1399,11 @@ abstract class Document extends Controls_Stack {
 		$display_name = get_the_author_meta( 'display_name', $post->post_author );
 
 		if ( $autosave_post || 'revision' === $post->post_type ) {
-			/* translators: 1: Saving date, 2: Author display name */
-			$last_edited = sprintf( __( 'Draft saved on %1$s by %2$s', 'elementor' ), '<time>' . $date . '</time>', $display_name );
+			/* translators: 1: Saving date, 2: Author display name. */
+			$last_edited = sprintf( esc_html__( 'Draft saved on %1$s by %2$s', 'elementor' ), '<time>' . $date . '</time>', $display_name );
 		} else {
-			/* translators: 1: Editing date, 2: Author display name */
-			$last_edited = sprintf( __( 'Last edited on %1$s by %2$s', 'elementor' ), '<time>' . $date . '</time>', $display_name );
+			/* translators: 1: Editing date, 2: Author display name. */
+			$last_edited = sprintf( esc_html__( 'Last edited on %1$s by %2$s', 'elementor' ), '<time>' . $date . '</time>', $display_name );
 		}
 
 		return $last_edited;
@@ -1395,8 +1570,10 @@ abstract class Document extends Controls_Stack {
 		}
 	}
 
-	private function process_element_import_export( Controls_Stack $element, $method ) {
-		$element_data = $element->get_data();
+	public function process_element_import_export( Controls_Stack $element, $method, $element_data = null ) {
+		if ( null === $element_data ) {
+			$element_data = $element->get_data();
+		}
 
 		if ( method_exists( $element, $method ) ) {
 			// TODO: Use the internal element data without parameters.
@@ -1411,8 +1588,15 @@ abstract class Document extends Controls_Stack {
 				return $element_data;
 			}
 
-			if ( method_exists( $control_class, $method ) ) {
-				$element_data['settings'][ $control['name'] ] = $control_class->{$method}( $element->get_settings( $control['name'] ), $control );
+			// Do not add default value to the final settings, if there is no value at the
+			// data before the methods `on_import` or `on_export` called.
+			$has_value = isset( $element_data['settings'][ $control['name'] ] );
+
+			if ( $has_value && method_exists( $control_class, $method ) ) {
+				$element_data['settings'][ $control['name'] ] = $control_class->{$method}(
+					$element_data['settings'][ $control['name'] ],
+					$control
+				);
 			}
 
 			// On Export, check if the control has an argument 'export' => false.
@@ -1490,7 +1674,7 @@ abstract class Document extends Controls_Stack {
 		$this->start_controls_section(
 			'document_settings',
 			[
-				'label' => __( 'General Settings', 'elementor' ),
+				'label' => esc_html__( 'General Settings', 'elementor' ),
 				'tab' => Controls_Manager::TAB_SETTINGS,
 			]
 		);
@@ -1498,11 +1682,10 @@ abstract class Document extends Controls_Stack {
 		$this->add_control(
 			'post_title',
 			[
-				'label' => __( 'Title', 'elementor' ),
+				'label' => esc_html__( 'Title', 'elementor' ),
 				'type' => Controls_Manager::TEXT,
 				'default' => $this->post->post_title,
 				'label_block' => true,
-				'separator' => 'none',
 			]
 		);
 
@@ -1515,13 +1698,13 @@ abstract class Document extends Controls_Stack {
 
 			$statuses = $this->get_post_statuses();
 			if ( 'future' === $this->get_main_post()->post_status ) {
-				$statuses['future'] = __( 'Future', 'elementor' );
+				$statuses['future'] = esc_html__( 'Future', 'elementor' );
 			}
 
 			$this->add_control(
 				'post_status',
 				[
-					'label' => __( 'Status', 'elementor' ),
+					'label' => esc_html__( 'Status', 'elementor' ),
 					'type' => Controls_Manager::SELECT,
 					'default' => $this->get_main_post()->post_status,
 					'options' => $statuses,

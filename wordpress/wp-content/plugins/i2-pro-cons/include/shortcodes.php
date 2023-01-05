@@ -96,7 +96,7 @@ function i2_pros_and_cons($atts, $content = null)
         if (substr($atts['link'], 0, 4) !== "http") {
             $atts['link'] = 'https://' . $atts['link'];
         }
-        $data .= '<div class="i2-button-wrapper' . ($atts['button_display_block'] == 'true' ? ' i2pc-block' : '')  . '"><a class="' . $options['button_theme'] . '" href="' .  $atts['link'] . '" rel="nofollow" target="_blank"> <i class="' . ($atts['button_icon'] == '' ? $options['button_icon'] : $atts['button_icon']) . '"></i> <span class="i2pc-btn-text">' .  $atts['link_text'] . '</span></a></div>';
+        $data .= '<div class="i2-button-wrapper' . ($atts['button_display_block'] == 'true' ? ' i2pc-block' : '')  . '"><a class="' . $options['button_theme'] . '" href="' .  $atts['link'] . '" rel="nofollow sponsored" target="_blank"> <i class="' . ($atts['button_icon'] == '' ? $options['button_icon'] : $atts['button_icon']) . '"></i> <span class="i2pc-btn-text">' .  $atts['link_text'] . '</span></a></div>';
     }
     $data .= '</div>';
 

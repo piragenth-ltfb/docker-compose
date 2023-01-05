@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2018 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,10 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'Kangaroos cannot jump here' );
+}
+
 class Ai1wm_Compatibility {
 
 	public static function get( $params ) {
@@ -34,9 +38,6 @@ class Ai1wm_Compatibility {
 			}
 		}
 
-		// Get updater URL
-		$updater_url = add_query_arg( array( 'ai1wm_updater' => 1 ), network_admin_url( 'plugins.php' ) );
-
 		// If no extension is used, update everything that is available
 		if ( empty( $extensions ) ) {
 			$extensions = Ai1wm_Extensions::get();
@@ -45,15 +46,11 @@ class Ai1wm_Compatibility {
 		$messages = array();
 		foreach ( $extensions as $extension_name => $extension_data ) {
 			if ( ! Ai1wm_Compatibility::check( $extension_data ) ) {
-				$messages[] = sprintf(
-					__(
-						'<strong>%s</strong> is not the latest version. ' .
-						'You must <a href="%s">update the plugin</a> before you can use it. <br />',
-						AI1WM_PLUGIN_NAME
-					),
-					$extension_data['title'],
-					$updater_url
-				);
+				if ( defined( 'WP_CLI' ) ) {
+					$messages[] = sprintf( __( '%s is not the latest version. You must update the plugin before you can use it. ', AI1WM_PLUGIN_NAME ), $extension_data['title'] );
+				} else {
+					$messages[] = sprintf( __( '<strong>%s</strong> is not the latest version. You must <a href="%s">update the plugin</a> before you can use it. <br />', AI1WM_PLUGIN_NAME ), $extension_data['title'], network_admin_url( 'plugins.php' ) );
+				}
 			}
 		}
 

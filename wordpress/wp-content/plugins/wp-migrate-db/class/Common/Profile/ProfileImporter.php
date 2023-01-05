@@ -62,7 +62,7 @@ class ProfileImporter
 
         $new_saved_profiles = get_site_option('wpmdb_saved_profiles'); //New profiles
         $wpmdb_settings     = get_site_option('wpmdb_settings');
-        $home               = preg_replace('/^https?:/', '', home_url());
+        $home               = preg_replace('/^https?:/', '', Util::home_url());
         $path               = esc_html(addslashes($this->util->get_absolute_root_file_path()));
 
         $new_saved_profiles = $this->importOldProfiles($new_saved_profiles, $wpmdb_settings, $home, $path);
@@ -138,6 +138,7 @@ class ProfileImporter
         $allowedExtraOpts = [
             'mst_select_subsite',
             'mst_selected_subsite',
+            'mst_destination_subsite',
             'new_prefix',
             'media_files',
             'migrate_themes',
@@ -253,9 +254,9 @@ class ProfileImporter
         ];
 
         if (isset($profile->mst_select_subsite) && isset($profile->mst_selected_subsite)) {
-            $output['enabled']          = true;
-            $output['selected_subsite'] = (int) $profile->mst_selected_subsite;
-
+            $output['enabled']             = true;
+            $output['selected_subsite']    = (int) $profile->mst_selected_subsite;
+            $output['destination_subsite'] = (int) $profile->mst_destination_subsite;
             if (isset($profile->new_prefix)) {
                 $output['new_prefix'] = $profile->new_prefix;
             }
@@ -303,11 +304,15 @@ class ProfileImporter
             'plugin_files'     => [
                 'enabled' => false,
             ],
+            'plugins_option'   => '',
             'plugins_selected' => [],
+            'plugins_excluded' => [],
             'theme_files'      => [
                 'enabled' => false,
             ],
+            'themes_option'    => '',
             'themes_selected'  => [],
+            'themes_excluded'  => [],
         ];
 
         if (isset($profile->migrate_themes) && $profile->migrate_themes === '1') {
@@ -323,7 +328,7 @@ class ProfileImporter
                 $output['plugins_selected']        = $profile->select_plugins;
             }
         }
-
+        //check if migrate_plugins === '1' and 'plugins_selected'
         if (isset($profile->file_ignores)) {
             $output['excludes'] = $profile->file_ignores;
         }
@@ -485,6 +490,7 @@ class ProfileImporter
             'advanced_options_selected' => $advanced_options,
             'profile_name'              => $profileObj->name,
             'migration_enabled'         => in_array($intent, ['savefile', 'find_replace']) ? true : false,
+            'databaseEnabled'           => isset($profile['databaseEnabled']) ? $profile['databaseEnabled'] : true
         ];
 
         $current_migration_details = $this->appendExtraProfileOpts($profile, $current_migration_details);

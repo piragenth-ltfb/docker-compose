@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2018 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,10 @@
  * ███████║███████╗██║  ██║ ╚████╔╝ ██║ ╚═╝ ██║██║  ██║███████║██║  ██╗
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'Kangaroos cannot jump here' );
+}
 ?>
 
 <style type="text/css" media="all">
@@ -54,6 +58,10 @@
 		content: "\e619";
 	}
 
+	.ai1wm-icon-bullhorn:before {
+		content: "\e91a";
+	}
+
 	.ai1wm-label {
 		border: 1px solid #5cb85c;
 		background-color: transparent;
@@ -72,6 +80,27 @@
 	.ai1wm-label:hover {
 		background-color: #5cb85c;
 		color: #fff;
+	}
+
+	.ai1wm-menu-count {
+		display: inline-block;
+		vertical-align: top;
+		box-sizing: border-box;
+		margin: 1px 0 -1px 2px;
+		padding: 0 5px;
+		min-width: 18px;
+		height: 18px;
+		border-radius: 9px;
+		background-color: #d63638;
+		color: #fff;
+		font-size:  11px;
+		line-height: 1.6;
+		text-align: center;
+		z-index: 26;
+	}
+
+	.ai1wm-menu-count.ai1wm-menu-hide {
+		display: none;
 	}
 
 	<?php if ( version_compare( $version, '3.8', '<' ) ) : ?>

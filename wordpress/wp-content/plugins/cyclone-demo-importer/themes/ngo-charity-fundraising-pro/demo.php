@@ -13,14 +13,23 @@ function cdi_import_files() {
             'preview_url' => 'https://bizbergthemes.com/ngo-charity-fundraising-pro/'
         ),
         array(
-            'import_file_name'=> __('Homepage PRO','cdi'),
+            'import_file_name'=> __('Clean Charity Homepage 2','cdi'),
             'categories'      =>  array( 'Homepage' ),
             'local_import_file'=> CDI_PLUGIN_DIR_PATH . '/themes/ngo-charity-fundraising-pro/inc/content.xml',
             'local_import_customizer_file' => CDI_PLUGIN_DIR_PATH . '/themes/ngo-charity-fundraising-pro/inc/options.dat',
             'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/ngo-charity-fundraising-lite/homepage-pro.jpg',
             'local_import_widget_file'     => CDI_PLUGIN_DIR_PATH . '/themes/ngo-charity-fundraising-pro/inc/widgets.wie',
-            'preview_url' => 'https://bizbergthemes.com/ngo-charity-fundraising-pro/homepage-pro/'
-        )
+            'preview_url' => 'https://bizbergthemes.com/ngo-charity-fundraising-pro/homepage-2/'
+        ),
+        array(
+            'import_file_name'=> __('NGO Charity Hub Homepage 3','cdi'),
+            'categories'      =>  array( 'Homepage' ),
+            'local_import_file'=> CDI_PLUGIN_DIR_PATH . '/themes/ngo-charity-fundraising-pro/inc/content.xml',
+            'local_import_customizer_file' => CDI_PLUGIN_DIR_PATH . '/themes/ngo-charity-fundraising-pro/inc/options.dat',
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/ngo-charity-fundraising-lite/homepage-pro-3.jpg',
+            'local_import_widget_file'     => CDI_PLUGIN_DIR_PATH . '/themes/ngo-charity-fundraising-pro/inc/widgets.wie',
+            'preview_url' => 'https://bizbergthemes.com/ngo-charity-fundraising-pro/homepage-3/'
+        ),
     );
 }
 
@@ -43,8 +52,12 @@ function cdi_after_import_setup( $selected_import ) {
             $front_page_id = get_page_by_path( 'homepage-free' );
             break;
 
-        case 'Homepage PRO':
-            $front_page_id = get_page_by_path( 'homepage-pro' );
+        case 'Clean Charity Homepage 2':
+            $front_page_id = get_page_by_path( 'homepage-2' );
+            break;
+
+        case 'NGO Charity Hub Homepage 3':
+            $front_page_id = get_page_by_path( 'homepage-3' );
             break;
         
         default:
@@ -99,6 +112,18 @@ function cdi_register_plugins( $plugins ) {
           'required' => true,             
         ],
     ];
+
+    array_push( $theme_plugins ,[ 
+        'name'     => esc_html__( 'Charity Addon for Elementor', 'cdi' ),
+        'slug'     => 'charity-addon-for-elementor', 
+        'required' => true,             
+    ]);
+
+    array_push( $theme_plugins ,[ 
+        'name'     => esc_html__( 'GiveWP – Donation Plugin and Fundraising Platform', 'cdi' ),
+        'slug'     => 'give', 
+        'required' => true,             
+    ]);
  
     return $theme_plugins;
 

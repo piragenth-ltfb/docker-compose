@@ -68,21 +68,29 @@ class Script extends Asset {
 		$src     = $this->args['src'];
 		$version = $this->args['version'];
 
-		$filename = '';
-		if ( class_exists( '\Google\Site_Kit\Core\Assets\Manifest' ) ) {
-			if ( isset( Manifest::$assets[ $this->handle ] ) ) {
-				$filename = Manifest::$assets[ $this->handle ];
-			} else {
-				$handle = str_replace( 'googlesitekit-', '', $this->handle );
-				if ( isset( Manifest::$assets[ $handle ] ) ) {
-					$filename = Manifest::$assets[ $handle ];
-				}
-			}
-		}
+		if ( $src ) {
+			$entry = Manifest::get( $this->handle );
 
-		if ( ! empty( $filename ) ) {
-			$src     = $context->url( 'dist/assets/js/' . $filename );
-			$version = null;
+			if ( is_array( $entry[0] ) ) {
+				// If the first entry item is an array, we can assume `$entry` is an array of entries in the format filename => hash.
+				// In this scenario we want to match the nested entry against the filename provided in `$src`.
+				$src_filename = basename( $src );
+
+				foreach ( $entry as $entry_pair ) {
+					if ( $this->is_matching_manifest_entry( $entry_pair, $src_filename ) ) {
+						list( $filename, $hash ) = $entry_pair;
+						break;
+					}
+				}
+			} else {
+				// Otherwise, `$entry` will be a single entry in the format filename => hash.
+				list( $filename, $hash ) = $entry;
+			}
+
+			if ( $filename ) {
+				$src     = $context->url( 'dist/assets/js/' . $filename );
+				$version = $hash;
+			}
 		}
 
 		wp_register_script(
@@ -112,12 +120,40 @@ class Script extends Asset {
 	}
 
 	/**
+	 * Checks if the provided manifest entry matches the given filename.
+	 *
+	 * @since 1.89.0
+	 *
+	 * @param array  $entry Array of filename, hash.
+	 * @param string $src_filename   Filename to check.
+	 * @return bool
+	 */
+	private function is_matching_manifest_entry( array $entry, $src_filename ) {
+		list ( $filename, $hash ) = $entry;
+
+		if ( ! isset( $hash ) ) {
+			// If the hash is not set, it means the hash is embedded in the entry filename.
+			// Remove the hash then compare to the src filename.
+			$entry_filename_without_hash = preg_replace( '/-[a-f0-9]+\.js$/', '.js', $filename );
+			if ( $src_filename === $entry_filename_without_hash ) {
+				return true;
+			}
+		}
+
+		if ( $filename === $src_filename ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Sets locale data for the script, if it has translations.
 	 *
 	 * @since 1.21.0
 	 */
 	private function set_locale_data() {
-		$json_translations = BC_Functions::load_script_textdomain( $this->handle, 'google-site-kit' );
+		$json_translations = load_script_textdomain( $this->handle, 'google-site-kit' );
 		if ( ! $json_translations ) {
 			return;
 		}

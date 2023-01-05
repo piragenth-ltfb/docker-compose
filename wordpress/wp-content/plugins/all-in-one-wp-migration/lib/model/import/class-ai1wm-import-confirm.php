@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2018 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,10 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'Kangaroos cannot jump here' );
+}
+
 class Ai1wm_Import_Confirm {
 
 	public static function execute( $params ) {
@@ -39,22 +43,84 @@ class Ai1wm_Import_Confirm {
 		// Close handle
 		ai1wm_close( $handle );
 
-		// Set message
-		$messages[] = __(
-			'The import process will overwrite your website including the database, media, plugins, and themes. ' .
-			'Please ensure that you have a backup of your data before proceeding to the next step.',
-			AI1WM_PLUGIN_NAME
-		);
+		// Confirm message
+		if ( defined( 'WP_CLI' ) ) {
+			$messages[] = __(
+				'The import process will overwrite your website including the database, media, plugins, and themes. ' .
+				'Are you sure to proceed?',
+				AI1WM_PLUGIN_NAME
+			);
+		} else {
+			$messages[] = __(
+				'The import process will overwrite your website including the database, media, plugins, and themes. ' .
+				'Please ensure that you have a backup of your data before proceeding to the next step.',
+				AI1WM_PLUGIN_NAME
+			);
+		}
 
 		// Check compatibility of PHP versions
 		if ( isset( $package['PHP']['Version'] ) ) {
-			if ( version_compare( $package['PHP']['Version'], '7.0.0', '<' ) && version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {
-				$messages[] = __(
-					'<i class="ai1wm-import-info">Your backup is from a PHP 5 but the site that you are importing to is PHP 7. ' .
-					'This could cause the import to fail. <a href="https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/" target="_blank">Technical details</a></i>',
-					AI1WM_PLUGIN_NAME
-				);
+			switch ( true ) {
+				case ( version_compare( $package['PHP']['Version'], '7.0.0', '<' ) && version_compare( PHP_VERSION, '8.0.0', '>=' ) ):
+					$php_version_message_cli = __(
+						'Your backup is from a PHP 5 but the site that you are importing to is PHP 8. ' .
+						'This could cause the import to fail. Technical details: https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/',
+						AI1WM_PLUGIN_NAME
+					);
+					$php_version_message     = __(
+						'<i class="ai1wm-import-info">Your backup is from a PHP 5 but the site that you are importing to is PHP 8. ' .
+						'This could cause the import to fail. <a href="https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/" target="_blank">Technical details</a></i>',
+						AI1WM_PLUGIN_NAME
+					);
+					break;
+
+				case ( version_compare( $package['PHP']['Version'], '8.0.0', '<' ) && version_compare( PHP_VERSION, '8.0.0', '>=' ) ):
+					$php_version_message_cli = __(
+						'Your backup is from a PHP 7 but the site that you are importing to is PHP 8. ' .
+						'This could cause the import to fail. Technical details: https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/',
+						AI1WM_PLUGIN_NAME
+					);
+					$php_version_message     = __(
+						'<i class="ai1wm-import-info">Your backup is from a PHP 7 but the site that you are importing to is PHP 8. ' .
+						'This could cause the import to fail. <a href="https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/" target="_blank">Technical details</a></i>',
+						AI1WM_PLUGIN_NAME
+					);
+					break;
+
+				case ( version_compare( $package['PHP']['Version'], '7.0.0', '<' ) && version_compare( PHP_VERSION, '7.0.0', '>=' ) ):
+					$php_version_message_cli = __(
+						'Your backup is from a PHP 5 but the site that you are importing to is PHP 7. ' .
+						'This could cause the import to fail. Technical details: https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/',
+						AI1WM_PLUGIN_NAME
+					);
+					$php_version_message     = __(
+						'<i class="ai1wm-import-info">Your backup is from a PHP 5 but the site that you are importing to is PHP 7. ' .
+						'This could cause the import to fail. <a href="https://help.servmask.com/knowledgebase/migrate-wordpress-from-php-5-to-php-7/" target="_blank">Technical details</a></i>',
+						AI1WM_PLUGIN_NAME
+					);
+					break;
+
+				default:
 			}
+
+			if ( isset( $php_version_message_cli, $php_version_message ) ) {
+				if ( defined( 'WP_CLI' ) ) {
+					$messages[] = $php_version_message_cli;
+				} else {
+					$messages[] = $php_version_message;
+				}
+			}
+		}
+
+		if ( defined( 'WP_CLI' ) ) {
+			$assoc_args = array();
+			if ( isset( $params['cli_args'] ) ) {
+				$assoc_args = $params['cli_args'];
+			}
+
+			WP_CLI::confirm( implode( $messages ), $assoc_args );
+
+			return $params;
 		}
 
 		// Set progress

@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) || exit;
 class Admin_Dashboard_Nav {
 
 	/**
-	 * Display dashabord tabs.
+	 * Display dashboard tabs.
 	 */
 	public function display() {
 		$nav_links = $this->get_nav_links();
@@ -89,21 +89,21 @@ class Admin_Dashboard_Nav {
 	 */
 	private function get_nav_links() {
 		$links = [
-			'modules' => [
+			'modules'       => [
 				'id'    => 'modules',
 				'url'   => '',
 				'args'  => 'view=modules',
 				'cap'   => 'manage_options',
 				'title' => esc_html__( 'Modules', 'rank-math' ),
 			],
-			'help'    => [
+			'help'          => [
 				'id'    => 'help',
 				'url'   => '',
 				'args'  => 'view=help',
 				'cap'   => 'manage_options',
 				'title' => esc_html__( 'Help', 'rank-math' ),
 			],
-			'wizard'  => [
+			'wizard'        => [
 				'id'    => 'wizard',
 				'url'   => 'wizard',
 				'args'  => '',

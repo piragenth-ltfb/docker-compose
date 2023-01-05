@@ -94,7 +94,7 @@ class Registration {
 
 		$status = Param::get( 'rankmath_connect' );
 		if ( $status && $redirect_to = $this->get_registration_url( $status ) ) { //phpcs:ignore
-			\wp_safe_redirect( $redirect_to );
+			Helper::redirect( $redirect_to );
 			exit;
 		}
 	}
@@ -125,6 +125,7 @@ class Registration {
 					'api_key'   => $auth_data['api_key'],
 					'plan'      => $auth_data['plan'],
 					'connected' => true,
+					'site_url'  => Helper::get_home_url(),
 				]
 			);
 
@@ -186,7 +187,7 @@ class Registration {
 			$url = 'wizard';
 		}
 
-		wp_redirect( Helper::get_admin_url( $url ) );
+		Helper::redirect( Helper::get_admin_url( $url ) );
 		exit;
 	}
 
@@ -230,7 +231,7 @@ class Registration {
 		// Wizard.
 		wp_enqueue_style( 'rank-math-wizard', rank_math()->plugin_url() . 'assets/admin/css/setup-wizard.css', [ 'wp-admin', 'buttons', 'cmb2-styles', 'rank-math-common', 'rank-math-cmb2' ], rank_math()->version );
 
-		$logo_url = '<a href="' . KB::get( 'logo' ) . '" target="_blank"><img src="' . esc_url( rank_math()->plugin_url() . 'assets/admin/img/logo.svg' ) . '"></a>';
+		$logo_url = '<a href="' . KB::get( 'logo', 'SW Logo' ) . '" target="_blank"><img src="' . esc_url( rank_math()->plugin_url() . 'assets/admin/img/logo.svg' ) . '"></a>';
 
 		ob_start();
 
@@ -268,9 +269,10 @@ class Registration {
 	 * Output connect button (instead of the old connect form).
 	 */
 	private function show_connect_button() {
+		Admin_Helper::maybe_show_invalid_siteurl_notice();
 		?>
 		<div class="text-center wp-core-ui rank-math-ui" style="margin-top: 30px;">
-			<button type="submit" class="button button-primary button-animated" name="rank_math_activate"><?php echo esc_attr__( 'Connect Your Account', 'rank-math' ); ?></button>
+			<button type="submit" class="button button-primary button-connect <?php echo Admin_Helper::is_site_url_valid() ? 'button-animated' : 'disabled'; ?>" name="rank_math_activate"><?php echo esc_attr__( 'Connect Your Account', 'rank-math' ); ?></button>
 		</div>
 		<?php
 	}
@@ -285,7 +287,7 @@ class Registration {
 			<p class="rank-math-gray-box">
 				<?php
 				/* translators: Link to Free Account Benefits KB article */
-				printf( esc_html__( 'By connecting your free account, you get keyword suggestions directly from Google when entering the focus keywords. Not only that, get access to our revolutionary SEO Analyzer inside WordPress that scans your website for SEO errors and suggest improvements. %s', 'rank-math' ), '<a href="' . KB::get( 'free-account-benefits' ) . '" target="_blank">' . esc_html__( 'Read more by following this link.', 'rank-math' ) . '</a>' );
+				printf( esc_html__( 'By connecting your free account, you get keyword suggestions directly from Google when entering the focus keywords. Not only that, get access to our revolutionary SEO Analyzer inside WordPress that scans your website for SEO errors and suggest improvements. %s', 'rank-math' ), '<a href="' . KB::get( 'free-account-benefits', 'SW Connect Free Account' ) . '" target="_blank">' . esc_html__( 'Read more by following this link.', 'rank-math' ) . '</a>' );
 				?>
 			</p>
 			<?php
@@ -306,12 +308,12 @@ class Registration {
 		// If no form submission, bail.
 		$referer = Param::post( '_wp_http_referer', get_dashboard_url() );
 		if ( Param::post( 'step' ) !== 'register' ) {
-			return wp_safe_redirect( $referer );
+			return Helper::redirect( $referer );
 		}
 
 		check_admin_referer( 'rank-math-wizard', 'security' );
 		if ( ! Helper::has_cap( 'general' ) ) {
-			return wp_safe_redirect( $referer );
+			return Helper::redirect( $referer );
 		}
 
 		$this->redirect_to_connect( $_POST );
@@ -326,7 +328,7 @@ class Registration {
 			exit;
 		}
 		add_option( 'rank_math_registration_skip', true );
-		wp_safe_redirect( Helper::get_admin_url( 'wizard' ) );
+		Helper::redirect( Helper::get_admin_url( 'wizard' ) );
 		exit;
 	}
 

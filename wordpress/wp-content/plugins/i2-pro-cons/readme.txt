@@ -1,8 +1,8 @@
 === i2 Pros & Cons ===
 Contributors: imibrar
 Tags: Pros & Cons, Amazon Pros & Cons, Pros and Cons, WP Pros & Cons
-Tested up to: 5.6
-Stable tag: 1.3.0
+Tested up to: 5.8
+Stable tag: 1.3.1
 Requires PHP: 5.x
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -12,6 +12,7 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 This plugin allow you to add/edit Pros & Cons visually in Gutenberg and classic editor in any post or page. you can also use shortcode. 
 
 **Update**
+v1.3.1 added rel sponsored in referral link, a new style and many options  . 
 v1.3.0 bug fix, popup button not visible in WordPress 5.6 in classic editor. 
 v1.2.6 bug fix, showing notice "rest_validate_value_from_schema was called incorrectly" in debug mode. 
 v1.2.4 allow to add pros and cons in single popup for gutenberg.
@@ -65,9 +66,9 @@ One click Pros and Cons addition
 
 == How to Use ==
 
-1. [How to customize Settings / Options page](https://themesfirst.com/i2-pros-and-cons-settings-the-right-way/ "i2 Pros & Cons customization")
-1. [How to use in Gutenberg](https://themesfirst.com/how-to-install-and-use-i2-pros-and-cons-gutenberg/ "i2 Pros & Cons in Gutengerg")
-1. [How to use in Classic Editor](https://themesfirst.com/how-to-install-and-use-i2-pros-and-cons-classic-editor/ "i2 Pros & Cons in Classic editor")
+1. [How to customize Settings / Options page](https://www.themesfirst.com/docs-category/i2-pros-and-cons-settings-the-right-way/ "i2 Pros & Cons customization")
+1. [How to use in Gutenberg](https://www.themesfirst.com/docs-category/how-to-install-and-use-i2-pros-and-cons-gutenberg/ "i2 Pros & Cons in Gutengerg")
+1. [How to use in Classic Editor](https://www.themesfirst.com/docs-category/how-to-install-and-use-i2-pros-and-cons-classic-editor/ "i2 Pros & Cons in Classic editor")
 
 
 == Frequently Asked Questions ==

@@ -24,13 +24,30 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Licenser module for ThemeIsle SDK.
  */
 class Licenser extends Abstract_Module {
-
+	/**
+	 * License VALID status string.
+	 */
+	const STATUS_VALID = 'valid';
+	/**
+	 * License NOT_ACTIVE status string.
+	 */
+	const STATUS_NOT_ACTIVE = 'not_active';
+	/**
+	 * License active expired status string.
+	 */
+	const STATUS_ACTIVE_EXPIRED = 'active_expired';
 	/**
 	 * Number of max failed checks before showing the license message.
 	 *
 	 * @var int $max_failed Maximum failed checks allowed before show the notice
 	 */
-	private static $max_failed = 5;
+	private static $max_failed = 1;
+	/**
+	 * Flag to check if the global actions were loaded.
+	 *
+	 * @var bool If the globals actions were loaded.
+	 */
+	private static $globals_loaded = false;
 	/**
 	 * License key string.
 	 *
@@ -216,6 +233,76 @@ class Licenser extends Abstract_Module {
 	}
 
 	/**
+	 * Check status.
+	 *
+	 * @param string $product_file Product basefile.
+	 *
+	 * @return string Status license.
+	 */
+	public static function status( $product_file ) {
+		$product = Product::get( $product_file );
+		if ( ! $product->requires_license() ) {
+			return self::STATUS_VALID;
+		}
+		$license_data = self::get_license_data( $product->get_key() );
+
+		$status = isset( $license_data->license ) ? $license_data->license : self::STATUS_NOT_ACTIVE;
+
+		return ( 'valid' === $status && isset( $license_data->is_expired ) && 'yes' === $license_data->is_expired ) ? 'active_expired' : $status;
+	}
+
+	/**
+	 * Product license data.
+	 *
+	 * @param string $key Product key.
+	 *
+	 * @return false|mixed|null
+	 */
+	private static function get_license_data( $key ) {
+		$license_data = get_option( $key . '_license_data', '' );
+
+		return isset( $license_data->license ) ? $license_data : false;
+	}
+
+	/**
+	 * Check if license is valid.
+	 *
+	 * @param string $product_file Product basefile.
+	 *
+	 * @return bool Is valid?
+	 */
+	public static function is_valid( $product_file ) {
+		return self::status( $product_file ) === self::STATUS_VALID;
+	}
+
+	/**
+	 * Get product plan.
+	 *
+	 * @param string $product_file Product file.
+	 *
+	 * @return int Plan id.
+	 */
+	public static function plan( $product_file ) {
+		$product = Product::get( $product_file );
+		$data    = self::get_license_data( $product->get_key() );
+
+		return isset( $data->price_id ) ? (int) $data->price_id : - 1;
+	}
+
+	/**
+	 * Get product license key.
+	 *
+	 * @param string $product_file Product file.
+	 *
+	 * @return string
+	 */
+	public static function key( $product_file ) {
+		$product = Product::get( $product_file );
+
+		return $product->get_license();
+	}
+
+	/**
 	 * Return the last error message.
 	 *
 	 * @return mixed Error message.
@@ -244,7 +331,7 @@ class Licenser extends Abstract_Module {
 	 */
 	public function get_distributor_name() {
 		if ( $this->is_from_partner( $this->product ) ) {
-			return 'ThemeIsle';
+			return 'Themeisle';
 		}
 
 		return $this->product->get_store_name();
@@ -256,12 +343,7 @@ class Licenser extends Abstract_Module {
 	 * @return int License plan.
 	 */
 	public function get_plan() {
-		$license_data = get_option( $this->product->get_key() . '_license_data', '' );
-		if ( ! isset( $license_data->price_id ) ) {
-			return - 1;
-		}
-
-		return (int) $license_data->price_id;
+		return self::plan( $this->product->get_basefile() );
 	}
 
 	/**
@@ -281,7 +363,7 @@ class Licenser extends Abstract_Module {
 		$status                 = $this->get_license_status( true );
 		$no_activations_string  = apply_filters( $this->product->get_key() . '_lc_no_activations_string', 'No more activations left for %s. You need to upgrade your plan in order to use %s on more websites. If you need assistance, please get in touch with %s staff.' );
 		$no_valid_string        = apply_filters( $this->product->get_key() . '_lc_no_valid_string', 'In order to benefit from updates and support for %s, please add your license code from your  <a href="%s" target="_blank">purchase history</a> and validate it <a href="%s">here</a>. ' );
-		$expired_license_string = apply_filters( $this->product->get_key() . '_lc_expired_string', 'Your %s License Key has expired. In order to continue receiving support and software updates you must  <a href="%s" target="_blank">renew</a> your license key.' );
+		$expired_license_string = apply_filters( $this->product->get_key() . '_lc_expired_string', 'Your %s\'s License Key has expired. In order to continue receiving support and software updates you must  <a href="%s" target="_blank">renew</a> your license key.' );
 		// No activations left for this license.
 		if ( 'valid' != $status && $this->check_activation() ) {
 			?>
@@ -379,7 +461,7 @@ class Licenser extends Abstract_Module {
 			return $this->get_api_url();
 		}
 
-		return $this->get_api_url() . '/checkout/?edd_license_key=' . $license_data->key . '&download_id=' . $license_data->download_id;
+		return trim( $this->get_api_url(), '/' ) . '/checkout/?edd_license_key=' . $license_data->key . '&download_id=' . $license_data->download_id;
 	}
 
 	/**
@@ -413,26 +495,22 @@ class Licenser extends Abstract_Module {
 
 		if ( is_wp_error( $response ) ) {
 			$license_data          = new \stdClass();
-			$license_data->license = 'valid';
+			$license_data->license = 'invalid';
 		} else {
 			$license_data = $response;
 		}
 
 		$license_old = get_option( $this->product->get_key() . '_license_data', '' );
-
-		if ( 'valid' === $license_old->license && ( $license_data->license !== $license_old->license ) ) {
+		if ( 'valid' === $license_old->license && ( $license_data->license !== $license_old->license ) && $this->failed_checks <= self::$max_failed ) {
 			$this->increment_failed_checks();
-		} else {
-			$this->reset_failed_checks();
-		}
 
-		if ( $this->failed_checks <= self::$max_failed ) {
 			return $license_old;
 		}
 
 		if ( ! isset( $license_data->key ) ) {
 			$license_data->key = isset( $license_old->key ) ? $license_old->key : '';
 		}
+		$this->reset_failed_checks();
 
 		return $license_data;
 
@@ -525,6 +603,10 @@ class Licenser extends Abstract_Module {
 		if ( 'activate' === $action && 'valid' !== $license_data->license ) {
 			return new \WP_Error( 'themeisle-license-invalid', 'ERROR: Invalid license provided.' );
 		}
+
+		// Remove the versions transient upon activation so that newer version for rollback can be acquired.
+		$versions_cache = $this->product->get_cache_key();
+		delete_transient( $versions_cache );
 
 		return true;
 	}
@@ -633,10 +715,19 @@ class Licenser extends Abstract_Module {
 	 */
 	public function theme_update_transient( $value ) {
 		$update_data = $this->check_for_update();
-		if ( $update_data ) {
-			$value->response[ $this->product->get_slug() ] = $update_data;
+		if ( empty( $value ) ) {
+			return $value;
 		}
 
+		if ( ! isset( $value->response ) ) {
+			return $value;
+		}
+
+		if ( ! $update_data ) {
+			return $value;
+		}
+
+		$value->response[ $this->product->get_slug() ] = $update_data;
 		return $value;
 	}
 
@@ -844,7 +935,13 @@ class Licenser extends Abstract_Module {
 			$this->failed_checks = intval( get_option( $this->product->get_key() . '_failed_checks', 0 ) );
 			$this->register_license_hooks();
 		}
-
+		if ( ! self::$globals_loaded ) {
+			add_filter( 'themeisle_sdk_license/status', [ __CLASS__, 'status' ], 999, 1 );
+			add_filter( 'themeisle_sdk_license/is-valid', [ __CLASS__, 'is_valid' ], 999, 1 );
+			add_filter( 'themeisle_sdk_license/plan', [ __CLASS__, 'plan' ], 999, 1 );
+			add_filter( 'themeisle_sdk_license/key', [ __CLASS__, 'key' ], 999, 1 );
+			$globals_loaded = true;
+		}
 		$namespace = apply_filters( 'themesle_sdk_namespace_' . md5( $product->get_basefile() ), false );
 
 		if ( false !== $namespace ) {
@@ -871,6 +968,20 @@ class Licenser extends Abstract_Module {
 			);
 			add_filter( 'plugins_api', array( $this, 'plugins_api_filter' ), 10, 3 );
 			add_filter( 'http_request_args', array( $this, 'http_request_args' ), 10, 2 ); //phpcs:ignore WordPressVIPMinimum.Hooks.RestrictedHooks.http_request_args
+			if ( ! self::is_valid( $product->get_basefile() ) ) {
+				add_filter(
+					'plugin_action_links_' . plugin_basename( $product->get_basefile() ),
+					function ( $actions ) {
+						if ( $this->get_license_status( true ) !== self::STATUS_ACTIVE_EXPIRED ) {
+							return $actions;
+						}
+						$new_actions['deactivate'] = $actions['deactivate'];
+						$new_actions['renew_link'] = '<a style="color:#d63638" href="' . esc_url( $this->renew_url() ) . '" target="_blank" rel="external noopener noreferrer">Renew license to update</a>';
+
+						return $new_actions;
+					} 
+				);
+			}
 
 			return $this;
 		}

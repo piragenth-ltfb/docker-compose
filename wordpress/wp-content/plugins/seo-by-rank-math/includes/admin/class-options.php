@@ -11,6 +11,7 @@
 namespace RankMath\Admin;
 
 use WP_Http;
+use RankMath\KB;
 use RankMath\CMB2;
 use RankMath\Helper;
 use RankMath\Traits\Hooker;
@@ -222,7 +223,7 @@ class Options {
 
 		if ( filter_has_var( INPUT_POST, 'reset-cmb' ) && Param::post( 'action' ) === $this->key ) {
 			delete_option( $this->key );
-			wp_safe_redirect( esc_url_raw( $url ), WP_Http::SEE_OTHER );
+			Helper::redirect( esc_url_raw( $url ), WP_Http::SEE_OTHER );
 			exit;
 		}
 	}
@@ -240,7 +241,7 @@ class Options {
 		\CMB2_Hookup::enqueue_cmb_css();
 		rank_math()->variables->setup_json();
 		wp_enqueue_style( 'rank-math-options', rank_math()->plugin_url() . 'assets/admin/css/option-panel.css', [ 'select2-rm', 'rank-math-common', 'rank-math-cmb2' ], rank_math()->version );
-		wp_enqueue_script( 'rank-math-options', rank_math()->plugin_url() . 'assets/admin/js/option-panel.js', [ 'underscore', 'select2-rm', 'lodash', 'rank-math-common', 'rank-math-validate' ], rank_math()->version, true );
+		wp_enqueue_script( 'rank-math-options', rank_math()->plugin_url() . 'assets/admin/js/option-panel.js', [ 'underscore', 'select2-rm', 'lodash', 'rank-math-common' ], rank_math()->version, true );
 
 		// Add thank you.
 		Helper::add_json( 'indexUrl', rank_math()->plugin_url() . 'assets/admin/js/search-index/' );
@@ -269,6 +270,22 @@ class Options {
 		// Header.
 		rank_math()->admin->display_admin_header();
 		?>
+
+		<?php if ( ! defined( 'RANK_MATH_PRO_FILE' ) ) : ?>
+			<div class="rank-math-unlock-pro-notice" id="rank-math-unlock-pro-notice">
+				<a href="<?php KB::the( 'pro', 'Unlock PRO Options Panel Notice' ); ?>" target="_blank" class="pro-link">
+					<p>
+						<?php esc_html_e( 'Take your SEO to the Next Level!', 'rank-math' ); ?>
+						<strong><?php esc_html_e( 'Get Rank Math PRO!', 'rank-math' ); ?></strong>
+						<span><?php esc_html_e( 'Click here to see all the exciting features.', 'rank-math' ); ?></span>
+					</p>
+					<div class="close-notice">
+						<span class="dashicons dashicons-dismiss"></span>
+					</div>
+				</a>
+			</div>
+		<?php endif; ?>
+
 		<div class="wrap rank-math-wrap rank-math-wrap-settings">
 
 			<span class="wp-header-end"></span>
@@ -280,7 +297,7 @@ class Options {
 
 				<footer class="form-footer rank-math-ui settings-footer wp-clearfix">
 					<?php wp_nonce_field( 'rank-math-reset-options' ); ?>
-					<input type="submit" name="submit-cmb" id="submit-cmb" class="button button-primary save-options" value="<?php esc_attr_e( 'Save Changes', 'rank-math' ); ?>">
+					<input type="submit" name="submit-cmb" id="submit-cmb" title="<?php echo esc_html__( 'Ctrl/Cmd + Enter', 'rank-math' ) ?>" class="button button-primary save-options" value="<?php esc_attr_e( 'Save Changes', 'rank-math' ); ?>">
 					<input type="submit" name="reset-cmb" id="rank-math-reset-cmb" value="<?php esc_attr_e( 'Reset Options', 'rank-math' ); ?>" class="button button-secondary reset-options alignleft">
 				</footer>
 

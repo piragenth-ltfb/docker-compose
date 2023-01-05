@@ -14,19 +14,23 @@
       <td class="prli-settings-table-nav">
         <ul class="prli-sidebar-nav">
           <li><a data-id="license"><?php esc_html_e('License', 'pretty-link'); ?></a></li>
-          <!-- <li><a data-id="addons"><?php esc_html_e('Add-Ons', 'pretty-link'); ?></a></li> -->
           <?php do_action('prli_updates_nav_items'); ?>
         </ul>
       </td>
       <td class="prli-settings-table-pages">
         <div class="prli-page" id="license">
-          <?php require(PRLI_VIEWS_PATH.'/admin/update/license.php'); ?>
+          <div class="prli-page-title"><?php esc_html_e('Pretty Links Pro License', 'pretty-link'); ?></div>
+          <div id="prli-license-container">
+            <?php
+              if(empty($li)) {
+                require PRLI_VIEWS_PATH . '/admin/update/inactive_license.php';
+              }
+              else {
+                require PRLI_VIEWS_PATH . '/admin/update/active_license.php';
+              }
+            ?>
+          </div>
         </div>
-        <!--
-        <div class="prli-page" id="addons">
-          <?php require(PRLI_VIEWS_PATH.'/admin/update/addons.php'); ?>
-        </div>
-        -->
         <?php do_action('prli_updates_pages'); ?>
       </td>
     </tr>

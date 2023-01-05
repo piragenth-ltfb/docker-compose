@@ -60,7 +60,7 @@ class Info_Box extends Widget_Base
         return 'https://essential-addons.com/elementor/docs/info-box/';
     }
 
-    protected function _register_controls()
+    protected function register_controls()
     {
 
         /**
@@ -101,7 +101,7 @@ class Info_Box extends Widget_Base
                     ],
                     'number' => [
                         'title' => esc_html__('Number', 'essential-addons-for-elementor-lite'),
-                        'icon' => 'fa fa-sort-numeric-desc',
+                        'icon' => 'eicon-number-field',
                     ],
                     'icon' => [
                         'title' => esc_html__('Icon', 'essential-addons-for-elementor-lite'),
@@ -109,7 +109,7 @@ class Info_Box extends Widget_Base
                     ],
                     'img' => [
                         'title' => esc_html__('Image', 'essential-addons-for-elementor-lite'),
-                        'icon' => 'fa fa-picture-o',
+                        'icon' => 'eicon-image-bold',
                     ],
                 ],
                 'default' => 'icon',
@@ -302,15 +302,15 @@ class Info_Box extends Widget_Base
                 'options' => [
                     'left' => [
                         'title' => esc_html__('Left', 'essential-addons-for-elementor-lite'),
-                        'icon' => 'fa fa-align-left',
+                        'icon' => 'eicon-text-align-left',
                     ],
                     'center' => [
                         'title' => esc_html__('Center', 'essential-addons-for-elementor-lite'),
-                        'icon' => 'fa fa-align-center',
+                        'icon' => 'eicon-text-align-center',
                     ],
                     'right' => [
                         'title' => esc_html__('Right', 'essential-addons-for-elementor-lite'),
-                        'icon' => 'fa fa-align-right',
+                        'icon' => 'eicon-text-align-right',
                     ],
                 ],
                 'default' => 'center',
@@ -506,7 +506,7 @@ class Info_Box extends Widget_Base
                         ],
                     ],
                     'default' => '1',
-                    'description' => '<span class="pro-feature"> Get the  <a href="https://wpdeveloper.net/in/upgrade-essential-addons-elementor" target="_blank">Pro version</a> for more stunning elements and customization options.</span>',
+                    'description' => '<span class="pro-feature"> Get the  <a href="https://wpdeveloper.com/upgrade/ea-pro" target="_blank">Pro version</a> for more stunning elements and customization options.</span>',
                 ]
             );
 
@@ -1192,6 +1192,7 @@ class Info_Box extends Widget_Base
                 'selectors' => [
                     '{{WRAPPER}} .eael-infobox .infobox-button .eael-infobox-button i' => 'font-size: {{SIZE}}{{UNIT}};',
                     '{{WRAPPER}} .eael-infobox .infobox-button .eael-infobox-button img' => 'height: {{SIZE}}{{UNIT}}; width: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .eael-infobox .infobox-button .eael-infobox-button svg' => 'height: {{SIZE}}{{UNIT}}; width: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );
@@ -1238,6 +1239,7 @@ class Info_Box extends Widget_Base
                 'default' => '#ffffff',
                 'selectors' => [
                     '{{WRAPPER}} .eael-infobox .eael-infobox-button' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .eael-infobox .eael-infobox-button svg' => 'fill: {{VALUE}};',
                 ],
             ]
         );
@@ -1284,6 +1286,7 @@ class Info_Box extends Widget_Base
                 'default' => '#ffffff',
                 'selectors' => [
                     '{{WRAPPER}} .eael-infobox .eael-infobox-button:hover' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .eael-infobox .eael-infobox-button:hover svg' => 'fill: {{VALUE}};',
                 ],
             ]
         );
@@ -1517,28 +1520,36 @@ class Info_Box extends Widget_Base
             $this->add_render_attribute('eael_infobox_inner', 'class', 'icon-on-right');
         }
 
-        $target = !empty($settings['eael_show_infobox_clickable_link']['is_external']) ? 'target="_blank"' : '';
-        $nofollow = !empty($settings['eael_show_infobox_clickable_link']['nofollow']) ? 'rel="nofollow"' : '';
+	    if ( ! empty( $settings['eael_show_infobox_clickable_link']['url'] ) ) {
+		    $this->add_link_attributes( 'infobox_clickable_link', $settings['eael_show_infobox_clickable_link'] );
+	    }
 
-        ob_start();
-        ?>
-        <?php if ('yes' == $settings['eael_show_infobox_clickable']): ?><a href="<?php echo esc_url($settings['eael_show_infobox_clickable_link']['url']) ?>" <?php echo $target; ?> <?php echo $nofollow; ?>><?php endif;?>
-            <div <?php echo $this->get_render_attribute_string('eael_infobox_inner'); ?>>
-            <?php
-        echo ob_get_clean();
+	    ob_start();
+
+	    if ( 'yes' == $settings['eael_show_infobox_clickable'] ) { ?>
+            <a <?php echo $this->get_render_attribute_string( 'infobox_clickable_link' ); ?>>
+	    <?php } ?>
+        <div <?php echo $this->get_render_attribute_string( 'eael_infobox_inner' ); ?>>
+	    <?php
+	    echo ob_get_clean();
     }
 
 	/**
 	 * This function is rendering closing divs and tags
 	 * of before partial for infobox.
 	 */
-    protected function eael_infobox_after()
-    {
-        $settings = $this->get_settings_for_display();
-        ob_start(); ?></div><?php
-if ('yes' == $settings['eael_show_infobox_clickable']): ?></a><?php endif;
-        echo ob_get_clean();
-    }
+	protected function eael_infobox_after() {
+		$settings = $this->get_settings_for_display();
+		ob_start(); ?>
+        </div>
+
+		<?php
+		if ( 'yes' == $settings['eael_show_infobox_clickable'] ) { ?>
+            </a>
+		<?php }
+
+		echo ob_get_clean();
+	}
 
 	/**
 	 * This function is rendering appropriate icon for infobox.
@@ -1607,7 +1618,7 @@ if ('yes' == $settings['eael_show_infobox_clickable']): ?></a><?php endif;
 
             <?php if ('icon' == $settings['eael_infobox_img_or_icon']): ?>
                 <div class="infobox-icon-wrap">
-                    <?php echo $icon_tag; ?>
+                    <?php Icons_Manager::render_icon( $settings['eael_infobox_icon_new'], [ 'aria-hidden' => 'true' ] ); ?>
                 </div>
             <?php endif;?>
 
@@ -1634,8 +1645,11 @@ if ('yes' == $settings['eael_show_infobox_clickable']): ?></a><?php endif;
         ob_start();
         ?>
         <div <?php echo $this->get_render_attribute_string('infobox_content'); ?>>
-            <<?php echo $settings['eael_infobox_title_tag']; ?> class="title"><?php echo $settings['eael_infobox_title']; ?></<?php echo $settings['eael_infobox_title_tag']; ?>>
-            <?php if ('yes' == $settings['eael_show_infobox_content']): ?>
+            <?php if ( !empty( $settings['eael_infobox_title'] ) ): ?>
+                <<?php echo Helper::eael_validate_html_tag( $settings['eael_infobox_title_tag'] ); ?> class="title"><?php echo Helper::eael_wp_kses($settings['eael_infobox_title']); ?></<?php echo Helper::eael_validate_html_tag( $settings['eael_infobox_title_tag'] ); ?>>
+            <?php
+                endif;
+            if ('yes' == $settings['eael_show_infobox_content']): ?>
                 <?php if ('content' === $settings['eael_infobox_text_type']): ?>
                     <?php if (!empty($settings['eael_infobox_text'])): ?>
                         <p><?php echo $settings['eael_infobox_text']; ?></p>
@@ -1668,17 +1682,9 @@ if ('yes' == $settings['eael_show_infobox_clickable']): ?></a><?php endif;
 
         $this->add_render_attribute('infobox_button', 'class', 'eael-infobox-button');
 
-        if ($settings['infobox_button_link_url']['url']) {
-            $this->add_render_attribute('infobox_button', 'href', esc_url($settings['infobox_button_link_url']['url']));
-        }
-
-        if ('on' == $settings['infobox_button_link_url']['is_external']) {
-            $this->add_render_attribute('infobox_button', 'target', '_blank');
-        }
-
-        if ('on' == $settings['infobox_button_link_url']['nofollow']) {
-            $this->add_render_attribute('infobox_button', 'rel', 'nofollow');
-        }
+	    if ( ! empty( $settings['infobox_button_link_url']['url'] ) ) {
+		    $this->add_link_attributes( 'infobox_button', $settings['infobox_button_link_url'] );
+	    }
 
         ob_start();
         ?>
@@ -1688,21 +1694,21 @@ if ('yes' == $settings['eael_show_infobox_clickable']): ?></a><?php endif;
                     <?php if ($button_icon_is_new || $button_icon_migrated) {?>
                         <?php if (isset($settings['eael_infobox_button_icon_new']['value']['url'])) {?>
                             <img class="eael_infobox_button_icon_left" src="<?php echo esc_attr($settings['eael_infobox_button_icon_new']['value']['url']); ?>" alt="<?php echo esc_attr(get_post_meta($settings['eael_infobox_button_icon_new']['value']['id'], '_wp_attachment_image_alt', true)); ?>" />
-                        <?php } else {?>
-                            <i class="<?php echo esc_attr($settings['eael_infobox_button_icon_new']['value']); ?> eael_infobox_button_icon_left"></i>
-                        <?php }?>
-                    <?php } else {?>
-                        <i class="<?php echo esc_attr($settings['eael_infobox_button_icon']); ?>"></i>
-                    <?php }?>
+                        <?php } else {
+                            Icons_Manager::render_icon( $settings['eael_infobox_button_icon_new'], [ 'aria-hidden' => 'true', 'class' => 'eael_infobox_button_icon_left' ] );
+                        }?>
+                    <?php } else {
+                        Icons_Manager::render_icon( $settings['eael_infobox_button_icon'], [ 'aria-hidden' => 'true' ] );
+                        }?>
                 <?php endif;?>
                 <span class="infobox-button-text"><?php echo esc_attr($settings['infobox_button_text']); ?></span>
                 <?php if ('right' == $settings['eael_infobox_button_icon_alignment']): ?>
                     <?php if ($button_icon_is_new || $button_icon_migrated) {?>
                         <?php if (isset($settings['eael_infobox_button_icon_new']['value']['url'])) {?>
                             <img class="eael_infobox_button_icon_right" src="<?php echo esc_attr($settings['eael_infobox_button_icon_new']['value']['url']); ?>" alt="<?php echo esc_attr(get_post_meta($settings['eael_infobox_button_icon_new']['value']['id'], '_wp_attachment_image_alt', true)); ?>" />
-                        <?php } else {?>
-                            <i class="<?php echo esc_attr($settings['eael_infobox_button_icon_new']['value']); ?> eael_infobox_button_icon_right"></i>
-                        <?php }?>
+                        <?php } else {
+                            Icons_Manager::render_icon( $settings['eael_infobox_button_icon_new'], [ 'aria-hidden' => 'true', 'class' => 'eael_infobox_button_icon_right' ] );
+                        }?>
                     <?php } else {
 
             if ('left' == $settings['eael_infobox_button_icon_alignment']) {

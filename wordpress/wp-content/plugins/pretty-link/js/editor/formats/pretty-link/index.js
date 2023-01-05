@@ -71,7 +71,7 @@ export const prettyLink = {
       }
 
       render() {
-        const { isActive, activeAttributes, value, onChange } = this.props;
+        const { isActive, activeAttributes, value, onChange, contentRef } = this.props;
 
         return (
           <>
@@ -112,6 +112,7 @@ export const prettyLink = {
               activeAttributes={activeAttributes}
               value={value}
               onChange={onChange}
+              contentRef={contentRef}
             />
           </>
         );

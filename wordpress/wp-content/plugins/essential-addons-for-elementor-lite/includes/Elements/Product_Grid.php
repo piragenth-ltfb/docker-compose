@@ -48,7 +48,6 @@ class Product_Grid extends Widget_Base
 
 		if ( $is_type_instance && class_exists('woocommerce')) {
 		    $this->load_quick_view_asset();
-			add_filter( 'body_class', [$this, 'add_slider_body_class'] );
 		}
 	}
 
@@ -108,28 +107,6 @@ class Product_Grid extends Widget_Base
         ];
     }
 
-	/**
-	 * added custom markup for popup
-	 *
-	 * @param $classes
-	 * @return mixed
-	 */
-	public function add_slider_body_class( $classes ) {
-		if ( !in_array( 'eael-woo-slider', $classes ) ) {
-			add_action( 'wp_body_open', function () {
-				?>
-                <div style="display: none" class="eael-woocommerce-popup-view eael-product-popup
-		eael-product-zoom-in woocommerce">
-                    <div class="eael-product-modal-bg"></div>
-                    <div class="eael-popup-details-render eael-woo-slider-popup"><div class="eael-preloader"></div></div>
-                </div>
-				<?php
-			} );
-			$classes[] = 'eael-woo-slider';
-		}
-		return $classes;
-	}
-
     public function add_to_cart_button_custom_text($default)
     {
         if ($this->is_show_custom_add_to_cart) {
@@ -140,7 +117,7 @@ class Product_Grid extends Widget_Base
                 case 'grouped':
                     return $this->grouped_add_to_cart_button_text;
                 case 'simple':
-                    if ( ! $product->managing_stock() && ! $product->is_in_stock() ) {
+                    if ( ! $product->is_in_stock() ) {
                         return $this->default_add_to_cart_button_text;
                     }
                     return $this->simple_add_to_cart_button_text;
@@ -184,7 +161,7 @@ class Product_Grid extends Widget_Base
         ]);
     }
 
-    protected function _register_controls()
+    protected function register_controls()
     {
         $this->init_content_wc_notice_controls();
         if (!function_exists('WC')) {
@@ -205,6 +182,7 @@ class Product_Grid extends Widget_Base
         $this->init_style_product_controls();
         $this->init_style_color_typography_controls();
         $this->init_style_addtocart_controls();
+        $this->sale_badge_style();
         $this->eael_product_action_buttons();
         $this->eael_product_action_buttons_style();
         /**
@@ -469,6 +447,9 @@ class Product_Grid extends Widget_Base
                     'span' => __( 'span', 'essential-addons-for-elementor-lite' ),
                     'p'    => __( 'p', 'essential-addons-for-elementor-lite' ),
                 ],
+                'condition'=> [
+                    'eael_product_grid_style_preset!' => 'eael-product-default'
+                ]
             ]
         );
 
@@ -548,6 +529,39 @@ class Product_Grid extends Widget_Base
             'label' => esc_html__('Show Product Compare?', 'essential-addons-for-elementor-lite'),
             'type' => Controls_Manager::SWITCHER,
         ]);
+
+	    $this->add_control(
+		    'eael_product_grid_image_clickable',
+		    [
+			    'label' => esc_html__('Image Clickable?', 'essential-addons-for-elementor-lite'),
+			    'type' => Controls_Manager::SWITCHER,
+			    'return_value' => 'yes',
+			    'default' => 'no',
+		    ]
+	    );
+
+	    $this->add_control(
+		    'eael_product_grid_wishlist',
+		    [
+			    'label' => esc_html__('Show Wishlist?', 'essential-addons-for-elementor-lite'),
+			    'type' => Controls_Manager::SWITCHER,
+			    'return_value' => 'yes',
+			    'default' => 'no',
+		    ]
+	    );
+
+	    if ( ! function_exists( 'YITH_WCWL' ) ) {
+		    $this->add_control( 'eael_wishlist_warning_text',
+			    [
+				    'type'            => Controls_Manager::RAW_HTML,
+				    'raw'             => __( '<strong>YITH WOOCOMMERCE WISHLIST</strong> is not installed/activated on your site. Please install and activate <a href="plugin-install.php?s=yith-woocommerce-wishlist&tab=search&type=term" target="_blank">YITH WOOCOMMERCE WISHLIST</a> first.', 'essential-addons-for-elementor-lite' ),
+				    'content_classes' => 'eael-warning',
+				    'condition'       => [
+					    'eael_product_grid_wishlist' => 'yes'
+				    ],
+			    ]
+		    );
+	    }
 
         $this->end_controls_section();
     }
@@ -705,15 +719,15 @@ class Product_Grid extends Widget_Base
                 'options' => [
                     'left' => [
                         'title' => __('Left', 'essential-addons-for-elementor-lite'),
-                        'icon' => 'fa fa-align-left',
+                        'icon' => 'eicon-text-align-left',
                     ],
                     'center' => [
                         'title' => __('Center', 'essential-addons-for-elementor-lite'),
-                        'icon' => 'fa fa-align-center',
+                        'icon' => 'eicon-text-align-center',
                     ],
                     'right' => [
                         'title' => __('Right', 'essential-addons-for-elementor-lite'),
-                        'icon' => 'fa fa-align-right',
+                        'icon' => 'eicon-text-align-right',
                     ],
                 ],
                 'default' => 'center',
@@ -812,7 +826,7 @@ class Product_Grid extends Widget_Base
             ]
         );
 
-        $this->add_control(
+        $this->add_responsive_control(
             'eael_peoduct_grid_padding',
             [
                 'label' => __('Padding', 'essential-addons-for-elementor-lite'),
@@ -1023,15 +1037,15 @@ class Product_Grid extends Widget_Base
                 'options' => [
                     'left' => [
                         'title' => __('Left', 'essential-addons-for-elementor-lite'),
-                        'icon' => 'fa fa-align-left',
+                        'icon' => 'eicon-text-align-left',
                     ],
                     'center' => [
                         'title' => __('Center', 'essential-addons-for-elementor-lite'),
-                        'icon' => 'fa fa-align-center',
+                        'icon' => 'eicon-text-align-center',
                     ],
                     'right' => [
                         'title' => __('Right', 'essential-addons-for-elementor-lite'),
-                        'icon' => 'fa fa-align-right',
+                        'icon' => 'eicon-text-align-right',
                     ],
                 ],
                 'default' => 'center',
@@ -1365,95 +1379,99 @@ class Product_Grid extends Widget_Base
             ]
         );
 
-        $this->add_control(
-            'eael_product_grid_sale_badge_heading',
-            [
-                'label' => __('Sale Badge', 'essential-addons-for-elementor-lite'),
-                'type' => Controls_Manager::HEADING,
-            ]
-        );
-
-        $this->add_control(
-            'eael_product_grid_sale_badge_color',
-            [
-                'label' => esc_html__('Sale Badge Color', 'essential-addons-for-elementor-lite'),
-                'type' => Controls_Manager::COLOR,
-                'default' => '#fff',
-                'selectors' => [
-                    '{{WRAPPER}} .woocommerce ul.products li.product .onsale, {{WRAPPER}} .woocommerce ul.products li.product .eael-onsale' => 'color: {{VALUE}};',
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'eael_product_grid_sale_badge_background',
-            [
-                'label' => esc_html__('Sale Badge Background', 'essential-addons-for-elementor-lite'),
-                'type' => Controls_Manager::COLOR,
-                'default' => '#ff2a13',
-                'selectors' => [
-                    '{{WRAPPER}} .woocommerce ul.products li.product .onsale, {{WRAPPER}} .woocommerce ul.products li.product .eael-onsale' => 'background-color: {{VALUE}};',
-                    '{{WRAPPER}} .woocommerce ul.products li.product .eael-onsale:not(.outofstock).sale-preset-4:after' => 'border-left-color: {{VALUE}}; border-right-color: {{VALUE}};',
-                ],
-            ]
-        );
-
-        $this->add_group_control(
-            Group_Control_Typography::get_type(),
-            [
-                'name' => 'eael_product_grid_sale_badge_typography',
-                'selector' => '{{WRAPPER}} .woocommerce ul.products li.product .onsale, {{WRAPPER}} .woocommerce ul.products li.product .eael-onsale:not(.outofstock)',
-            ]
-        );
-
-        // stock out badge
-        $this->add_control(
-            'eael_product_grid_stock_out_badge_heading',
-            [
-                'label' => __('Stock Out Badge', 'essential-addons-for-elementor-lite'),
-                'type' => Controls_Manager::HEADING,
-            ]
-        );
-
-        $this->add_control(
-            'eael_product_grid_stock_out_badge_color',
-            [
-                'label' => esc_html__('Stock Out Badge Color', 'essential-addons-for-elementor-lite'),
-                'type' => Controls_Manager::COLOR,
-                'default' => '#fff',
-                'selectors' => [
-                    '{{WRAPPER}} .woocommerce ul.products li.product .outofstock-badge, {{WRAPPER}} .woocommerce ul.products li.product .eael-onsale.outofstock' => 'color: {{VALUE}};',
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'eael_product_grid_stock_out_badge_background',
-            [
-                'label' => esc_html__('Stock Out Badge Background', 'essential-addons-for-elementor-lite'),
-                'type' => Controls_Manager::COLOR,
-                'default' => '#ff2a13',
-                'selectors' => [
-                    '{{WRAPPER}} .woocommerce ul.products li.product .outofstock-badge, {{WRAPPER}} .woocommerce ul.products li.product .eael-onsale.outofstock' => 'background-color: {{VALUE}};',
-                    '{{WRAPPER}} .woocommerce ul.products li.product .eael-onsale.outofstock.sale-preset-4:after' => 'border-left-color: {{VALUE}}; border-right-color: {{VALUE}};',
-                ],
-            ]
-        );
-
-        $this->add_group_control(
-            Group_Control_Typography::get_type(),
-            [
-                'name' => 'eael_product_grid_stock_out_badge_typography',
-                'selector' => '{{WRAPPER}} .woocommerce ul.products li.product .outofstock-badge, {{WRAPPER}} .woocommerce ul.products li.product .eael-onsale.outofstock',
-            ]
-        );
-
         $this->end_controls_section();
+    }
+
+    protected function sale_badge_style(){
+	    $this->start_controls_section(
+		    'eael_section_product_grid_sale_badge_style',
+		    [
+			    'label' => esc_html__('Sale Badge Style', 'essential-addons-for-elementor-lite'),
+			    'tab' => Controls_Manager::TAB_STYLE,
+		    ]
+	    );
+
+	    $this->add_control(
+		    'eael_product_grid_sale_badge_color',
+		    [
+			    'label' => esc_html__('Sale Badge Color', 'essential-addons-for-elementor-lite'),
+			    'type' => Controls_Manager::COLOR,
+			    'default' => '#fff',
+			    'selectors' => [
+				    '{{WRAPPER}} .woocommerce ul.products li.product .onsale, {{WRAPPER}} .woocommerce ul.products li.product .eael-onsale' => 'color: {{VALUE}};',
+			    ],
+		    ]
+	    );
+
+	    $this->add_control(
+		    'eael_product_grid_sale_badge_background',
+		    [
+			    'label' => esc_html__('Sale Badge Background', 'essential-addons-for-elementor-lite'),
+			    'type' => Controls_Manager::COLOR,
+			    'default' => '#ff2a13',
+			    'selectors' => [
+				    '{{WRAPPER}} .woocommerce ul.products li.product .onsale, {{WRAPPER}} .woocommerce ul.products li.product .eael-onsale' => 'background-color: {{VALUE}};',
+				    '{{WRAPPER}} .woocommerce ul.products li.product .eael-onsale:not(.outofstock).sale-preset-4:after' => 'border-left-color: {{VALUE}}; border-right-color: {{VALUE}};',
+			    ],
+		    ]
+	    );
+
+	    $this->add_group_control(
+		    Group_Control_Typography::get_type(),
+		    [
+			    'name' => 'eael_product_grid_sale_badge_typography',
+			    'selector' => '{{WRAPPER}} .woocommerce ul.products li.product .onsale, {{WRAPPER}} .woocommerce ul.products li.product .eael-onsale:not(.outofstock)',
+		    ]
+	    );
+
+	    // stock out badge
+	    $this->add_control(
+		    'eael_product_grid_stock_out_badge_heading',
+		    [
+			    'label' => __('Stock Out Badge', 'essential-addons-for-elementor-lite'),
+			    'type' => Controls_Manager::HEADING,
+		    ]
+	    );
+
+	    $this->add_control(
+		    'eael_product_grid_stock_out_badge_color',
+		    [
+			    'label' => esc_html__('Stock Out Badge Color', 'essential-addons-for-elementor-lite'),
+			    'type' => Controls_Manager::COLOR,
+			    'default' => '#fff',
+			    'selectors' => [
+				    '{{WRAPPER}} .woocommerce ul.products li.product .outofstock-badge, {{WRAPPER}} .woocommerce ul.products li.product .eael-onsale.outofstock' => 'color: {{VALUE}};',
+			    ],
+		    ]
+	    );
+
+	    $this->add_control(
+		    'eael_product_grid_stock_out_badge_background',
+		    [
+			    'label' => esc_html__('Stock Out Badge Background', 'essential-addons-for-elementor-lite'),
+			    'type' => Controls_Manager::COLOR,
+			    'default' => '#ff2a13',
+			    'selectors' => [
+				    '{{WRAPPER}} .woocommerce ul.products li.product .outofstock-badge, {{WRAPPER}} .woocommerce ul.products li.product .eael-onsale.outofstock' => 'background-color: {{VALUE}};',
+				    '{{WRAPPER}} .woocommerce ul.products li.product .eael-onsale.outofstock.sale-preset-4:after' => 'border-left-color: {{VALUE}}; border-right-color: {{VALUE}};',
+			    ],
+		    ]
+	    );
+
+	    $this->add_group_control(
+		    Group_Control_Typography::get_type(),
+		    [
+			    'name' => 'eael_product_grid_stock_out_badge_typography',
+			    'selector' => '{{WRAPPER}} .woocommerce ul.products li.product .outofstock-badge, {{WRAPPER}} .woocommerce ul.products li.product .eael-onsale.outofstock',
+		    ]
+	    );
+
+	    $this->end_controls_section();
     }
 
     protected function init_style_addtocart_controls()
     {
-// add to cart button
+        // add to cart button
         $this->start_controls_section(
             'eael_section_product_grid_add_to_cart_styles',
             [
@@ -1666,30 +1684,6 @@ class Product_Grid extends Widget_Base
             'eael_section_product_badges',
             [
                 'label' => esc_html__('Sale / Stock Out Badge', 'essential-addons-for-elementor-lite'),
-                'conditions' => [
-                    'relation' => 'and',
-                    'terms' => [
-                        [
-                            'name' => 'eael_product_grid_layout',
-                            'operator' => '!=',
-                            'value' => [
-                                'grid',
-                                'list',
-                                'masonry',
-                            ],
-                        ],
-                        [
-                            'name' => 'eael_product_grid_style_preset',
-                            'operator' => '!in',
-                            'value' => [
-                                'eael-product-default',
-                                'eael-product-simple',
-                                'eael-product-reveal',
-                                'eael-product-overlay',
-                            ]
-                        ],
-                    ],
-                ],
             ]
         );
         $this->add_control(
@@ -1717,11 +1711,11 @@ class Product_Grid extends Widget_Base
                 'options' => [
                     'left' => [
                         'title' => __('Left', 'essential-addons-for-elementor-lite'),
-                        'icon' => 'fa fa-align-left',
+                        'icon' => 'eicon-text-align-left',
                     ],
                     'right' => [
                         'title' => __('Right', 'essential-addons-for-elementor-lite'),
-                        'icon' => 'fa fa-align-right',
+                        'icon' => 'eicon-text-align-right',
                     ],
                 ],
                 'condition' => [
@@ -1729,6 +1723,23 @@ class Product_Grid extends Widget_Base
                 ],
             ]
         );
+
+	    $this->add_control(
+		    'eael_product_sale_text',
+		    [
+			    'label'       => esc_html__( 'Sale Text', 'essential-addons-for-elementor-lite' ),
+			    'type'        => Controls_Manager::TEXT,
+			    'separator' => 'before',
+		    ]
+	    );
+
+	    $this->add_control(
+		    'eael_product_stockout_text',
+		    [
+			    'label'       => esc_html__( 'Stock Out Text', 'essential-addons-for-elementor-lite' ),
+			    'type'        => Controls_Manager::TEXT,
+		    ]
+	    );
 
         $this->end_controls_section();
     }
@@ -2185,15 +2196,15 @@ class Product_Grid extends Widget_Base
                 'options' => [
                     'left' => [
                         'title' => __('Left', 'essential-addons-for-elementor-lite'),
-                        'icon' => 'fa fa-align-left',
+                        'icon' => 'eicon-text-align-left',
                     ],
                     'center' => [
                         'title' => __('Center', 'essential-addons-for-elementor-lite'),
-                        'icon' => 'fa fa-align-center',
+                        'icon' => 'eicon-text-align-center',
                     ],
                     'right' => [
                         'title' => __('Right', 'essential-addons-for-elementor-lite'),
-                        'icon' => 'fa fa-align-right',
+                        'icon' => 'eicon-text-align-right',
                     ],
                 ],
                 'default' => 'center',
@@ -2969,93 +2980,113 @@ class Product_Grid extends Widget_Base
         $this->end_controls_section();
     }
 
+	function eael_customize_woo_prod_thumbnail_size( $size ) {
+		$settings = $this->get_settings_for_display();
+
+		return $settings['eael_product_grid_image_size_size'];
+	}
+
     protected function render()
     {
         if (!function_exists('WC')) {
             return;
         }
 
-
-
         $settings = $this->get_settings_for_display();
 
         // normalize for load more fix
-        $settings['layout_mode'] = $settings["eael_product_grid_layout"];
-        $widget_id = $this->get_id();
-        $settings['eael_widget_id'] = $widget_id;
-        if ( $settings[ 'post_type' ] === 'source_dynamic' && is_archive() || !empty($_REQUEST['post_type'])) {
-            $settings[ 'posts_per_page' ] = $settings[ 'eael_product_grid_products_count' ] ?: 4;
-            $settings[ 'offset' ]         = $settings[ 'product_offset' ];
-            $args                         = HelperClass::get_query_args( $settings );
-            $args                         = HelperClass::get_dynamic_args( $settings, $args );
-        } else {
-            $args = $this->build_product_query( $settings );
-        }
+	    $settings['layout_mode']    = $settings["eael_product_grid_layout"];
+	    $widget_id                  = $this->get_id();
+	    $settings['eael_widget_id'] = $widget_id;
 
-        $this->is_show_custom_add_to_cart = boolval($settings['show_add_to_cart_custom_text']);
-        $this->simple_add_to_cart_button_text = $settings['add_to_cart_simple_product_button_text'];
-        $this->variable_add_to_cart_button_text = $settings['add_to_cart_variable_product_button_text'];
-        $this->grouped_add_to_cart_button_text = $settings['add_to_cart_grouped_product_button_text'];
-        $this->external_add_to_cart_button_text = $settings['add_to_cart_external_product_button_text'];
-        $this->default_add_to_cart_button_text = $settings['add_to_cart_default_product_button_text'];
+	    if ( $settings['post_type'] === 'source_dynamic' && is_archive() || ! empty( $_REQUEST['post_type'] ) ) {
+		    $settings['posts_per_page'] = $settings['eael_product_grid_products_count'] ?: 4;
+		    $settings['offset']         = $settings['product_offset'];
+		    $args                       = HelperClass::get_query_args( $settings );
+		    $args                       = HelperClass::get_dynamic_args( $settings, $args );
+	    } else {
+		    $args = $this->build_product_query( $settings );
+	    }
 
-        if (Plugin::$instance->documents->get_current()) {
-            $this->page_id = Plugin::$instance->documents->get_current()->get_main_id();
-        }
+	    $this->is_show_custom_add_to_cart       = boolval( $settings['show_add_to_cart_custom_text'] );
+	    $this->simple_add_to_cart_button_text   = $settings['add_to_cart_simple_product_button_text'];
+	    $this->variable_add_to_cart_button_text = $settings['add_to_cart_variable_product_button_text'];
+	    $this->grouped_add_to_cart_button_text  = $settings['add_to_cart_grouped_product_button_text'];
+	    $this->external_add_to_cart_button_text = $settings['add_to_cart_external_product_button_text'];
+	    $this->default_add_to_cart_button_text  = $settings['add_to_cart_default_product_button_text'];
+
+	    if ( Plugin::$instance->documents->get_current() ) {
+		    $this->page_id = Plugin::$instance->documents->get_current()->get_main_id();
+	    }
         // render dom
-        $this->add_render_attribute('wrap', [
-            'class' => [
-                "eael-product-grid",
-                $settings['eael_product_grid_style_preset'],
-                $settings['eael_product_grid_layout']
-            ],
-            'id' => 'eael-product-grid',
-            'data-widget-id' => $widget_id,
-            'data-page-id' => $this->page_id,
-            'data-nonce' => wp_create_nonce('eael_product_grid'),
-        ]);
+	    $this->add_render_attribute( 'wrap', [
+		    'class'          => [
+			    "eael-product-grid",
+			    $settings['eael_product_grid_style_preset'],
+			    $settings['eael_product_grid_layout']
+		    ],
+		    'id'             => 'eael-product-grid',
+		    'data-widget-id' => $widget_id,
+		    'data-page-id'   => $this->page_id,
+		    'data-nonce'     => wp_create_nonce( 'eael_product_grid' ),
+	    ] );
 
-        add_filter('woocommerce_product_add_to_cart_text', [
-            $this,
-            'add_to_cart_button_custom_text',
-        ]);
+	    add_filter( 'woocommerce_product_add_to_cart_text', [
+		    $this,
+		    'add_to_cart_button_custom_text',
+	    ] );
         ?>
 
         <div <?php $this->print_render_attribute_string('wrap'); ?> >
             <div class="woocommerce">
                 <?php
                 do_action( 'eael_woo_before_product_loop' );
-                $template = $this->get_template($settings['eael_dynamic_template_Layout']);
-                $settings['loadable_file_name'] = $this->get_filename_only($template);
-                $dir_name = $this->get_temp_dir_name($settings['loadable_file_name']);
 
-                if (file_exists($template)) {
-	                $settings['eael_page_id'] = get_the_ID();
-                    $query = new \WP_Query($args);
-                    if ($query->have_posts()) {
-                        echo '<ul class="products" data-layout-mode="' . $settings["eael_product_grid_layout"] . '">';
-                        while ($query->have_posts()) {
-                            $query->the_post();
-                            include($template);
-                        }
-                        wp_reset_postdata();
-                        echo '</ul>';
-                    } else {
-                        _e('<p class="no-posts-found">No posts found!</p>', 'essential-addons-for-elementor-lite');
-                    }
+                $template                       = $this->get_template( $settings['eael_dynamic_template_Layout'] );
+                $settings['loadable_file_name']  = $this->get_filename_only( $template );
+                $dir_name                       = $this->get_temp_dir_name( $settings['loadable_file_name'] );
+                $found_posts                    = 0;
+
+                if ( file_exists( $template ) ) {
+	                $settings['eael_page_id'] = $this->page_id ? $this->page_id : get_the_ID();
+	                $query                    = new \WP_Query( $args );
+	                if ( $query->have_posts() ) {
+		                $found_posts        = $query->found_posts;
+		                $max_page           = ceil( $found_posts / absint( $args['posts_per_page'] ) );
+		                $args['max_page']   = $max_page;
+		                $args['total_post'] = $found_posts;
+
+		                printf( '<ul class="products" data-layout-mode="%s">', esc_attr( $settings["eael_product_grid_layout"] ) );
+
+                            while ( $query->have_posts() ) {
+                                $query->the_post();
+                                include( realpath( $template ) );
+                            }
+                            wp_reset_postdata();
+
+		                echo '</ul>';
+
+	                } else {
+		                _e( '<p class="no-posts-found">No posts found!</p>', 'essential-addons-for-elementor-lite' );
+	                }
+
                 } else {
-                    _e('<p class="no-posts-found">No layout found!</p>', 'essential-addons-for-elementor-lite');
+	                _e( '<p class="no-posts-found">No layout found!</p>', 'essential-addons-for-elementor-lite' );
                 }
+
                 if ( 'true' == $settings['show_pagination'] ) {
-                    $settings['eael_widget_name'] = $this->get_name();
-                    echo HelperClass::eael_pagination($args, $settings);
+	                $settings['eael_widget_name'] = $this->get_name();
+	                echo HelperClass::eael_pagination( $args, $settings );
                 }
 
+                if ( $found_posts > $args['posts_per_page'] ) {
+	                $this->print_load_more_button( $settings, $args, $dir_name );
+                }
 
-                $this->print_load_more_button($settings, $args, $dir_name);
                 ?>
             </div>
         </div>
+
         <script type="text/javascript">
             jQuery(document).ready(function($) {
                 var $scope = jQuery(".elementor-element-<?php echo $this->get_id(); ?>");
@@ -3085,6 +3116,7 @@ class Product_Grid extends Widget_Base
             $this,
             'add_to_cart_button_custom_text',
         ]);
+	    remove_filter( 'single_product_archive_thumbnail_size', [ $this, 'eael_customize_woo_prod_thumbnail_size' ] );
     }
 
     /**

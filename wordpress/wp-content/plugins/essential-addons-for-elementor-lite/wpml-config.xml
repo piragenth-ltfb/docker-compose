@@ -52,8 +52,7 @@
             <fields-in-item items_of="eael_data_table_content_rows">
                 <field type="Data Table: Cell Text" editor_type="AREA">eael_data_table_content_row_title</field>
                 <field type="Data Table: Cell Content" editor_type="VISUAL">eael_data_table_content_row_content</field>
-                <field type="Data Table: Link" editor_type="LINE" key_of="eael_data_table_content_row_title_link">url
-                </field>
+                <field type="Data Table: Link" editor_type="LINE" key_of="eael_data_table_content_row_title_link">url</field>
             </fields-in-item>
         </widget>
         <widget name="eael-dual-color-header">
@@ -87,9 +86,8 @@
                 <field type="Filterable Gallery: Load More" editor_type="LINE">load_more_text</field>
                 <field type="Filterable Gallery: No More Text" editor_type="LINE">nomore_items_text</field>
             </fields>
-            <fields-in-item items_of="eael_fgFlipBox_controls">
+            <fields-in-item items_of="eael_fg_controls">
                 <field type="Filterable Gallery: Control" editor_type="LINE">eael_fg_control</field>
-
             </fields-in-item>
             <fields-in-item items_of="eael_fg_gallery_items">
                 <field type="Filterable Gallery: Control Name" editor_type="LINE">eael_fg_gallery_control_name</field>
@@ -98,8 +96,7 @@
                 <field type="Filterable Gallery: Item Rating" editor_type="LINE">fg_item_ratings</field>
                 <field type="Filterable Gallery: Item Category" editor_type="LINE">fg_item_cat</field>
                 <field type="Filterable Gallery: Item Content" editor_type="VISUAL">eael_fg_gallery_item_content</field>
-                <field type="Filterable Gallery: Item Link" key_of="eael_fg_gallery_img_link" editor_type="LINE">url
-                </field>
+                <field type="Filterable Gallery: Item Link" key_of="eael_fg_gallery_img_link" editor_type="LINE">url</field>
             </fields-in-item>
         </widget>
         <widget name="eael-image-accordion">
@@ -166,17 +163,13 @@
                 <field type="Pricing Table: Sell Price" editor_type="LINE">eael_pricing_table_onsale_price</field>
                 <field type="Pricing Table: Price Currency" editor_type="LINE">eael_pricing_table_price_cur</field>
                 <field type="Pricing Table: Price Button Text" editor_type="LINE">eael_pricing_table_btn</field>
-                <field type="Pricing Table: Price Button Link" key_of="eael_pricing_table_btn_link" editor_type="LINE">
-                    url
-                </field>
+                <field type="Pricing Table: Price Button Link" key_of="eael_pricing_table_btn_link" editor_type="LINE">url</field>
                 <field type="Pricing Table: Price Period" editor_type="LINE">eael_pricing_table_price_period</field>
-                <field type="Pricing Table: Price Tag Text" editor_type="LINE">eael_pricing_table_featured_tag_text
-                </field>
+                <field type="Pricing Table: Price Tag Text" editor_type="LINE">eael_pricing_table_featured_tag_text</field>
             </fields>
             <fields-in-item items_of="eael_pricing_table_items">
                 <field type="Pricing Table: Feature" editor_type="LINE">eael_pricing_table_item</field>
-                <field type="Pricing Table: Feature Tooltip" editor_type="LINE">eael_pricing_item_tooltip_content
-                </field>
+                <field type="Pricing Table: Feature Tooltip" editor_type="LINE">eael_pricing_item_tooltip_content</field>
             </fields-in-item>
         </widget>
         <widget name="eael-progress-bar">
@@ -185,6 +178,21 @@
             </conditions>
             <fields>
                 <field type="Progressbar: Title" editor_type="LINE">progress_bar_title</field>
+            </fields>
+        </widget>
+        <widget name="eicon-woocommerce">
+            <conditions>
+                <condition key="widgetType">eicon-woocommerce</condition>
+            </conditions>
+            <fields>
+                <field type="Product Grid: Simple Product Button Text" editor_type="LINE">add_to_cart_simple_product_button_text</field>
+                <field type="Product Grid: Variable Product Button Text" editor_type="LINE">add_to_cart_variable_product_button_text</field>
+                <field type="Product Grid: Grouped Product Button Text" editor_type="LINE">add_to_cart_grouped_product_button_text</field>
+                <field type="Product Grid: External Product Button Text" editor_type="LINE">add_to_cart_external_product_button_text</field>
+                <field type="Product Grid: Default Product Button Text" editor_type="LINE">add_to_cart_default_product_button_text</field>
+                <field type="Product Grid: Load More Button Text" editor_type="LINE">show_load_more_text</field>
+                <field type="Product Grid: Sale Text" editor_type="LINE">eael_product_sale_text</field>
+                <field type="Product Grid: Stock Out Text" editor_type="LINE">eael_product_stockout_text</field>
             </fields>
         </widget>
         <widget name="eael-team-member">
@@ -290,9 +298,8 @@
                 <condition key="widgetType">eael-advanced-data-table</condition>
             </conditions>
             <fields>
-                <field type="Adv Data Table: Search Placeholder" editor_type="LINE">
-                    ea_adv_data_table_search_placeholder
-                </field>
+                <field type="Adv Data Table: Table Content" editor_type="LINE">ea_adv_data_table_static_html</field>
+                <field type="Adv Data Table: Search Placeholder" editor_type="LINE">ea_adv_data_table_search_placeholder</field>
             </fields>
         </widget>
         <widget name="eael-formstack">
@@ -354,8 +361,9 @@
                 <condition key="widgetType">eael-login-register</condition>
             </conditions>
             <fields>
+                <field type="Login | Register Form: Redirect Link for Logged-in Users" editor_type="LINK">redirect_url_for_logged_in_user>url</field>
                 <field type="Login | Register Form: Lost Password Text" editor_type="LINE">lost_password_text</field>
-                <field type="Login | Register Form: Lost Password Link" key_of="lost_password_url" editor_type="LINE">url</field>
+                <field type="Login | Register Form: Lost Password Link" editor_type="LINK">lost_password_url>url</field>
                 <field type="Login | Register Form: Remember Text" editor_type="LINE">remember_text</field>
                 <field type="Login | Register Form: Login Form Title" editor_type="LINE">login_form_title</field>
                 <field type="Login | Register Form: Login Form Subtitle" editor_type="AREA">login_form_subtitle</field>
@@ -385,14 +393,84 @@
                 <field type="Login | Register Form: Login Button Text" editor_type="LINE">login_button_text</field>
                 <field type="Login | Register Form: Register Button Text" editor_type="LINE">reg_button_text</field>
                 <field type="Login | Register Form: Register Link Text" editor_type="AREA">registration_link_text</field>
-                <field type="Login | Register Form: Redirect URL" key_of="redirect_url" editor_type="LINE">url</field>
-                <field type="Login | Register Form: Register Link" key_of="custom_register_url" editor_type="LINE">url</field>
+                <field type="Login | Register Form: Redirect URL" editor_type="LINK">redirect_url>url</field>
+                <field type="Login | Register Form: Register Link" editor_type="LINK">custom_register_url>url</field>
+                <field type="Login | Register Form: Sign in Link Text" editor_type="AREA">login_link_text</field>
             </fields>
             <fields-in-item items_of="register_fields">
                 <field type="Login | Register Form: Field Label" editor_type="LINE">field_label</field>
                 <field type="Login | Register Form: Placeholder" editor_type="AREA">placeholder</field>
                 <field type="Login | Register Form: Required Note" editor_type="AREA">required_note</field>
             </fields-in-item>
+        </widget>
+        <widget name="eael-interactive-circle">
+            <conditions>
+                <condition key="widgetType">eael-interactive-circle</condition>
+            </conditions>
+            <fields-in-item items_of="eael_interactive_circle_item">
+                <field type="Interactive Circle List: Title" editor_type="LINE">eael_interactive_circle_btn_title</field>
+                <field type="Interactive Circle List: Content" editor_type="AREA">eael_interactive_circle_item_content</field>
+            </fields-in-item>
+        </widget>
+        <widget name="eael-woo-cart">
+            <conditions>
+                <condition key="widgetType">eael-woo-cart</condition>
+            </conditions>
+            <fields-in-item items_of="table_items">
+                <field type="Woo Cart List: Title" editor_type="LINE">column_heading_title</field>
+            </fields-in-item>
+            <fields>
+                <field type="Woo Cart: Button Text" editor_type="LINE">eael_woo_cart_components_cart_update_button_text</field>
+                <field type="Woo Cart: Coupon Button Text" editor_type="LINE">eael_woo_cart_components_cart_coupon_button_text</field>
+                <field type="Woo Cart: Placeholder Text" editor_type="LINE">eael_woo_cart_components_cart_coupon_placeholder</field>
+                <field type="Woo Cart: Button Text" editor_type="LINE">eael_woo_cart_components_cart_checkout_button_text</field>
+                <field type="Woo Cart: Checkout Button Text" editor_type="AREA">eael_woo_cart_components_cart_checkout_button_text</field>
+            </fields>
+        </widget>
+        <widget name="eael-woo-checkout">
+            <conditions>
+                <condition key="widgetType">eael-woo-checkout</condition>
+            </conditions>
+            <fields>
+                <field type="Woo Checkout: Order Table Heading" editor_type="LINE">ea_woo_checkout_order_details_title</field>
+                <field type="Woo Checkout: Product Text" editor_type="LINE">ea_woo_checkout_table_product_text</field>
+                <field type="Woo Checkout: Quantity Text" editor_type="LINE">ea_woo_checkout_table_quantity_text</field>
+                <field type="Woo Checkout: Price Text" editor_type="LINE">ea_woo_checkout_table_price_text</field>
+                <field type="Woo Checkout: Subtotal Text" editor_type="LINE">ea_woo_checkout_table_subtotal_text</field>
+                <field type="Woo Checkout: Shipping Text" editor_type="LINE">ea_woo_checkout_table_shipping_text</field>
+                <field type="Woo Checkout: Total Text" editor_type="LINE">ea_woo_checkout_table_total_text</field>
+                <field type="Woo Checkout: Shop Link Text" editor_type="LINE">ea_woo_checkout_shop_link_text</field>
+                <field type="Woo Checkout: Coupon Title" editor_type="LINE">ea_woo_checkout_coupon_title</field>
+                <field type="Woo Checkout: Coupon Link Text" editor_type="LINE">ea_woo_checkout_coupon_link_text</field>
+                <field type="Woo Checkout: Coupon Form Content" editor_type="LINE">ea_woo_checkout_coupon_form_content</field>
+                <field type="Woo Checkout: Coupon Placeholder Text" editor_type="LINE">ea_woo_checkout_coupon_placeholder_text</field>
+                <field type="Woo Checkout: Coupon Button Text" editor_type="LINE">ea_woo_checkout_coupon_button_text</field>
+                <field type="Woo Checkout: Login Title" editor_type="LINE">ea_woo_checkout_login_title</field>
+                <field type="Woo Checkout: Login Message" editor_type="AREA">ea_woo_checkout_login_message</field>
+                <field type="Woo Checkout: Login Link Text" editor_type="LINE">ea_woo_checkout_login_link_text</field>
+                <field type="Woo Checkout: Billing Title" editor_type="LINE">ea_woo_checkout_billing_title</field>
+                <field type="Woo Checkout: Shipping Title" editor_type="LINE">ea_woo_checkout_shipping_title</field>
+                <field type="Woo Checkout: Additional Info Title" editor_type="LINE">ea_woo_checkout_additional_info_title</field>
+                <field type="Woo Checkout: Payment Title" editor_type="LINE">ea_woo_checkout_payment_title</field>
+                <field type="Woo Checkout: Place Order Text" editor_type="LINE">ea_woo_checkout_place_order_text</field>
+                <field type="Woo Checkout: Tab Login Text" editor_type="LINE">ea_woo_checkout_tab_login_text</field>
+                <field type="Woo Checkout: Tab Coupon Text" editor_type="LINE">ea_woo_checkout_tab_coupon_text</field>
+                <field type="Woo Checkout: Tab Billing Shipping Text" editor_type="LINE">ea_woo_checkout_tab_billing_shipping_text</field>
+                <field type="Woo Checkout: Tab Payment Text" editor_type="LINE">ea_woo_checkout_tab_payment_text</field>
+                <field type="Woo Checkout: Tab Button Next Text" editor_type="LINE">ea_woo_checkout_tabs_btn_next_text</field>
+                <field type="Woo Checkout: Tab Button Previous Text" editor_type="LINE">ea_woo_checkout_tabs_btn_prev_text</field>
+            </fields>
+        </widget>
+        <widget name="eael-nft-gallery">
+            <conditions>
+                <condition key="widgetType">eael-nft-gallery</condition>
+            </conditions>
+            <fields>
+                <field type="NFT Gallery: Label | View Details" editor_type="LINE">eael_nft_gallery_content_view_details_label</field>
+                <field type="NFT Gallery: Label | No Items" editor_type="LINE">eael_nft_gallery_content_no_items_label</field>
+                <field type="NFT Gallery: Label | Last Sale" editor_type="LINE">eael_nft_gallery_content_last_sale_label</field>
+                <field type="NFT Gallery: Label | Ends In" editor_type="LINE">eael_nft_gallery_content_ends_in_label</field>
+            </fields>
         </widget>
     </elementor-widgets>
 </wpml-config>

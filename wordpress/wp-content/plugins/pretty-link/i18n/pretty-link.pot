@@ -1,17 +1,17 @@
-# Copyright (C) 2021 Pretty Links
+# Copyright (C) 2022 Pretty Links
 # This file is distributed under the same license as the Pretty Links plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Pretty Links 3.2.3\n"
+"Project-Id-Version: Pretty Links 3.2.8\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pretty-link\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-03-25T17:28:19+00:00\n"
+"POT-Creation-Date: 2022-12-09T11:54:38-06:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.4.0\n"
+"X-Generator: WP-CLI 2.5.0\n"
 "X-Domain: pretty-link\n"
 
 #. Plugin Name of the plugin
@@ -40,7 +40,7 @@ msgstr ""
 
 #: app/controllers/PrliAppController.php:134
 #: app/controllers/PrliLinksController.php:166
-#: app/controllers/PrliUpdateController.php:492
+#: app/controllers/PrliUpdateController.php:731
 msgid "Link Categories"
 msgstr ""
 
@@ -52,7 +52,7 @@ msgstr ""
 
 #: app/controllers/PrliAppController.php:142
 #: app/controllers/PrliLinksController.php:167
-#: app/controllers/PrliUpdateController.php:498
+#: app/controllers/PrliUpdateController.php:737
 msgid "Link Tags"
 msgstr ""
 
@@ -63,7 +63,7 @@ msgid "Tags"
 msgstr ""
 
 #: app/controllers/PrliAppController.php:150
-#: app/controllers/PrliUpdateController.php:504
+#: app/controllers/PrliUpdateController.php:743
 #: pro/app/views/reports/list.php:4
 #: pro/app/views/reports/reports.php:7
 msgid "Link Reports"
@@ -77,7 +77,7 @@ msgstr ""
 
 #: app/controllers/PrliAppController.php:158
 #: app/controllers/PrliAppController.php:159
-#: app/controllers/PrliUpdateController.php:510
+#: app/controllers/PrliUpdateController.php:749
 #: pro/app/controllers/PlpImportExportController.php:15
 msgid "Import / Export"
 msgstr ""
@@ -149,65 +149,65 @@ msgid "Buy"
 msgstr ""
 
 #: app/controllers/PrliAppController.php:327
-#: app/views/admin/update/license.php:39
+#: app/views/admin/update/inactive_license.php:28
 #: app/views/shared/nav.php:9
 msgid "Upgrade to Pro"
 msgstr ""
 
-#: app/controllers/PrliAppController.php:429
+#: app/controllers/PrliAppController.php:435
 #: app/views/groups/edit.php:72
 #: app/views/options/form.php:1082
 #: pro/app/views/reports/edit.php:66
 msgid "Update"
 msgstr ""
 
-#: app/controllers/PrliAppController.php:431
+#: app/controllers/PrliAppController.php:437
 msgid "Copy to Clipboard"
 msgstr ""
 
-#: app/controllers/PrliAppController.php:432
+#: app/controllers/PrliAppController.php:438
 msgid "Copied!"
 msgstr ""
 
-#: app/controllers/PrliAppController.php:433
+#: app/controllers/PrliAppController.php:439
 msgid "Oops, Copy Failed!"
 msgstr ""
 
-#: app/controllers/PrliAppController.php:457
+#: app/controllers/PrliAppController.php:463
 msgid "Are you sure you want to reset your Pretty Link? This will delete all of the statistical data about this Pretty Link in your database."
 msgstr ""
 
 #. translators: %1$s: br tag, %2$s: open link tag, %3$s: close link tag
-#: app/controllers/PrliAppController.php:562
+#: app/controllers/PrliAppController.php:568
 msgid "You're almost done!%1$s%2$sFinish your Re-Install of Pretty Links Pro%3$s"
 msgstr ""
 
-#: app/controllers/PrliAppController.php:577
+#: app/controllers/PrliAppController.php:583
 msgid "Pretty Links Pro Successfully Uninstalled."
 msgstr ""
 
-#: app/controllers/PrliAppController.php:626
+#: app/controllers/PrliAppController.php:632
 msgid "Invalid server response"
 msgstr ""
 
-#: app/controllers/PrliAppController.php:627
+#: app/controllers/PrliAppController.php:633
 msgid "Ajax error"
 msgstr ""
 
-#: app/controllers/PrliAppController.php:644
+#: app/controllers/PrliAppController.php:650
 msgid "Pretty Link Quick Add"
 msgstr ""
 
-#: app/controllers/PrliAppController.php:683
+#: app/controllers/PrliAppController.php:689
 msgid "Your Pretty Links Pro installation isn't quite complete yet. %1$sAutomatically Upgrade to Enable Pretty Links Pro%2$s"
 msgstr ""
 
-#: app/controllers/PrliAppController.php:704
+#: app/controllers/PrliAppController.php:710
 msgid "Your Pretty Links Pro installation isn't quite complete yet.<br/>%1$sAutomatically Upgrade to Enable Pretty Links Pro%2$s"
 msgstr ""
 
 #. translators: $1$s - Pretty Links plugin name; $2$s - WP.org review link; $3$s - WP.org review link.
-#: app/controllers/PrliAppController.php:752
+#: app/controllers/PrliAppController.php:758
 msgid "Enjoying %1$s? Please rate <a href=\"%2$s\" target=\"_blank\" rel=\"noopener noreferrer\">&#9733;&#9733;&#9733;&#9733;&#9733;</a> on <a href=\"%3$s\" target=\"_blank\" rel=\"noopener\">WordPress.org</a> to help us spread the word. Thanks from the Pretty Links team!"
 msgstr ""
 
@@ -223,26 +223,30 @@ msgstr ""
 msgid "All Links"
 msgstr ""
 
-#: app/controllers/PrliFlyoutMenuController.php:34
+#: app/controllers/PrliFlyoutMenuController.php:38
 msgid "See Quick Links"
 msgstr ""
 
-#: app/controllers/PrliFlyoutMenuController.php:79
+#: app/controllers/PrliFlyoutMenuController.php:89
 #: app/views/admin/popups/upgrade.php:23
 msgid "Upgrade to Pretty Links Pro"
 msgstr ""
 
-#: app/controllers/PrliFlyoutMenuController.php:86
+#: app/controllers/PrliFlyoutMenuController.php:96
 msgid "Support & Docs"
 msgstr ""
 
-#: app/controllers/PrliFlyoutMenuController.php:91
+#: app/controllers/PrliFlyoutMenuController.php:101
 msgid "Suggest a Feature"
+msgstr ""
+
+#: app/controllers/PrliFlyoutMenuController.php:107
+msgid "Notifications "
 msgstr ""
 
 #: app/controllers/PrliLinksController.php:59
 #: app/helpers/PrliLinksHelper.php:171
-#: app/views/links/form_basic.php:48
+#: app/views/links/form_basic.php:49
 #: app/views/shared/tinymce_form_popup.php:86
 #: app/views/widgets/widget.php:15
 msgid "Pretty Link"
@@ -258,7 +262,7 @@ msgstr ""
 
 #: app/controllers/PrliLinksController.php:62
 #: js/editor.js:12
-#: js/editor/components/link-editor/index.js:379
+#: js/editor/components/link-editor/index.js:400
 msgid "New Pretty Link"
 msgstr ""
 
@@ -329,7 +333,7 @@ msgstr ""
 
 #: app/controllers/PrliLinksController.php:432
 #: app/controllers/PrliLinksController.php:774
-#: app/controllers/PrliPopupController.php:93
+#: app/controllers/PrliPopupController.php:95
 msgid "Forbidden"
 msgstr ""
 
@@ -462,6 +466,7 @@ msgid "Your Pretty Link was Successfully Reset"
 msgstr ""
 
 #: app/controllers/PrliLinksController.php:788
+#: app/controllers/PrliUpdateController.php:198
 msgid "Bad request"
 msgstr ""
 
@@ -507,52 +512,52 @@ msgstr ""
 msgid "An unknown error occurred."
 msgstr ""
 
-#: app/controllers/PrliPopupController.php:97
+#: app/controllers/PrliPopupController.php:99
 msgid "Must specify a popup"
 msgstr ""
 
-#: app/controllers/PrliPopupController.php:103
+#: app/controllers/PrliPopupController.php:105
 msgid "Invalid popup"
 msgstr ""
 
-#: app/controllers/PrliPopupController.php:108
+#: app/controllers/PrliPopupController.php:110
 msgid "The popup was successfully delayed"
 msgstr ""
 
-#: app/controllers/PrliPopupController.php:112
+#: app/controllers/PrliPopupController.php:114
 msgid "The popup was successfully stopped"
 msgstr ""
 
-#: app/controllers/PrliReviewNoticeController.php:56
+#: app/controllers/PrliReviewNoticeController.php:74
 #: app/views/admin/popups/rating.php:8
 msgid "Are you enjoying using Pretty Links?"
 msgstr ""
 
-#: app/controllers/PrliReviewNoticeController.php:60
+#: app/controllers/PrliReviewNoticeController.php:78
 msgid "That's awesome! Could you please do me a BIG favor and give it a 5-star rating on WordPress to help us spread the word and boost our motivation?"
 msgstr ""
 
-#: app/controllers/PrliReviewNoticeController.php:63
+#: app/controllers/PrliReviewNoticeController.php:81
 msgid "Okay, you deserve it"
 msgstr ""
 
-#: app/controllers/PrliReviewNoticeController.php:64
+#: app/controllers/PrliReviewNoticeController.php:82
 msgid "Nope, maybe later"
 msgstr ""
 
-#: app/controllers/PrliReviewNoticeController.php:65
+#: app/controllers/PrliReviewNoticeController.php:83
 msgid "I already did"
 msgstr ""
 
-#: app/controllers/PrliReviewNoticeController.php:69
+#: app/controllers/PrliReviewNoticeController.php:87
 msgid "We're sorry to hear you aren't enjoying Pretty Links. We would love a chance to improve. Could you take a minute and let us know what we can do better?"
 msgstr ""
 
-#: app/controllers/PrliReviewNoticeController.php:71
+#: app/controllers/PrliReviewNoticeController.php:89
 msgid "Give Feedback"
 msgstr ""
 
-#: app/controllers/PrliReviewNoticeController.php:72
+#: app/controllers/PrliReviewNoticeController.php:90
 msgid "No thanks"
 msgstr ""
 
@@ -568,28 +573,107 @@ msgstr ""
 msgid "No clicks older than %1$d days were found, so nothing was deleted"
 msgstr ""
 
-#: app/controllers/PrliUpdateController.php:74
-msgid "Why you creepin'?"
+#: app/controllers/PrliUpdateController.php:66
+#: app/controllers/PrliUpdateController.php:80
+#: app/controllers/PrliUpdateController.php:161
+msgid "Bad request."
 msgstr ""
 
-#: app/controllers/PrliUpdateController.php:318
+#: app/controllers/PrliUpdateController.php:70
+#: app/controllers/PrliUpdateController.php:165
+#: app/controllers/PrliUpdateController.php:202
+msgid "Sorry, you don't have permission to do this."
+msgstr ""
+
+#: app/controllers/PrliUpdateController.php:74
+#: app/controllers/PrliUpdateController.php:169
+#: app/controllers/PrliUpdateController.php:206
+msgid "Security check failed."
+msgstr ""
+
+#: app/controllers/PrliUpdateController.php:108
+msgid "The license information is not available, try refreshing the page."
+msgstr ""
+
+#. translators: %1$s: the product name, %2$s: open link tag, %3$s: close link tag
+#: app/controllers/PrliUpdateController.php:140
+msgid "This License Key has expired, but you have an active license for %1$s, %2$sclick here%3$s to activate using this license instead."
+msgstr ""
+
+#: app/controllers/PrliUpdateController.php:190
+msgid "Failed to get filesystem access"
+msgstr ""
+
+#: app/controllers/PrliUpdateController.php:219
+msgid "The correct edition of Pretty Links has been installed successfully."
+msgstr ""
+
+#: app/controllers/PrliUpdateController.php:222
+msgid "Failed to install the correct edition of Pretty Links, please download it from prettylinks.com and install it manually."
+msgstr ""
+
+#: app/controllers/PrliUpdateController.php:226
+msgid "License data not found"
+msgstr ""
+
+#: app/controllers/PrliUpdateController.php:400
+msgid "License key deactivated"
+msgstr ""
+
+#: app/controllers/PrliUpdateController.php:544
 msgid "Check for Update"
 msgstr ""
 
-#: app/controllers/PrliUpdateController.php:387
+#: app/controllers/PrliUpdateController.php:613
 msgid "You had an HTTP error connecting to Caseproof's Mothership API"
 msgstr ""
 
-#: app/controllers/PrliUpdateController.php:399
+#: app/controllers/PrliUpdateController.php:625
 msgid "Your License Key was invalid"
 msgstr ""
 
-#: app/controllers/PrliUpdateController.php:425
+#: app/controllers/PrliUpdateController.php:642
+#: app/views/admin/update/active_license.php:19
+#: app/views/admin/update/edge_updates.php:4
+#: app/views/widgets/widget.php:22
+msgid "Loading..."
+msgstr ""
+
+#: app/controllers/PrliUpdateController.php:643
+msgid "An error occurred during activation: %s"
+msgstr ""
+
+#: app/controllers/PrliUpdateController.php:644
+msgid "Invalid response."
+msgstr ""
+
+#: app/controllers/PrliUpdateController.php:645
+msgid "Ajax error."
+msgstr ""
+
+#: app/controllers/PrliUpdateController.php:646
+msgid "Are you sure? Pretty Links will not be functional on %s if this License Key is deactivated."
+msgstr ""
+
+#: app/controllers/PrliUpdateController.php:648
+msgid "An error occurred during deactivation: %s"
+msgstr ""
+
+#: app/controllers/PrliUpdateController.php:650
+msgid "An error occurred while installing the correct edition."
+msgstr ""
+
+#: app/controllers/PrliUpdateController.php:664
 msgid "You do not have access."
 msgstr ""
 
-#: app/controllers/PrliUpdateController.php:429
+#: app/controllers/PrliUpdateController.php:668
 msgid "Edge updates couldn't be updated."
+msgstr ""
+
+#. translators: %1$s: open link tag, %2$s: close link tag
+#: app/controllers/PrliUpdateController.php:758
+msgid "To restore automatic updates, %1$sinstall the correct edition%2$s of Pretty Links."
 msgstr ""
 
 #: app/controllers/PrliXmlRpcController.php:36
@@ -792,6 +876,57 @@ msgstr ""
 
 #: app/helpers/PrliLinksHelper.php:139
 msgid "Target URL:"
+msgstr ""
+
+#. Translators: Readable time to display
+#: app/lib/PrliNotifications.php:315
+msgid "%1$s ago"
+msgstr ""
+
+#: app/lib/PrliNotifications.php:449
+msgid "%s unread message"
+msgid_plural "%s unread messages"
+msgstr[0] ""
+msgstr[1] ""
+
+#: app/lib/PrliNotifications.php:497
+#: app/lib/PrliNotifications.php:562
+msgid "Dismiss"
+msgstr ""
+
+#: app/lib/PrliNotifications.php:504
+#: app/lib/PrliNotifications.php:569
+msgid "%s second ago"
+msgid_plural "%s seconds ago"
+msgstr[0] ""
+msgstr[1] ""
+
+#: app/lib/PrliNotifications.php:540
+msgid "You're all caught up!"
+msgstr ""
+
+#: app/lib/PrliNotifications.php:615
+msgid "Inbox"
+msgstr ""
+
+#: app/lib/PrliNotifications.php:618
+msgid "View Dismissed"
+msgstr ""
+
+#: app/lib/PrliNotifications.php:619
+msgid "View Active"
+msgstr ""
+
+#: app/lib/PrliNotifications.php:620
+msgid "Close"
+msgstr ""
+
+#: app/lib/PrliNotifications.php:633
+msgid "Notifications"
+msgstr ""
+
+#: app/lib/PrliNotifications.php:636
+msgid "Dismiss All"
 msgstr ""
 
 #: app/models/PrliClick.php:237
@@ -1077,7 +1212,7 @@ msgid "Split-test your Pretty Links"
 msgstr ""
 
 #: app/views/admin/popups/upgrade.php:14
-#: app/views/admin/update/license.php:60
+#: app/views/admin/update/inactive_license.php:49
 msgid "And much, much more!"
 msgstr ""
 
@@ -1086,7 +1221,7 @@ msgid "Plus, upgrading is fast, easy and won't disrupt any of your existing link
 msgstr ""
 
 #: app/views/admin/popups/upgrade.php:18
-#: app/views/admin/update/license.php:66
+#: app/views/admin/update/inactive_license.php:55
 msgid "We think you'll love it!"
 msgstr ""
 
@@ -1125,6 +1260,52 @@ msgstr ""
 #. translators: %1$s: open link tag, %2$s: close link tag
 #: app/views/admin/update/activation_warning.php:58
 msgid "After you paste your license key on the %1$s\"Pretty Links\" -> \"Activate Pro\" admin page,%2$s you'll start getting automatic updates."
+msgstr ""
+
+#. translators: %1$s: the license edition, %2$s: the installed edition, %3$s: open link tag, %4$s: close link tag
+#: app/views/admin/update/active_license.php:12
+msgid "This License Key is for %1$s, but %2$s is installed. %3$sClick here%4$s to install the correct edition for the license (%1$s)."
+msgstr ""
+
+#: app/views/admin/update/active_license.php:24
+msgid "Active License Key Information:"
+msgstr ""
+
+#: app/views/admin/update/active_license.php:27
+msgid "License Key:"
+msgstr ""
+
+#: app/views/admin/update/active_license.php:31
+msgid "Status:"
+msgstr ""
+
+#: app/views/admin/update/active_license.php:32
+msgid "Active on %s"
+msgstr ""
+
+#: app/views/admin/update/active_license.php:35
+msgid "Product:"
+msgstr ""
+
+#: app/views/admin/update/active_license.php:39
+msgid "Activations:"
+msgstr ""
+
+#. translators: %1$s: open b tag, %2$s: close b tag, %3$d: current activation count, %4$s: max activations
+#: app/views/admin/update/active_license.php:44
+msgid "%1$s%3$d of %4$s%2$s sites have been activated with this license key"
+msgstr ""
+
+#: app/views/admin/update/active_license.php:55
+msgid "Deactivate License Key on %s"
+msgstr ""
+
+#: app/views/admin/update/active_license.php:59
+msgid "Upgrade plugin to Pro"
+msgstr ""
+
+#: app/views/admin/update/active_license.php:64
+msgid "You're currently running version %s of Pretty Links Pro"
 msgstr ""
 
 #: app/views/admin/update/addons.php:3
@@ -1201,104 +1382,50 @@ msgstr ""
 msgid "Include Pretty Links Pro edge (development) releases in automatic updates (not recommended for production websites)"
 msgstr ""
 
-#: app/views/admin/update/edge_updates.php:4
-#: app/views/widgets/widget.php:22
-msgid "Loading..."
-msgstr ""
-
-#: app/views/admin/update/license.php:7
-msgid "Pretty Links Pro License"
-msgstr ""
-
 #. translators: %1$s: link to pro site, %2$s: link to pro site login page
-#: app/views/admin/update/license.php:14
+#: app/views/admin/update/inactive_license.php:6
 msgid "You must have a License Key to enable automatic updates for Pretty Links Pro. If you don't have a License please go to %1$s to get one. If you do have a license you can login at %2$s to manage your licenses and site activations."
 msgstr ""
 
-#: app/views/admin/update/license.php:25
+#: app/views/admin/update/inactive_license.php:15
 msgid "Enter Your Pretty Links Pro License Key:"
 msgstr ""
 
-#: app/views/admin/update/license.php:32
+#: app/views/admin/update/inactive_license.php:22
 msgid "Activate License Key on %s"
 msgstr ""
 
 #. translators: %1$s: open link tag, %2$s: close link tag
-#: app/views/admin/update/license.php:45
+#: app/views/admin/update/inactive_license.php:34
 msgid "It looks like you haven't %1$supgraded to Pretty Links Pro%2$s yet. Here are just a few things you could be doing with pro:"
 msgstr ""
 
-#: app/views/admin/update/license.php:55
+#: app/views/admin/update/inactive_license.php:44
 msgid "Auto-replace keywords throughout your site with Pretty Links"
 msgstr ""
 
-#: app/views/admin/update/license.php:56
+#: app/views/admin/update/inactive_license.php:45
 msgid "Protect your affiliate links by using Cloaked Redirects"
 msgstr ""
 
-#: app/views/admin/update/license.php:57
+#: app/views/admin/update/inactive_license.php:46
 msgid "Redirect based on a visitor's location"
 msgstr ""
 
-#: app/views/admin/update/license.php:58
+#: app/views/admin/update/inactive_license.php:47
 msgid "Auto-prettylink your Pages &amp; Posts"
 msgstr ""
 
-#: app/views/admin/update/license.php:59
+#: app/views/admin/update/inactive_license.php:48
 msgid "Find out what works and what doesn't by split testing your links"
 msgstr ""
 
-#: app/views/admin/update/license.php:64
+#: app/views/admin/update/inactive_license.php:53
 msgid "Plus, upgrading is fast, easy and won't disrupt any of your existing links or data. And there's even a 14 day money back guarantee."
 msgstr ""
 
-#: app/views/admin/update/license.php:68
+#: app/views/admin/update/inactive_license.php:57
 msgid "Upgrade to Pro today!"
-msgstr ""
-
-#: app/views/admin/update/license.php:72
-msgid "Active License Key Information:"
-msgstr ""
-
-#: app/views/admin/update/license.php:75
-msgid "License Key:"
-msgstr ""
-
-#: app/views/admin/update/license.php:79
-msgid "Status:"
-msgstr ""
-
-#: app/views/admin/update/license.php:80
-msgid "Active on %s"
-msgstr ""
-
-#: app/views/admin/update/license.php:83
-msgid "Product:"
-msgstr ""
-
-#: app/views/admin/update/license.php:87
-msgid "Activations:"
-msgstr ""
-
-#. translators: %1$s: open b tag, %2$s: close b tag, %3$d: current activation count, %4$s: max activations
-#: app/views/admin/update/license.php:92
-msgid "%1$s%3$d of %4$s%2$s sites have been activated with this license key"
-msgstr ""
-
-#: app/views/admin/update/license.php:102
-msgid "Are you sure? Pretty Links Pro will not be functional on %s if this License Key is deactivated."
-msgstr ""
-
-#: app/views/admin/update/license.php:102
-msgid "Deactivate License Key on %s"
-msgstr ""
-
-#: app/views/admin/update/license.php:105
-msgid "Upgrade plugin to Pro"
-msgstr ""
-
-#: app/views/admin/update/license.php:110
-msgid "You're currently running version %s of Pretty Links Pro"
 msgstr ""
 
 #: app/views/admin/update/ui.php:3
@@ -1309,8 +1436,8 @@ msgstr ""
 msgid "License"
 msgstr ""
 
-#: app/views/admin/update/ui.php:17
-msgid "Add-Ons"
+#: app/views/admin/update/ui.php:22
+msgid "Pretty Links Pro License"
 msgstr ""
 
 #: app/views/admin/upgrade/reports.php:8
@@ -1700,20 +1827,20 @@ msgstr ""
 msgid "This is the URL that your Pretty Link will redirect to."
 msgstr ""
 
-#: app/views/links/form_basic.php:45
+#: app/views/links/form_basic.php:46
 msgid "Pretty Link*"
 msgstr ""
 
-#: app/views/links/form_basic.php:49
+#: app/views/links/form_basic.php:50
 msgid "This is how your pretty link will appear. You can edit the Pretty Link slug here."
 msgstr ""
 
-#: app/views/links/form_basic.php:61
-#: app/views/links/form_basic.php:64
+#: app/views/links/form_basic.php:62
+#: app/views/links/form_basic.php:65
 msgid "Notes"
 msgstr ""
 
-#: app/views/links/form_basic.php:65
+#: app/views/links/form_basic.php:66
 msgid "This is a field where you can enter notes about a particular link. This notes field is mainly for your own link management needs. It isn't currently used anywhere on the front end."
 msgstr ""
 
@@ -1896,7 +2023,7 @@ msgid "Add No Follow"
 msgstr ""
 
 #: app/views/options/form.php:110
-msgid "Add the 'nofollow' attribute by default to new links. This will add nofollow and noindex in the HTTP Response headers when enabled."
+msgid "Defaults 'No Follow' to be enabled on new links. This will add the nofollow and noindex in the HTTP Reponse headers when enabled on the link."
 msgstr ""
 
 #: app/views/options/form.php:119
@@ -2680,7 +2807,7 @@ msgstr ""
 
 #: app/views/shared/tinymce_form_popup.php:10
 #: js/editor.js:12
-#: js/editor/components/link-editor/index.js:432
+#: js/editor/components/link-editor/index.js:453
 msgid "Create New Pretty Link"
 msgstr ""
 

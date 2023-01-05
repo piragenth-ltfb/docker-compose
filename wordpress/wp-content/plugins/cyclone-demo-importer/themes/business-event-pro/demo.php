@@ -4,31 +4,40 @@ add_filter( 'pt-ocdi/import_files', 'cdi_import_files' );
 function cdi_import_files() {
     return array(
         array(
-            'import_file_name'=> __('Business Event Homepage 1','cdi'),
-            'categories'      =>  array( 'Homepage' ),
-            'local_import_file'=> CDI_PLUGIN_DIR_PATH . '/themes/business-event-pro/inc/content.xml',
+            'import_file_name'             => __('Epic Business Event PRO','cdi'),
+            'categories'                   =>  array( 'Homepage' ),
+            'local_import_file'            => CDI_PLUGIN_DIR_PATH . '/themes/business-event-pro/inc/content.xml',
             'local_import_customizer_file' => CDI_PLUGIN_DIR_PATH . '/themes/business-event-pro/inc/options.dat',
-            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/business-event/homepage.jpg',
             'local_import_widget_file'     => CDI_PLUGIN_DIR_PATH . '/themes/business-event-pro/inc/widgets.wie',
-            'preview_url' => 'https://bizbergthemes.com/business-event-pro/'
+            'import_preview_image_url'     => CDI_PLUGIN_DIR_URL . '/assets/images/business-event/homepage-epic-business-event.jpg',
+            'preview_url'                  => 'https://bizbergthemes.com/business-event-pro/epic-business-event-homepage-3/'
         ),
         array(
-            'import_file_name'=> __('Business Event Homepage 2','cdi'),
-            'categories'      =>  array( 'Homepage' ),
-            'local_import_file'=> CDI_PLUGIN_DIR_PATH . '/themes/business-event-pro/inc/content.xml',
+            'import_file_name'             => __('Business Event Homepage 1','cdi'),
+            'categories'                   =>  array( 'Homepage' ),
+            'local_import_file'            => CDI_PLUGIN_DIR_PATH . '/themes/business-event-pro/inc/content.xml',
             'local_import_customizer_file' => CDI_PLUGIN_DIR_PATH . '/themes/business-event-pro/inc/options.dat',
-            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/business-event/homepage-2.jpg',
+            'import_preview_image_url'     => CDI_PLUGIN_DIR_URL . '/assets/images/business-event/homepage.jpg',
             'local_import_widget_file'     => CDI_PLUGIN_DIR_PATH . '/themes/business-event-pro/inc/widgets.wie',
-            'preview_url' => 'https://bizbergthemes.com/business-event-pro/business-event-1-pro-dark/'
+            'preview_url'                  => 'https://bizbergthemes.com/business-event-pro/'
         ),
         array(
-            'import_file_name'=> __('Business Event Homepage 3','cdi'),
-            'categories'      =>  array( 'Homepage' ),
-            'local_import_file'=> CDI_PLUGIN_DIR_PATH . '/themes/business-event-pro/inc/content.xml',
+            'import_file_name'             => __('Business Event Homepage 2','cdi'),
+            'categories'                   =>  array( 'Homepage' ),
+            'local_import_file'            => CDI_PLUGIN_DIR_PATH . '/themes/business-event-pro/inc/content.xml',
             'local_import_customizer_file' => CDI_PLUGIN_DIR_PATH . '/themes/business-event-pro/inc/options.dat',
-            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/business-event/homepage-3.jpg',
+            'import_preview_image_url'     => CDI_PLUGIN_DIR_URL . '/assets/images/business-event/homepage-2.jpg',
             'local_import_widget_file'     => CDI_PLUGIN_DIR_PATH . '/themes/business-event-pro/inc/widgets.wie',
-            'preview_url' => 'https://bizbergthemes.com/business-event-pro/business-event-homepage-2/'
+            'preview_url'                  => 'https://bizbergthemes.com/business-event-pro/business-event-1-pro-dark/'
+        ),
+        array(
+            'import_file_name'             => __('Business Event Homepage 3','cdi'),
+            'categories'                   =>  array( 'Homepage' ),
+            'local_import_file'            => CDI_PLUGIN_DIR_PATH . '/themes/business-event-pro/inc/content.xml',
+            'local_import_customizer_file' => CDI_PLUGIN_DIR_PATH . '/themes/business-event-pro/inc/options.dat',
+            'import_preview_image_url'     => CDI_PLUGIN_DIR_URL . '/assets/images/business-event/homepage-3.jpg',
+            'local_import_widget_file'     => CDI_PLUGIN_DIR_PATH . '/themes/business-event-pro/inc/widgets.wie',
+            'preview_url'                  => 'https://bizbergthemes.com/business-event-pro/business-event-homepage-2/'
         ),
     );
 }
@@ -52,6 +61,10 @@ function cdi_after_import_setup( $selected_import ) {
 
         case 'Business Event Homepage 1':
             $front_page_id = get_page_by_path( 'business-event-free' );
+            break;
+
+        case 'Epic Business Event PRO':
+            $front_page_id = get_page_by_path( 'epic-business-event-homepage-3' );
             break;
 
         case 'Business Event Homepage 2':
@@ -111,6 +124,11 @@ function cdi_register_plugins( $plugins ) {
         [ 
           'name'     => 'Essential Addons for Elementor', 
           'slug'     => 'essential-addons-for-elementor-lite', 
+          'required' => true,             
+        ],
+        [ 
+          'name'     => 'Events Addon for Elementor',
+          'slug'     => 'events-addon-for-elementor',
           'required' => true,             
         ],
     ];

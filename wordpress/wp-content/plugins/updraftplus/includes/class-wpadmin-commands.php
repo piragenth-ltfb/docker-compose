@@ -6,7 +6,7 @@ if (!defined('UPDRAFTPLUS_DIR')) die('No access.');
 	See class-commands.php for explanation about how these classes work.
 */
 
-if (!class_exists('UpdraftPlus_Commands')) require_once(UPDRAFTPLUS_DIR.'/includes/class-commands.php');
+if (!class_exists('UpdraftPlus_Commands')) updraft_try_include_file('includes/class-commands.php', 'require_once');
 
 /**
  * An extension, because commands available via wp-admin are a super-set of those which are available through all mechanisms
@@ -74,20 +74,6 @@ class UpdraftPlus_WPAdmin_Commands extends UpdraftPlus_Commands {
 		die;
 
 		// return array('response' => $response['response'], 'status' => $response['status'], 'log' => $response['log'] );
-	}
-	
-	/**
-	 * Function to retrieve raw backup history given a timestamp and nonce
-	 *
-	 * @param Array $data - Data parameter; keys: timestamp, nonce
-	 *
-	 * @return String if empty result will be empty string
-	 */
-	public function rawbackup_history($data) {
-
-		$history = UpdraftPlus_Backup_History::get_history();
-
-		return $this->_updraftplus_admin->raw_backup_info($history, $data['timestamp'], $data['nonce'], null);
 	}
 	
 	public function updraftcentral_delete_key($params) {
@@ -230,10 +216,10 @@ class UpdraftPlus_WPAdmin_Commands extends UpdraftPlus_Commands {
 					$incremental_sets = array_reverse($incremental_sets);
 					$first_timestamp = $incremental_sets[0];
 					
-					foreach ($incremental_sets as $timestamp) {
-						$pretty_date = get_date_from_gmt(gmdate('Y-m-d H:i:s', (int) $timestamp), 'M d, Y G:i');
+					foreach ($incremental_sets as $set_timestamp) {
+						$pretty_date = get_date_from_gmt(gmdate('Y-m-d H:i:s', (int) $set_timestamp), 'M d, Y G:i');
 						$esc_pretty_date = esc_attr($pretty_date);
-						$incremental_select_html .= '<option value="'.$timestamp.'" '.selected($timestamp, $first_timestamp, false).'>'.$esc_pretty_date.'</option>';
+						$incremental_select_html .= '<option value="'.$set_timestamp.'" '.selected($set_timestamp, $first_timestamp, false).'>'.$esc_pretty_date.'</option>';
 					}
 
 					$incremental_select_html .= '</select>';
@@ -350,6 +336,16 @@ class UpdraftPlus_WPAdmin_Commands extends UpdraftPlus_Commands {
 	public function dismiss_clone_php_notice() {
 		UpdraftPlus_Options::update_updraft_option('dismissed_clone_php_notices_until', time() + 180 * 86400);
 		return array();
+	}
+
+	/**
+	 * Update and set dismiss_phpseclib_notice option name to true
+	 *
+	 * @return array - an associative array containing a key named 'success' with 1 value which indicates the successful of updating the option
+	 */
+	public function dismiss_phpseclib_notice() {
+		UpdraftPlus_Options::update_updraft_option('updraft_dismiss_phpseclib_notice', true);
+		return array('success' => 1);
 	}
 
 	/**

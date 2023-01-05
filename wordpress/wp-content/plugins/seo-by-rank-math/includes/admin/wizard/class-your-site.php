@@ -70,11 +70,31 @@ class Your_Site implements Wizard_Step {
 
 		$wizard->cmb->add_field(
 			[
+				'id'      => 'website_name',
+				'type'    => 'text',
+				'name'    => esc_html__( 'Website Name', 'rank-math' ),
+				'default' => Helper::get_settings( 'titles.website_name', $displayname ),
+				'desc'    => esc_html__( 'Enter the name of your site to appear in search results.', 'rank-math' ),
+			]
+		);
+		
+		$wizard->cmb->add_field(
+			[
+				'id'      => 'website_alternate_name',
+				'type'    => 'text',
+				'default' => Helper::get_settings( 'titles.website_alternate_name' ),
+				'name'    => esc_html__( 'Website Alternate Name', 'rank-math' ),
+				'desc'    => esc_html__( 'An alternate version of your site name (for example, an acronym or shorter name).', 'rank-math' ),
+			]
+		);
+
+		$wizard->cmb->add_field(
+			[
 				'id'      => 'company_name',
 				'type'    => 'text',
-				'name'    => esc_html__( 'Company Name', 'rank-math' ),
+				'name'    => esc_html__( 'Person/Organization Name', 'rank-math' ),
+				'desc'    => esc_html__( 'Your name or company name intended to feature in Google\'s Knowledge Panel.', 'rank-math' ),
 				'default' => Helper::get_settings( 'titles.knowledgegraph_name', $displayname ),
-				'dep'     => $this->get_type_dependency(),
 			]
 		);
 
@@ -84,7 +104,7 @@ class Your_Site implements Wizard_Step {
 				'type'    => 'file',
 				'name'    => esc_html__( 'Logo for Google', 'rank-math' ),
 				'default' => $this->get_default_logo(),
-				'desc'    => __( '<strong>Min Size: 160Χ90px, Max Size: 1920X1080px</strong>.<br />A squared image is preferred by the search engines.', 'rank-math' ),
+				'desc'    => __( '<strong>Min Size: 112Χ112px</strong>.<br />A squared image is preferred by the search engines.', 'rank-math' ),
 				'options' => [ 'url' => false ],
 			]
 		);
@@ -94,7 +114,7 @@ class Your_Site implements Wizard_Step {
 				'id'      => 'open_graph_image',
 				'type'    => 'file',
 				'name'    => esc_html__( 'Default Social Share Image', 'rank-math' ),
-				'desc'    => __( 'When a featured image is not set, this image will be used as a thumbnail when your post is shared on Facebook. <strong>Recommended image size 1200 x 630 pixels.</strong>', 'rank-math' ),
+				'desc'    => __( 'When a featured image or an OpenGraph Image is not set for individual posts/pages/CPTs, this image will be used as a fallback thumbnail when your post is shared on Facebook. <strong>The recommended image size is 1200 x 630 pixels.</strong>', 'rank-math' ),
 				'options' => [ 'url' => false ],
 				'default' => Helper::get_settings( 'titles.open_graph_image' ),
 			]
@@ -183,6 +203,14 @@ class Your_Site implements Wizard_Step {
 				$settings['titles']['knowledgegraph_type'] = 'person';
 				$settings['titles']['knowledgegraph_name'] = $values['author_name'];
 				break;
+		}
+
+		foreach ( [ 'website_name', 'website_alternate_name' ] as $key ) {
+			if ( empty( $values[ $key ] ) ) {
+				continue;
+			}
+
+			$settings['titles'][ $key ] = $values[ $key ];
 		}
 
 		return $settings;

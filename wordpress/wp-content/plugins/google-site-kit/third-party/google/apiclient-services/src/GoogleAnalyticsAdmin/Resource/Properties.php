@@ -17,9 +17,11 @@
  */
 namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\Resource;
 
-use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaGoogleSignalsSettings;
-use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListPropertiesResponse;
-use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaProperty;
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAcknowledgeUserDataCollectionRequest;
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAcknowledgeUserDataCollectionResponse;
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataRetentionSettings;
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListPropertiesResponse;
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaProperty;
 /**
  * The "properties" collection of methods.
  * Typical usage is:
@@ -31,18 +33,36 @@ use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnaly
 class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
 {
     /**
+     * Acknowledges the terms of user data collection for the specified property.
+     * This acknowledgement must be completed (either in the Google Analytics UI or
+     * via this API) before MeasurementProtocolSecret resources may be created.
+     * (properties.acknowledgeUserDataCollection)
+     *
+     * @param string $property Required. The property for which to acknowledge user
+     * data collection.
+     * @param GoogleAnalyticsAdminV1betaAcknowledgeUserDataCollectionRequest $postBody
+     * @param array $optParams Optional parameters.
+     * @return GoogleAnalyticsAdminV1betaAcknowledgeUserDataCollectionResponse
+     */
+    public function acknowledgeUserDataCollection($property, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAcknowledgeUserDataCollectionRequest $postBody, $optParams = [])
+    {
+        $params = ['property' => $property, 'postBody' => $postBody];
+        $params = \array_merge($params, $optParams);
+        return $this->call('acknowledgeUserDataCollection', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAcknowledgeUserDataCollectionResponse::class);
+    }
+    /**
      * Creates an "GA4" property with the specified location and attributes.
      * (properties.create)
      *
-     * @param GoogleAnalyticsAdminV1alphaProperty $postBody
+     * @param GoogleAnalyticsAdminV1betaProperty $postBody
      * @param array $optParams Optional parameters.
-     * @return GoogleAnalyticsAdminV1alphaProperty
+     * @return GoogleAnalyticsAdminV1betaProperty
      */
-    public function create(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaProperty $postBody, $optParams = [])
+    public function create(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaProperty $postBody, $optParams = [])
     {
         $params = ['postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaProperty::class);
+        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaProperty::class);
     }
     /**
      * Marks target Property as soft-deleted (ie: "trashed") and returns it. This
@@ -51,18 +71,18 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * before the expiration time, the Property and all child resources (eg:
      * GoogleAdsLinks, Streams, UserLinks) will be permanently purged.
      * https://support.google.com/analytics/answer/6154772 Returns an error if the
-     * target is not found, or is not an GA4 Property. (properties.delete)
+     * target is not found, or is not a GA4 Property. (properties.delete)
      *
      * @param string $name Required. The name of the Property to soft-delete.
      * Format: properties/{property_id} Example: "properties/1000"
      * @param array $optParams Optional parameters.
-     * @return GoogleAnalyticsAdminV1alphaProperty
+     * @return GoogleAnalyticsAdminV1betaProperty
      */
     public function delete($name, $optParams = [])
     {
         $params = ['name' => $name];
         $params = \array_merge($params, $optParams);
-        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaProperty::class);
+        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaProperty::class);
     }
     /**
      * Lookup for a single "GA4" Property. (properties.get)
@@ -70,28 +90,29 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @param string $name Required. The name of the property to lookup. Format:
      * properties/{property_id} Example: "properties/1000"
      * @param array $optParams Optional parameters.
-     * @return GoogleAnalyticsAdminV1alphaProperty
+     * @return GoogleAnalyticsAdminV1betaProperty
      */
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
         $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaProperty::class);
+        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaProperty::class);
     }
     /**
-     * Lookup for Google Signals settings for a property.
-     * (properties.getGoogleSignalsSettings)
+     * Returns the singleton data retention settings for this property.
+     * (properties.getDataRetentionSettings)
      *
-     * @param string $name Required. The name of the google signals settings to
-     * retrieve. Format: properties/{property}/googleSignalsSettings
+     * @param string $name Required. The name of the settings to lookup. Format:
+     * properties/{property}/dataRetentionSettings Example:
+     * "properties/1000/dataRetentionSettings"
      * @param array $optParams Optional parameters.
-     * @return GoogleAnalyticsAdminV1alphaGoogleSignalsSettings
+     * @return GoogleAnalyticsAdminV1betaDataRetentionSettings
      */
-    public function getGoogleSignalsSettings($name, $optParams = [])
+    public function getDataRetentionSettings($name, $optParams = [])
     {
         $params = ['name' => $name];
         $params = \array_merge($params, $optParams);
-        return $this->call('getGoogleSignalsSettings', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaGoogleSignalsSettings::class);
+        return $this->call('getDataRetentionSettings', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataRetentionSettings::class);
     }
     /**
      * Returns child Properties under the specified parent Account. Only "GA4"
@@ -104,11 +125,14 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      *
      * @opt_param string filter Required. An expression for filtering the results of
      * the request. Fields eligible for filtering are: `parent:`(The resource name
-     * of the parent account) or `firebase_project:`(The id or number of the linked
+     * of the parent account/property) or `ancestor:`(The resource name of the
+     * parent account) or `firebase_project:`(The id or number of the linked
      * firebase project). Some examples of filters: ``` | Filter | Description |
      * |-----------------------------|-------------------------------------------| |
-     * parent:accounts/123 | The account with account id: 123. | | firebase_project
-     * :project-id | The firebase project with id: project-id. | |
+     * parent:accounts/123 | The account with account id: 123. | |
+     * parent:properties/123 | The property with property id: 123. | |
+     * ancestor:accounts/123 | The account with account id: 123. | |
+     * firebase_project:project-id | The firebase project with id: project-id. | |
      * firebase_project:123 | The firebase project with number: 123. | ```
      * @opt_param int pageSize The maximum number of resources to return. The
      * service may return fewer than this value, even if there are additional pages.
@@ -121,55 +145,54 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @opt_param bool showDeleted Whether to include soft-deleted (ie: "trashed")
      * Properties in the results. Properties can be inspected to determine whether
      * they are deleted or not.
-     * @return GoogleAnalyticsAdminV1alphaListPropertiesResponse
+     * @return GoogleAnalyticsAdminV1betaListPropertiesResponse
      */
     public function listProperties($optParams = [])
     {
         $params = [];
         $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListPropertiesResponse::class);
+        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListPropertiesResponse::class);
     }
     /**
      * Updates a property. (properties.patch)
      *
      * @param string $name Output only. Resource name of this property. Format:
      * properties/{property_id} Example: "properties/1000"
-     * @param GoogleAnalyticsAdminV1alphaProperty $postBody
+     * @param GoogleAnalyticsAdminV1betaProperty $postBody
      * @param array $optParams Optional parameters.
      *
      * @opt_param string updateMask Required. The list of fields to be updated.
      * Field names must be in snake case (e.g., "field_to_update"). Omitted fields
      * will not be updated. To replace the entire entity, use one path with the
      * string "*" to match all fields.
-     * @return GoogleAnalyticsAdminV1alphaProperty
+     * @return GoogleAnalyticsAdminV1betaProperty
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaProperty $postBody, $optParams = [])
+    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaProperty $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaProperty::class);
+        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaProperty::class);
     }
     /**
-     * Updates Google Signals settings for a property.
-     * (properties.updateGoogleSignalsSettings)
+     * Updates the singleton data retention settings for this property.
+     * (properties.updateDataRetentionSettings)
      *
-     * @param string $name Output only. Resource name of this setting. Format:
-     * properties/{property_id}/googleSignalsSettings Example:
-     * "properties/1000/googleSignalsSettings"
-     * @param GoogleAnalyticsAdminV1alphaGoogleSignalsSettings $postBody
+     * @param string $name Output only. Resource name for this DataRetentionSetting
+     * resource. Format: properties/{property}/dataRetentionSettings
+     * @param GoogleAnalyticsAdminV1betaDataRetentionSettings $postBody
      * @param array $optParams Optional parameters.
      *
      * @opt_param string updateMask Required. The list of fields to be updated.
      * Field names must be in snake case (e.g., "field_to_update"). Omitted fields
      * will not be updated. To replace the entire entity, use one path with the
      * string "*" to match all fields.
-     * @return GoogleAnalyticsAdminV1alphaGoogleSignalsSettings
+     * @return GoogleAnalyticsAdminV1betaDataRetentionSettings
      */
-    public function updateGoogleSignalsSettings($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaGoogleSignalsSettings $postBody, $optParams = [])
+    public function updateDataRetentionSettings($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataRetentionSettings $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('updateGoogleSignalsSettings', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaGoogleSignalsSettings::class);
+        return $this->call('updateDataRetentionSettings', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataRetentionSettings::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.

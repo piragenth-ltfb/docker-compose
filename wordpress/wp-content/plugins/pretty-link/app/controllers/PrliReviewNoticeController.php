@@ -23,7 +23,9 @@ class PrliReviewNoticeController {
           'status' => 'removed'
         ) );
       } else if ( 'delay' === $_POST['type'] ) {
-        set_transient( 'pl_review_prompt_delay', true, WEEK_IN_SECONDS );
+        update_option( 'pl_review_prompt_delay', array(
+          'delayed_until' => time() + WEEK_IN_SECONDS
+        ) );
         wp_send_json_success( array(
           'status' => 'delayed'
         ) );
@@ -38,8 +40,24 @@ class PrliReviewNoticeController {
       return;
     }
 
-    // Notice has been removed or delayed
-    if ( get_option( 'pl_review_prompt_removed' ) || get_transient( 'pl_review_prompt_delay' ) ) {
+    // Check for the constant to disable the prompt
+    if ( defined( 'PL_DISABLE_REVIEW_PROMPT' ) && true == PL_DISABLE_REVIEW_PROMPT ) {
+      return;
+    }
+
+    // Notice has been delayed
+    $delayed_option = get_option( 'pl_review_prompt_delay' );
+    if ( ! empty( $delayed_option['delayed_until'] ) && time() < $delayed_option['delayed_until'] ) {
+      return;
+    }
+
+    // Notice has been removed
+    if ( get_option( 'pl_review_prompt_removed' ) ) {
+      return;
+    }
+
+    // Backwards compat
+    if ( get_transient( 'pl_review_prompt_delay' ) ) {
       return;
     }
 
@@ -60,24 +78,29 @@ class PrliReviewNoticeController {
         <p><?php _e( 'That\'s awesome! Could you please do me a BIG favor and give it a 5-star rating on WordPress to help us spread the word and boost our motivation?', 'pretty-link' ); ?></p>
         <p style="font-weight: bold;">~ Blair Williams<br>Founder &amp; CEO of Pretty Links</p>
         <p>
-          <a style="display: inline-block; margin-right: 10px;" href="https://wordpress.org/support/plugin/pretty-link/reviews/?filter=5#new-post" onclick="delayReviewPrompt('remove')" target="_blank"><?php esc_html_e( 'Okay, you deserve it', 'pretty-link' ); ?></a>
-          <a style="display: inline-block; margin-right: 10px;" href="#" onclick="delayReviewPrompt('delay')"><?php esc_html_e( 'Nope, maybe later', 'pretty-link' ); ?></a>
-          <a href="#" onclick="delayReviewPrompt('remove')"><?php esc_html_e( 'I already did', 'pretty-link' ); ?></a>
+          <a style="display: inline-block; margin-right: 10px;" href="https://wordpress.org/support/plugin/pretty-link/reviews/?filter=5#new-post" onclick="delayReviewPrompt(event, 'remove', true, true)" target="_blank"><?php esc_html_e( 'Okay, you deserve it', 'pretty-link' ); ?></a>
+          <a style="display: inline-block; margin-right: 10px;" href="#" onclick="delayReviewPrompt(event, 'delay', true, false)"><?php esc_html_e( 'Nope, maybe later', 'pretty-link' ); ?></a>
+          <a href="#" onclick="delayReviewPrompt(event, 'remove', true, false)"><?php esc_html_e( 'I already did', 'pretty-link' ); ?></a>
         </p>
       </div>
       <div id="prli_review_no" style="display: none;">
         <p><?php _e( 'We\'re sorry to hear you aren\'t enjoying Pretty Links. We would love a chance to improve. Could you take a minute and let us know what we can do better?', 'pretty-link' ); ?></p>
         <p>
-          <a style="display: inline-block; margin-right: 10px;" href="https://prettylinks.com/feedback/?utm_source=plugin_admin&utm_medium=link&utm_campaign=in_plugin&utm_content=request_review" onclick="delayReviewPrompt('remove')" target="_blank"><?php esc_html_e( 'Give Feedback', 'pretty-link' ); ?></a>
-          <a href="#" onclick="delayReviewPrompt('delay')"><?php esc_html_e( 'No thanks', 'pretty-link' ); ?></a>
+          <a style="display: inline-block; margin-right: 10px;" href="https://prettylinks.com/feedback/?utm_source=plugin_admin&utm_medium=link&utm_campaign=in_plugin&utm_content=request_review" onclick="delayReviewPrompt(event, 'remove', true, true)" target="_blank"><?php esc_html_e( 'Give Feedback', 'pretty-link' ); ?></a>
+          <a href="#" onclick="delayReviewPrompt(event, 'remove', true, false)"><?php esc_html_e( 'No thanks', 'pretty-link' ); ?></a>
         </p>
       </div>
     </div>
     <script>
 
-      function delayReviewPrompt(type, triggerClick = true) {
+      function delayReviewPrompt(event, type, triggerClick = true, openLink = false) {
+        event.preventDefault();
         if ( triggerClick ) {
           jQuery('#prli_review_notice').fadeOut();
+        }
+        if ( openLink ) {
+          var href = event.target.href;
+          window.open(href, '_blank');
         }
         jQuery.ajax({
           url: ajaxurl,
@@ -102,7 +125,7 @@ class PrliReviewNoticeController {
           $('#prli_review_' + selection).show();
         });
         $('body').on('click', '#prli_review_notice .notice-dismiss', function(event) {
-          delayReviewPrompt('delay', false);
+          delayReviewPrompt(event, 'delay', false);
         });
       });
     </script>

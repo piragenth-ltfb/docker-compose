@@ -219,7 +219,7 @@ class PrliUtils {
       $cookie_expire_time = time()+60*60*24*30; // Expire in 30 days
 
       if(!isset($_COOKIE[$cookie_name])) {
-        setcookie($cookie_name,$slug,$cookie_expire_time,'/');
+        setcookie($cookie_name, $slug, $cookie_expire_time, '/', '', is_ssl());
         $first_click = 1;
       }
 
@@ -231,7 +231,7 @@ class PrliUtils {
       // Retrieve / Generate visitor id
       if(!isset($_COOKIE[$visitor_cookie])) {
         $visitor_uid = $prli_click->generateUniqueVisitorId();
-        setcookie($visitor_cookie,$visitor_uid,$visitor_cookie_expire_time,'/');
+        setcookie($visitor_cookie, $visitor_uid, $visitor_cookie_expire_time, '/', '', is_ssl());
       }
       else {
         $visitor_uid = $_COOKIE[$visitor_cookie];
@@ -377,7 +377,7 @@ class PrliUtils {
       $ipaddress = $ips[0]; //Fix for flywheel
     }
 
-    return $ipaddress;
+    return apply_filters('pl_get_current_client_ip', $ipaddress);
   }
 
   public function get_custom_forwarding_rule($param_struct) {
@@ -1279,5 +1279,61 @@ class PrliUtils {
   public static function clamp($x, $min, $max) {
     return min(max($x, $min), $max);
   }
-}
 
+  /**
+   * Get the edition data from a product slug
+   *
+   * @param string $product_slug
+   * @return array|null
+   */
+  public static function get_edition($product_slug) {
+    $editions = array(
+      array('index' => 0, 'slug' => 'pretty-link-beginner', 'name' => 'Pretty Links Pro Beginner'),
+      array('index' => 1, 'slug' => 'pretty-link-pro-blogger', 'name' => 'Pretty Links Pro Blogger'),
+      array('index' => 2, 'slug' => 'pretty-link-marketer', 'name' => 'Pretty Links Pro Marketer'),
+      array('index' => 3, 'slug' => 'pretty-link-super-affiliate', 'name' => 'Pretty Links Pro Super Affiliate'),
+      array('index' => 4, 'slug' => 'pretty-link-executive', 'name' => 'Pretty Links Pro Executive'),
+      array('index' => 5, 'slug' => 'pretty-link-pro-developer', 'name' => 'Pretty Links Pro Developer'),
+    );
+
+    foreach($editions as $edition) {
+      if($product_slug == $edition['slug']) {
+        return $edition;
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Is the installed edition of Pretty Links different from the edition in the license?
+   *
+   * @return array|false An array containing the installed edition and license edition data, false if the correct edition is installed
+   */
+  public static function is_incorrect_edition_installed() {
+    $license = get_site_transient('prli_license_info');
+    $license_product_slug = !empty($license) && !empty($license['product_slug']) ? $license['product_slug'] : '';
+
+    if(
+      empty($license_product_slug) ||
+      empty(PRLI_EDITION) ||
+      $license_product_slug == PRLI_EDITION ||
+      !current_user_can('update_plugins') ||
+      @is_dir(PRLI_PATH . '/.git')
+    ) {
+      return false;
+    }
+
+    $installed_edition = self::get_edition(PRLI_EDITION);
+    $license_edition = self::get_edition($license_product_slug);
+
+    if(!is_array($installed_edition) || !is_array($license_edition)) {
+      return false;
+    }
+
+    return array(
+      'installed' => $installed_edition,
+      'license' => $license_edition
+    );
+  }
+}

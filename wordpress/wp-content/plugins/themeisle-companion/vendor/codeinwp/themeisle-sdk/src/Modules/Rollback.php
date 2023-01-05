@@ -98,7 +98,7 @@ class Rollback extends Abstract_Module {
 	 */
 	private function get_api_versions() {
 
-		$cache_key      = $this->product->get_key() . '_' . preg_replace( '/[^0-9a-zA-Z ]/m', '', $this->product->get_version() ) . 'versions';
+		$cache_key      = $this->product->get_cache_key();
 		$cache_versions = get_transient( $cache_key );
 		if ( false === $cache_versions ) {
 			$versions = $this->get_remote_versions();
@@ -375,10 +375,26 @@ class Rollback extends Abstract_Module {
 	}
 
 	/**
+	 * Fires after the option has been updated.
+	 *
+	 * @param mixed  $old_value The old option value.
+	 * @param mixed  $value     The new option value.
+	 * @param string $option    Option name.
+	 */
+	public function update_active_plugins_action( $old_value, $value, $option ) {
+		delete_site_transient( 'update_plugins' );
+		wp_cache_delete( 'plugins', 'plugins' );
+	}
+
+	/**
 	 * Set the rollback hook. Strangely, this does not work if placed in the ThemeIsle_SDK_Rollback class, so it is being called from there instead.
 	 */
 	public function add_hooks() {
 		add_action( 'admin_post_' . $this->product->get_key() . '_rollback', array( $this, 'start_rollback' ) );
 		add_action( 'admin_footer', array( $this, 'add_footer' ) );
+
+		// This hook will be invoked after the plugin activation.
+		// We use this to force an update of the cache so that Update is present immediate after a rollback.
+		add_action( 'update_option_active_plugins', array( $this, 'update_active_plugins_action' ), 10, 3 );
 	}
 }

@@ -145,7 +145,7 @@ class Rewrite {
 	public function request( $query_vars ) {
 		if ( isset( $query_vars['rank_math_category_redirect'] ) ) {
 			$catlink = trailingslashit( get_option( 'home' ) ) . user_trailingslashit( $query_vars['rank_math_category_redirect'], 'category' );
-			wp_redirect( $catlink, 301 );
+			Helper::redirect( $catlink, 301 );
 			exit;
 		}
 
@@ -162,7 +162,6 @@ class Rewrite {
 
 		$category_rewrite = $this->get_category_rules();
 
-		// Redirect support from Old Category Base.
 		$old_base                            = str_replace( '%category%', '(.+)', $wp_rewrite->get_category_permastruct() );
 		$old_base                            = trim( $old_base, '/' );
 		$category_rewrite[ $old_base . '$' ] = 'index.php?rank_math_category_redirect=$matches[1]';

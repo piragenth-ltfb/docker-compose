@@ -48,7 +48,15 @@ function i2_pros_and_cons_options_default($theme = "i2pc-theme-00", $buttonTheme
             'button_radius_in_percent' => 0,
             'button_line_height' => '',
             'button_min_width' => 'auto',
-            'button_class' => ''
+            'button_class' => '',
+            
+            // added box shadow v 1.3.1              
+            'use_box_shadow' => 0,
+            'outer_box_shadow' => 0,
+            'box_shadow_height' => 4,
+            'box_shadow_color' => '#000000',
+            'box_shadow_alpha' => 50,
+
         );
         $options['use_theme'] = $theme;
         $options['button_theme'] = $buttonTheme;
@@ -237,7 +245,9 @@ class i2ProsAndConsSettingsPage
         add_action('admin_menu', array($this, 'i2_pros_and_cons_add_plugin_page'));
         add_action('admin_init', array($this, 'i2_pros_and_cons_page_init'));
         add_action('admin_enqueue_scripts', array($this, 'i2_pros_and_cons_add_color_picker'));
-        $this->options = get_option('i2_pros_and_cons', i2_pros_and_cons_options_default());
+       // $options = get_option('i2_pros_and_cons');
+       // $this->options = array_merge(i2_pros_and_cons_options_default(), $options);             
+        $this->options = get_option('i2_pros_and_cons', i2_pros_and_cons_options_default());             
     }
 
 
@@ -289,12 +299,13 @@ class i2ProsAndConsSettingsPage
                 <a href="?page=i2_pros_and_cons&tab=global" class="nav-tab <?php echo $active_tab == 'global' ? 'nav-tab-active' : ''; ?>"><?php _e('Global', 'i2-pros-cons') ?></a>
                 <a href="?page=i2_pros_and_cons&tab=heading" class="nav-tab <?php echo $active_tab == 'heading' ? 'nav-tab-active' : ''; ?>"><?php _e('Heading', 'i2-pros-cons') ?></a>
                 <a href="?page=i2_pros_and_cons&tab=section" class="nav-tab <?php echo $active_tab == 'section' ? 'nav-tab-active' : ''; ?>"><?php _e('Section', 'i2-pros-cons') ?></a>
+                <a href="?page=i2_pros_and_cons&tab=boxshadow" class="nav-tab <?php echo $active_tab == 'boxshadow' ? 'nav-tab-active' : ''; ?>"><?php _e('Box Shadow', 'i2-pros-cons') ?></a>
                 <a href="?page=i2_pros_and_cons&tab=icons" class="nav-tab <?php echo $active_tab == 'icons' ? 'nav-tab-active' : ''; ?>"><?php _e('Icons', 'i2-pros-cons') ?></a>
                 <a href="?page=i2_pros_and_cons&tab=button" class="nav-tab <?php echo $active_tab == 'button' ? 'nav-tab-active' : ''; ?>"><?php _e('Button', 'i2-pros-cons') ?></a>
             </div>
             <div class="form-wrapper">
             <div class="i2-form-body" style="display:flex;"> 
-               <div class="i2-form-body-content"> 
+               <div class="i2-form-body-content">
                 <form method="post" action="options.php" autocomplete="off">
                     <?php
                     // This prints out all hidden setting fields
@@ -307,6 +318,8 @@ class i2ProsAndConsSettingsPage
                         do_settings_sections('i2_pros_and_cons_heading');
                     } else if ($active_tab == 'section') {
                         do_settings_sections('i2_pros_and_cons_body');
+                    } else if ($active_tab == 'boxshadow') {
+                        do_settings_sections('i2_pros_and_cons_box_shadow');                        
                     } else if ($active_tab == 'button') {
                         do_settings_sections('i2_pros_and_cons_button');
                     } else {
@@ -319,9 +332,9 @@ class i2ProsAndConsSettingsPage
                 </div>
                 <div class="i2-from-right" style="margin-left:auto;">
                  <h3>How to use</h3>
-                <a href="<?php echo I2PC_MORE_THEMES_PLUGINS_URL; ?>/i2-pros-and-cons-settings-the-right-way/" target="_blank" style="display: block; margin-bottom:10px;text-decoration:none;"><i class="dashicons dashicons-editor-help"></i> Setting page</a>
-                <a href="<?php echo I2PC_MORE_THEMES_PLUGINS_URL; ?>/how-to-install-and-use-i2-pros-and-cons-gutenberg/" target="_blank" style="display: block; margin-bottom:10px;text-decoration:none;"><i class="dashicons dashicons-editor-help"></i> Gutenberg editor</a>
-                <a href="<?php echo I2PC_MORE_THEMES_PLUGINS_URL; ?>/how-to-install-and-use-i2-pros-and-cons-classic-editor/" target="_blank" style="display: block; margin-bottom:10px;text-decoration:none;"><i class="dashicons dashicons-editor-help"></i> Classic editor</a>
+                <a href="<?php echo I2PC_MORE_THEMES_PLUGINS_URL; ?>/docs-category/i2-pros-and-cons-settings-the-right-way/" target="_blank" style="display: block; margin-bottom:10px;text-decoration:none;"><i class="dashicons dashicons-editor-help"></i> Setting page</a>
+                <a href="<?php echo I2PC_MORE_THEMES_PLUGINS_URL; ?>/docs-category/how-to-install-and-use-i2-pros-and-cons-gutenberg/" target="_blank" style="display: block; margin-bottom:10px;text-decoration:none;"><i class="dashicons dashicons-editor-help"></i> Gutenberg editor</a>
+                <a href="<?php echo I2PC_MORE_THEMES_PLUGINS_URL; ?>/docs-category/how-to-install-and-use-i2-pros-and-cons-classic-editor/" target="_blank" style="display: block; margin-bottom:10px;text-decoration:none;"><i class="dashicons dashicons-editor-help"></i> Classic editor</a>
                 </div>
                 </div>
             </div>
@@ -362,6 +375,13 @@ public function i2_pros_and_cons_page_init()
         array($this, 'section_info'), // Callback
         'i2_pros_and_cons_body' // Page
     );
+    add_settings_section(
+        'i2_pros_and_cons_section_box_shadow', // ID
+        'Box Shadow', // Title
+        array($this, 'section_info'), // Callback
+        'i2_pros_and_cons_box_shadow' // Page
+    );
+
     add_settings_section(
         'i2_pros_and_cons_section_icons', // ID
         'Icons Setting', // Title
@@ -628,6 +648,54 @@ public function i2_pros_and_cons_page_init()
         ['id' => 'text_underline']
     );
 
+    // added box shadow version 1.3.1
+
+    add_settings_field(
+        'use_box_shadow',
+        __('Use Box Shadow', 'i2-pros-and-cons'),
+        array($this, 'i2_pros_and_cons_callback_checkbox_field'),
+        'i2_pros_and_cons_box_shadow',
+        'i2_pros_and_cons_section_box_shadow',
+        ['id' => 'use_box_shadow']
+    );
+
+    add_settings_field(
+        'outer_box_shadow',
+        __('Only Outer Box Shadow', 'i2-pros-and-cons'),
+        array($this, 'i2_pros_and_cons_callback_checkbox_field'),
+        'i2_pros_and_cons_box_shadow',
+        'i2_pros_and_cons_section_box_shadow',
+        ['id' => 'outer_box_shadow']
+    );
+    add_settings_field(
+        'box_shadow_color',
+        __('Text Color', 'i2-pros-and-cons'),
+        array($this, 'i2_pros_and_cons_callback_text_field'),
+        'i2_pros_and_cons_box_shadow',
+        'i2_pros_and_cons_section_box_shadow',
+        ['id' => 'box_shadow_color', 'myclass' => 'i2-pros-cons-color-picker', 'type' => 'text']
+    );
+    add_settings_field(
+        'box_shadow_alpha',
+        __('Shadow Transparency', 'i2-pros-and-cons'),
+        array($this, 'i2_pros_and_cons_callback_text_field'),
+        'i2_pros_and_cons_box_shadow',
+        'i2_pros_and_cons_section_box_shadow',
+        ['id' => 'box_shadow_alpha', 'size' => 3, 'helptext' => 'between 0 to 100', 'type' => 'number', 'default' => 50]
+    );
+
+    add_settings_field(
+        'box_shadow_height',
+        __('Box Shadow Height', 'i2-pros-and-cons'),
+        array($this, 'i2_pros_and_cons_callback_text_field'),
+        'i2_pros_and_cons_box_shadow',
+        'i2_pros_and_cons_section_box_shadow',
+        ['id' => 'box_shadow_height', 'size' => 4, 'helptext' => 'px', 'type' => 'number', 'default' => 2]
+    );
+
+    // end added box shadow version 1.3.1
+
+
     // end body fields
     // icons fields 
     add_settings_field(
@@ -823,6 +891,13 @@ public function sanitize($input)
         $new_input['button_radius_in_percent'] =   isset($input['button_radius_in_percent']) ?   $input['button_radius_in_percent']  : 0;
         $new_input['button_class'] =   isset($input['button_class']) ?   $input['button_class']  : '';
     }
+
+    if (isset($input['use_box_shadow'])) {
+        $new_input['use_box_shadow'] =   isset($input['use_box_shadow']) ?   $input['use_box_shadow']  : 0;
+    }
+    if (isset($input['outer_box_shadow'])) {
+        $new_input['outer_box_shadow'] =   isset($input['outer_box_shadow']) ?   $input['outer_box_shadow']  : 0;
+    }
     return $new_input;
 }
 
@@ -856,7 +931,12 @@ function i2_pros_and_cons_callback_text_field($args)
     $size = isset($args['size']) ? $args['size'] : '40';
     $helptext = isset($args['helptext']) ? $args['helptext'] : '';
     $type = isset($args['type']) ? $args['type'] : 'text';
+    $default = isset($args['default']) ? $args['default'] : '';
+    // added default value version 1.3.1
     $value = isset($this->options[$id]) ? sanitize_text_field($this->options[$id]) : '';
+    if($value == '' && $default != ''){
+        $value = $default;
+    }
 
     echo '<input id="i2_pros_and_cons_' . $id . '" name="i2_pros_and_cons[' . $id . ']" class="' . $class . '" type="' . $type . '" size="' . $size . '" value="' . $value . '" /> ' . $helptext;
 }

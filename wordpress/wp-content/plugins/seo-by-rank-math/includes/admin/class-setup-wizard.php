@@ -192,7 +192,7 @@ class Setup_Wizard {
 	 */
 	public function change_label( $label ) {
 		if ( $this->is_advance() ) {
-			return esc_html__( 'Advance Options', 'rank-math' );
+			return esc_html__( 'Advanced Options', 'rank-math' );
 		}
 
 		return $label;
@@ -223,7 +223,7 @@ class Setup_Wizard {
 		// If no form submission, bail!
 		$referer = Param::post( '_wp_http_referer' );
 		if ( empty( $_POST ) ) {
-			return wp_safe_redirect( $referer );
+			return Helper::redirect( $referer );
 		}
 
 		check_admin_referer( 'rank-math-wizard', 'security' );
@@ -238,7 +238,7 @@ class Setup_Wizard {
 		if ( is_string( $show_content ) ) {
 			$redirect = $show_content;
 		}
-		wp_safe_redirect( $redirect );
+		Helper::redirect( $redirect );
 		exit;
 	}
 
@@ -280,8 +280,11 @@ class Setup_Wizard {
 		rank_math()->admin_assets->register();
 		wp_enqueue_style( 'rank-math-wizard', rank_math()->plugin_url() . 'assets/admin/css/setup-wizard.css', [ 'wp-admin', 'buttons', 'cmb2-styles', 'select2-rm', 'rank-math-common', 'rank-math-cmb2' ], rank_math()->version );
 
+		// Enqueue scripts for the SEO Score Updater tool.
+		\RankMath\Tools\Update_Score::get()->enqueue();
+
 		// Enqueue javascript.
-		wp_enqueue_script( 'rank-math-wizard', rank_math()->plugin_url() . 'assets/admin/js/wizard.js', [ 'media-editor', 'select2-rm', 'lodash', 'rank-math-common', 'rank-math-validate' ], rank_math()->version, true );
+		wp_enqueue_script( 'rank-math-wizard', rank_math()->plugin_url() . 'assets/admin/js/wizard.js', [ 'media-editor', 'select2-rm', 'lodash', 'rank-math-common' ], rank_math()->version, true );
 
 		Helper::add_json( 'currentStep', $this->step );
 		Helper::add_json( 'deactivated', esc_html__( 'Deactivated', 'rank-math' ) );

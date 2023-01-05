@@ -47,7 +47,7 @@ class Admin_Header {
 			</h1>
 			<?php $this->get_search_options(); ?>
 			<?php $this->get_mode_selector(); ?>
-			<a href="<?php echo esc_url( $this->get_help_link() ); ?>" target="_blank" class="button rank-math-help"><i class="rm-icon rm-icon-help"></i></a>
+			<a href="<?php echo esc_url( $this->get_help_link() ); ?>" title="<?php esc_attr_e( 'Rank Math Knowledge Base', 'rank-math' ); ?>" target="_blank" class="button rank-math-help"><i class="dashicons dashicons-editor-help"></i></a>
 		</div>
 		<?php
 
@@ -121,13 +121,12 @@ class Admin_Header {
 			'sitemap-general'        => 'rank-math-options-sitemap' === Param::get( 'page' ),
 			'role-manager'           => 'rank-math-role-manager' === Param::get( 'page' ),
 			'seo-analysis'           => 'rank-math-seo-analysis' === Param::get( 'page' ),
-			'seo-analysis'           => 'rank-math-seo-analysis' === Param::get( 'page' ),
 		];
 
-		$link = 'https://rankmath.com/kb/?utm_source=Plugin&utm_medium=RM%20Header%20KB%20Icon&utm_campaign=WP';
+		$link = KB::get( 'knowledgebase', 'RM Header KB Icon' );
 		foreach ( $links as $key => $value ) {
 			if ( $value ) {
-				$link = KB::get( $key );
+				$link = KB::get( $key, 'Admin Bar ' . ucwords( str_replace( '-', ' ', $key ) ) );
 				break;
 			}
 		}

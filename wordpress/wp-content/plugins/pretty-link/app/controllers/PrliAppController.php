@@ -87,7 +87,7 @@ class PrliAppController extends PrliBaseController {
       <div id="pl-admin-header"><img class="pl-logo" src="<?php echo PRLI_IMAGES_URL . '/pretty-links-logo-color-white.svg'; ?>" /></div>
       <script>
         jQuery(document).ready(function($) {
-          $('#close-pl-upgrade-header').click(function(event) {
+          $('#close-pl-upgrade-header').on('click', function() {
             var upgradeHeader = $('#pl-upgrade-header');
             upgradeHeader.fadeOut();
             $.ajax({
@@ -340,10 +340,16 @@ class PrliAppController extends PrliBaseController {
                       array(), PRLI_VERSION );
 
     if ($this->should_enqueue_block_editor_scripts()) {
+      $prereqs = ['wp-i18n', 'wp-element', 'wp-compose', 'wp-components'];
+
+      if ($current_screen->id != 'widgets') {
+        $prereqs[] = 'wp-editor';
+      }
+
       wp_enqueue_script(
         'pretty-link-richtext-format',
         PRLI_JS_URL . '/editor.js',
-        ['wp-editor', 'wp-i18n', 'wp-element', 'wp-compose', 'wp-components'],
+        $prereqs,
         PRLI_VERSION,
         true
       );

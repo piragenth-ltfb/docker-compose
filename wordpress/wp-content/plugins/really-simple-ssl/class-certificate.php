@@ -1,20 +1,14 @@
-<?php
-
-defined('ABSPATH') or die("you do not have access to this page!");
+<?php defined('ABSPATH') or die();
 
 if ( ! class_exists( 'rsssl_certificate' ) ) {
     class rsssl_certificate
     {
         private static $_this;
-
         function __construct()
         {
-
             if (isset(self::$_this))
                 wp_die(sprintf(__('%s is a singleton class and you cannot create a second instance.', 'really-simple-ssl'), get_class($this)));
-
             self::$_this = $this;
-
         }
 
         static function this()
@@ -34,38 +28,35 @@ if ( ! class_exists( 'rsssl_certificate' ) ) {
 
         public function is_valid()
         {
-            //Get current domain
-            $domain = site_url();
-            //Parse to strip off any /subfolder/
-            $parse = parse_url($domain);
-            $domain = $parse['host'];
 
-            if (function_exists('stream_context_get_params')) {
-                //get certificate info
+            $domain = $this->get_domain();
+            if ( !$domain || !function_exists('stream_context_get_params') ) {
+				set_transient('rsssl_certinfo', 'no-response', DAY_IN_SECONDS);
+            } else {
                 $certinfo = $this->get_certinfo($domain);
-
-                if (!$certinfo) {
-                	RSSSL()->really_simple_ssl->trace_log("- SSL certificate not valid");
+                if ( !$certinfo ) {
                 	return false;
                 }
 
-                //Check if domain is valid
                 $domain_valid = $this->is_domain_valid($certinfo, $domain);
-                if (!$domain_valid) {
-	                RSSSL()->really_simple_ssl->trace_log("- Domain on certificate does not match website's domain");
-                }
-                //Check if date is valid
                 $date_valid = $this->is_date_valid($certinfo);
-	            if (!$date_valid) {
-		            RSSSL()->really_simple_ssl->trace_log("- Date on certificate expired or not valid");
-	            }
-                //Domain and date valid? Return true
-                if ($domain_valid && $date_valid) {
+                if ( $domain_valid && $date_valid ) {
                     return true;
                 }
             }
             return false;
         }
+
+	    /**
+	     * get domain
+	     * @return string
+	     */
+		public function get_domain(){
+			$domain = site_url();
+			//Parse to strip off any /subfolder/
+			$parse = parse_url($domain);
+			return isset($parse['host']) ? $parse['host'] : false;
+		}
 
        /**
         *
@@ -83,8 +74,8 @@ if ( ! class_exists( 'rsssl_certificate' ) ) {
         {
 	        //first check standard situation
 	        //Get both the common name(s) and the alternative names from the certificate
-	        $certificate_common_names = isset($certinfo['subject']['CN']) ? $certinfo['subject']['CN'] : false;
-	        $certificate_alternative_names = isset($certinfo['extensions']['subjectAltName']) ? $certinfo['extensions']['subjectAltName'] : false;
+	        $certificate_common_names = isset($certinfo['subject']['CN']) ? $certinfo['subject']['CN'] : '';
+	        $certificate_alternative_names = isset($certinfo['extensions']['subjectAltName']) ? $certinfo['extensions']['subjectAltName'] : '';
 	        //Check if the domain is found in either the certificate common name(s) (CN) or alternative name(s) (AN)
 	        $pos_cn = strpos($certificate_common_names, $domain);
 	        $pos_an = strpos($certificate_alternative_names, $domain);
@@ -98,7 +89,7 @@ if ( ! class_exists( 'rsssl_certificate' ) ) {
 	        //strip of asterisk, and check if the wildcard domain is part of current domain
 	        $cert_domains = array();
 	        if ( $this->is_wildcard() ) {
-		        $certificate_alternative_names = isset($certinfo['extensions']['subjectAltName']) ? explode(', ',$certinfo['extensions']['subjectAltName']) : false;
+		        $certificate_alternative_names = explode(', ',$certificate_alternative_names);
 		        $cert_domains[] = trim(str_replace('*', '', $certificate_common_names));
 		        foreach ($certificate_alternative_names as $subjectAltName) {
 			        $cert_domains[] = trim(str_replace('*', '', $subjectAltName));
@@ -156,25 +147,13 @@ if ( ! class_exists( 'rsssl_certificate' ) ) {
             return false;
         }
 
-        public function expiry_date_nice(){
-        	//refresh transient
-	        $valid = RSSSL()->rsssl_certificate->is_valid();
-	        $certinfo = get_transient('rsssl_certinfo');
-	        $end_date = isset($certinfo['validTo_time_t']) ? $certinfo['validTo_time_t'] : false;
-	        //if the certificate expires within the grace period, allow renewal
-	        //e.g. expiry date 30 may, now = 10 may => grace period 9 june.
-	        $expiry_date = !empty($end_date) ? date( get_option('date_format'), $end_date ) : false;
-	        return $expiry_date;
-        }
-
 	    /**
 	     * Check if the certificate is valid, but about to expire.
 	     * @return bool
 	     */
         public function about_to_expire(){
-	        $valid = $this->is_valid();
 	        //if not valid, it's already expired
-	        if (!$valid) {
+	        if ( !$this->is_valid() ) {
 	        	return true;
 	        }
 
@@ -231,7 +210,7 @@ if ( ! class_exists( 'rsssl_certificate' ) ) {
          *
          * @since 3.0
          * @param string $url
-         * @return mixed
+         * @return string|bool
          * @access public
          *
          */
@@ -240,11 +219,12 @@ if ( ! class_exists( 'rsssl_certificate' ) ) {
         {
             $certinfo = get_transient('rsssl_certinfo' );
             //if the last check resulted in a "no response", we skip this check for a day.
-	        if ($certinfo === 'no-response') return false;
+	        if ($certinfo === 'no-response') {
+				return false;
+	        }
 
-	        if (!$certinfo || RSSSL()->really_simple_ssl->is_settings_page()) {
+	        if (!$certinfo || RSSSL()->admin->is_settings_page()) {
 	            $url = 'https://'.str_replace(array('https://', 'http://'), '', $url);
-
                 $original_parse = parse_url($url, PHP_URL_HOST);
                 if ($original_parse) {
                     $get = stream_context_create(array("ssl" => array("capture_peer_cert" => TRUE)));
@@ -269,10 +249,10 @@ if ( ! class_exists( 'rsssl_certificate' ) ) {
                 }
                 set_transient('rsssl_certinfo', $certinfo, DAY_IN_SECONDS);
             }
-
             if ( $certinfo==='not-valid' ) return false;
-
-            if (!empty($certinfo)) return $certinfo;
+            if ( !empty($certinfo) ) {
+				return $certinfo;
+            }
 
             return false;
         }

@@ -10,6 +10,8 @@
 
 namespace RankMath\Redirections;
 
+use RankMath\KB;
+use RankMath\Redirections\Import_Export;
 use RankMath\Helper;
 use RankMath\Traits\Hooker;
 use MyThemeShop\Helpers\Param;
@@ -55,7 +57,7 @@ class Export {
 
 		$items = DB::get_redirections(
 			[
-				'limit'  => 1000,
+				'limit'  => Import_Export::get()->limit,
 				'status' => 'active',
 			]
 		);
@@ -66,7 +68,7 @@ class Export {
 
 		$text[] = '# Created by Rank Math';
 		$text[] = '# ' . date_i18n( 'r' );
-		$text[] = '# Rank Math ' . trim( rank_math()->version ) . ' - https://rankmath.com/';
+		$text[] = '# Rank Math ' . trim( rank_math()->version ) . ' - ' . KB::get( 'seo-suite' );
 		$text[] = '';
 
 		$text = array_merge( $text, $this->$server( $items['redirections'] ) );
@@ -169,7 +171,7 @@ class Export {
 	 * @return string
 	 */
 	private function is_valid_regex( $source ) {
-		if ( 'regex' == $source['comparison'] && @preg_match( $source['pattern'], null ) === false ) { // phpcs:ignore
+		if ( 'regex' == $source['comparison'] && @preg_match( '/' . $source['pattern'] . '/', null ) === false ) { // phpcs:ignore
 			return false;
 		}
 

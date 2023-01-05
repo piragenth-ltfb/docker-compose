@@ -85,7 +85,10 @@ class User_Screen implements IScreen {
 	 * @return array
 	 */
 	public function get_values() {
-		return [];
+		global $wp_rewrite;
+		return [
+			'permalinkFormat' => ! empty( $wp_rewrite->author_structure ) ? home_url( $wp_rewrite->author_structure ) : home_url(),
+		];
 	}
 
 	/**
@@ -95,8 +98,8 @@ class User_Screen implements IScreen {
 	 */
 	public function get_object_values() {
 		return [
-			'titleTemplate'       => '%name% %sep% %sitename% %page%',
-			'descriptionTemplate' => '%user_description%',
+			'titleTemplate'       => Helper::get_settings( 'titles.author_archive_title', '%name% %sep% %sitename% %page%' ),
+			'descriptionTemplate' => Helper::get_settings( 'titles.author_archive_description', '%user_description%' ),
 		];
 	}
 

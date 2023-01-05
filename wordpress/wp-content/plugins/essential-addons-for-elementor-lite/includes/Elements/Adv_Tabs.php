@@ -63,7 +63,7 @@ class Adv_Tabs extends Widget_Base
         return 'https://essential-addons.com/elementor/docs/advanced-tabs/';
     }
 
-    protected function _register_controls()
+    protected function register_controls()
     {
         /**
          * Advance Tabs Settings
@@ -112,6 +112,55 @@ class Adv_Tabs extends Widget_Base
                 ],
             ]
         );
+
+        $this->add_control(
+            'eael_adv_tabs_tab_icon_alignment',
+            [
+                'label' => esc_html__( 'Icon Alignment', 'essential-addons-for-elementor-lite' ),
+                'description' => sprintf( __( 'Set icon position before/after the tab title.', 'essential-addons-for-elementor-lite' ) ),
+                'type' => Controls_Manager::CHOOSE,
+                'default' => 'before',
+                'options' => [
+                    'before' => [
+                        'title' => esc_html__( 'Before', 'essential-addons-for-elementor-lite' ),
+                        'icon' => 'eicon-h-align-left',
+                    ],
+                    'after' => [
+                        'title' => esc_html__( 'After', 'essential-addons-for-elementor-lite' ),
+                        'icon' => 'eicon-h-align-right',
+                    ],
+                ],
+                'condition' => [
+                    'eael_adv_tab_icon_position' => 'eael-tab-inline-icon',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'eael_adv_tabs_default_active_tab',
+            [
+                'label' => esc_html__('Tab Auto Active?', 'essential-addons-for-elementor-lite'), 
+                'type' => Controls_Manager::SWITCHER,
+                'description' => esc_html__('If no tab is selected as default active tab, then we display first tab as active. Turn on/off this default behaviour.', 'essential-addons-for-elementor-lite'),
+                'default' => 'yes',
+                'return_value' => 'yes',
+                'label_on'     => __('Yes', 'essential-addons-for-elementor-lite'),
+                'label_off'    => __('No', 'essential-addons-for-elementor-lite'),
+            ]
+        );
+
+        $this->add_control(
+            'eael_adv_tabs_custom_id_offset',
+            [
+                'label'       => esc_html__('Custom ID offset', 'essential-addons-for-elementor-lite'),
+                'description' => esc_html__('Use offset to set the custom ID target scrolling position.', 'essential-addons-for-elementor-lite'),
+                'type'        => Controls_Manager::NUMBER,
+                'label_block' => false,
+                'default'     => 0,
+                'min'         => 0,
+            ]
+        );
+
         $this->end_controls_section();
 
         /**
@@ -129,7 +178,7 @@ class Adv_Tabs extends Widget_Base
         $repeater->add_control(
             'eael_adv_tabs_tab_show_as_default',
             [
-                'label' => __('Set as Default', 'essential-addons-for-elementor-lite'),
+                'label' => __('Active as Default', 'essential-addons-for-elementor-lite'),
                 'type' => Controls_Manager::SWITCHER,
                 'default' => 'inactive',
                 'return_value' => 'active-default',
@@ -149,11 +198,11 @@ class Adv_Tabs extends Widget_Base
                     ],
                     'icon' => [
                         'title' => esc_html__('Icon', 'essential-addons-for-elementor-lite'),
-                        'icon' => 'fa fa-gear',
+                        'icon' => 'eicon-icon-box',
                     ],
                     'image' => [
                         'title' => esc_html__('Image', 'essential-addons-for-elementor-lite'),
-                        'icon' => 'fa fa-picture-o',
+                        'icon' => 'eicon-image-bold',
                     ],
                 ],
                 'default' => 'icon',
@@ -202,6 +251,28 @@ class Adv_Tabs extends Widget_Base
         );
 
         $repeater->add_control(
+            'eael_adv_tabs_tab_title_html_tag',
+            [
+                'name' => 'eael_adv_tabs_tab_title',
+                'label' => esc_html__('Title HTML Tag', 'essential-addons-for-elementor-lite'),
+                'type'    => Controls_Manager::SELECT,
+                'options' => [
+                    'h1'   => 'H1',
+                    'h2'   => 'H2',
+                    'h3'   => 'H3',
+                    'h4'   => 'H4',
+                    'h5'   => 'H5',
+                    'h6'   => 'H6',
+                    'div'  => 'div',
+                    'span' => 'span',
+                    'p'    => 'p',
+                ],
+                'default' => 'span',
+                'dynamic' => ['active' => true],
+            ]
+        );
+
+        $repeater->add_control(
             'eael_adv_tabs_text_type',
             [
                 'label' => __('Content Type', 'essential-addons-for-elementor-lite'),
@@ -218,8 +289,10 @@ class Adv_Tabs extends Widget_Base
             'eael_primary_templates',
             [
                 'label' => __('Choose Template', 'essential-addons-for-elementor-lite'),
-                'type' => Controls_Manager::SELECT,
-                'options' => Helper::get_elementor_templates(),
+                'type' => 'eael-select2',
+                'source_name' => 'post_type',
+                'source_type' => 'elementor_library',
+                'label_block' => true,
                 'condition' => [
                     'eael_adv_tabs_text_type' => 'template',
                 ],
@@ -236,6 +309,16 @@ class Adv_Tabs extends Widget_Base
                 'condition' => [
                     'eael_adv_tabs_text_type' => 'content',
                 ],
+            ]
+        );
+        
+        $repeater->add_control(
+            'eael_adv_tabs_tab_id',
+            [
+                'label' => esc_html__('Custom ID', 'essential-addons-for-elementor-lite'),
+                'type' => Controls_Manager::TEXT,
+                'description' => esc_html__( 'Custom ID will be added as an anchor tag. For example, if you add ‘test’ as your custom ID, the link will become like the following: https://www.example.com/#test and it will open the respective tab directly.', 'essential-addons-for-elementor-lite' ),
+                'default' => '',
             ]
         );
 
@@ -275,7 +358,7 @@ class Adv_Tabs extends Widget_Base
                         ],
                     ],
                     'default' => '1',
-                    'description' => '<span class="pro-feature"> Get the  <a href="https://wpdeveloper.net/in/upgrade-essential-addons-elementor" target="_blank">Pro version</a> for more stunning elements and customization options.</span>',
+                    'description' => '<span class="pro-feature"> Get the  <a href="https://wpdeveloper.com/upgrade/ea-pro" target="_blank">Pro version</a> for more stunning elements and customization options.</span>',
                 ]
             );
 
@@ -411,7 +494,7 @@ class Adv_Tabs extends Widget_Base
                 'selectors' => [
                     '{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li i' => 'font-size: {{SIZE}}{{UNIT}};',
                     '{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li img' => 'width: {{SIZE}}{{UNIT}};',
-                    '{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li svg' => 'width: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );
@@ -433,11 +516,13 @@ class Adv_Tabs extends Widget_Base
                     ],
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .eael-tab-inline-icon li i, {{WRAPPER}} .eael-tab-inline-icon li img, {{WRAPPER}} .eael-tab-inline-icon li svg' => 'margin-right: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .eael-tab-inline-icon li .title-before-icon' => 'margin-right: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .eael-tab-inline-icon li .title-after-icon' => 'margin-left: {{SIZE}}{{UNIT}};',
                     '{{WRAPPER}} .eael-tab-top-icon li i, {{WRAPPER}} .eael-tab-top-icon li img, {{WRAPPER}} .eael-tab-top-icon li svg' => 'margin-bottom: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );
+
         $this->add_responsive_control(
             'eael_adv_tabs_tab_padding',
             [
@@ -606,7 +691,6 @@ class Adv_Tabs extends Widget_Base
                 'default' => '#444',
                 'selectors' => [
                     '{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li.active' => 'background-color: {{VALUE}};',
-                    '{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li.active-default' => 'background-color: {{VALUE}};',
                 ],
             ]
         );
@@ -615,7 +699,7 @@ class Adv_Tabs extends Widget_Base
             [
                 'name' => 'eael_adv_tabs_tab_bgtype_active',
                 'types' => ['classic', 'gradient'],
-                'selector' => '{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li.active,{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li.active-default',
+                'selector' => '{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li.active',
             ]
         );
         $this->add_control(
@@ -626,7 +710,6 @@ class Adv_Tabs extends Widget_Base
                 'default' => '#fff',
                 'selectors' => [
                     '{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li.active' => 'color: {{VALUE}};',
-                    '{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul .active-default .eael-tab-title' => 'color: {{VALUE}};',
                 ],
             ]
         );
@@ -638,9 +721,9 @@ class Adv_Tabs extends Widget_Base
                 'default' => '#fff',
                 'selectors' => [
                     '{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li.active > i' => 'color: {{VALUE}};',
-                    '{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li.active-default > i' => 'color: {{VALUE}};',
+                    //'{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li.active-default > i' => 'color: {{VALUE}};',
                     '{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li.active > svg' => 'fill: {{VALUE}};',
-                    '{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li.active-default > svg' => 'fill: {{VALUE}};',
+                    //'{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li.active-default > svg' => 'fill: {{VALUE}};',
                 ],
                 'condition' => [
                     'eael_adv_tabs_icon_show' => 'yes',
@@ -652,7 +735,7 @@ class Adv_Tabs extends Widget_Base
             [
                 'name' => 'eael_adv_tabs_tab_border_active',
                 'label' => esc_html__('Border', 'essential-addons-for-elementor-lite'),
-                'selector' => '{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li.active, {{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li.active-default',
+                'selector' => '{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li.active',
             ]
         );
         $this->add_responsive_control(
@@ -663,7 +746,6 @@ class Adv_Tabs extends Widget_Base
                 'size_units' => ['px', 'em', '%'],
                 'selectors' => [
                     '{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li.active' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-                    '{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li.active-default' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
@@ -822,8 +904,8 @@ class Adv_Tabs extends Widget_Base
                 'type' => Controls_Manager::COLOR,
                 'default' => '#444',
                 'selectors' => [
-                    '{{WRAPPER}} .eael-advance-tabs .eael-tabs-nav > ul li:after' => 'border-top-color: {{VALUE}};',
-                    '{{WRAPPER}} .eael-advance-tabs.eael-tabs-vertical > .eael-tabs-nav > ul li:after' => 'border-top-color: transparent; border-left-color: {{VALUE}};',
+                    '{{WRAPPER}} .eael-advance-tabs:not(.eael-tabs-vertical) .eael-tabs-nav > ul li:after' => 'border-top-color: {{VALUE}};',
+                    '{{WRAPPER}} .eael-advance-tabs.eael-tabs-vertical > .eael-tabs-nav > ul li:after' => 'border-left-color: {{VALUE}};',
                 ],
                 'condition' => [
                     'eael_adv_tabs_tab_caret_show' => 'yes',
@@ -863,17 +945,19 @@ class Adv_Tabs extends Widget_Base
     protected function render()
     {
         $settings = $this->get_settings_for_display();
+
         $eael_find_default_tab = [];
         $eael_adv_tab_id = 1;
         $eael_adv_tab_content_id = 1;
         $tab_icon_migrated = isset($settings['__fa4_migrated']['eael_adv_tabs_tab_title_icon_new']);
         $tab_icon_is_new = empty($settings['eael_adv_tabs_tab_title_icon']);
+        $tab_auto_active =  'yes' === $settings['eael_adv_tabs_default_active_tab'] ? esc_attr('eael-tab-auto-active') : '';
 
         $this->add_render_attribute(
             'eael_tab_wrapper',
             [
                 'id' => "eael-advance-tabs-{$this->get_id()}",
-                'class' => ['eael-advance-tabs', $settings['eael_adv_tab_layout']],
+                'class' => ['eael-advance-tabs', $settings['eael_adv_tab_layout'], $tab_auto_active],
                 'data-tabid' => $this->get_id(),
             ]
         );
@@ -885,12 +969,52 @@ class Adv_Tabs extends Widget_Base
             $this->add_render_attribute('eael_tab_wrapper', 'class', 'responsive-vertical-layout');
         }
 
+        if( !empty($settings['eael_adv_tabs_custom_id_offset']) ){
+            $this->add_render_attribute('eael_tab_wrapper', 'data-custom-id-offset', esc_attr( $settings['eael_adv_tabs_custom_id_offset'] ) );
+        }
+
         $this->add_render_attribute('eael_tab_icon_position', 'class', esc_attr($settings['eael_adv_tab_icon_position'])); ?>
         <div <?php echo $this->get_render_attribute_string('eael_tab_wrapper'); ?>>
             <div class="eael-tabs-nav">
                 <ul <?php echo $this->get_render_attribute_string('eael_tab_icon_position'); ?>>
-                    <?php foreach ($settings['eael_adv_tabs_tab'] as $tab) : ?>
-                        <li class="<?php echo esc_attr($tab['eael_adv_tabs_tab_show_as_default']); ?>">
+                    <?php foreach ($settings['eael_adv_tabs_tab'] as $index => $tab) :
+	                    $tab_id = $tab['eael_adv_tabs_tab_id'] ? $tab['eael_adv_tabs_tab_id'] : Helper::str_to_css_id( $tab['eael_adv_tabs_tab_title'] );
+	                    $tab_id = $tab_id === 'safari' ? 'eael-safari' : $tab_id;
+
+                        $tab_count = $index + 1;
+					    $tab_title_setting_key = $this->get_repeater_setting_key( 'eael_adv_tabs_tab_title', 'eael_adv_tabs_tab', $index );
+					    
+
+                        $this->add_render_attribute( $tab_title_setting_key, [
+                            'id' => $tab_id,
+                            'class' => [ $tab['eael_adv_tabs_tab_show_as_default'], 'eael-tab-item-trigger' ],
+                            'aria-selected' => 1 === $tab_count ? 'true' : 'false',
+                            'data-tab' => $tab_count,
+                            'role' => 'tab',
+                            'tabindex' => 1 === $tab_count ? '0' : '-1',
+                            'aria-controls' => $tab_id . '-tab',
+                            'aria-expanded' => 'false',
+                        ] );
+
+                        $repeater_html_tag = !empty($tab['eael_adv_tabs_tab_title_html_tag']) ? $tab['eael_adv_tabs_tab_title_html_tag'] : 'span';
+                        $repeater_tab_title = Helper::eael_wp_kses($tab['eael_adv_tabs_tab_title']);
+                                
+                        ?>
+                        <li <?php $this->print_render_attribute_string( $tab_title_setting_key ); ?>>
+                            <?php if( $settings['eael_adv_tab_icon_position'] === 'eael-tab-inline-icon' && $settings['eael_adv_tabs_tab_icon_alignment'] === 'after' ) : ?>
+                                <?php 
+                                $this->add_render_attribute( $tab_title_setting_key . '_repeater_tab_title_attr', [
+                                    'class' => [ 'eael-tab-title', ' title-before-icon' ],
+                                ] );
+
+                                printf('<%1$s %2$s>%3$s</%1$s>', 
+                                    $repeater_html_tag,
+                                    $this->get_render_attribute_string( $tab_title_setting_key . '_repeater_tab_title_attr'), 
+                                    $repeater_tab_title 
+                                ); 
+                                ?>
+                            <?php endif; ?>
+
                             <?php if ($settings['eael_adv_tabs_icon_show'] === 'yes') :
                                 if ($tab['eael_adv_tabs_icon_type'] === 'icon') : ?>
                                     <?php if ($tab_icon_is_new || $tab_icon_migrated) {
@@ -901,25 +1025,56 @@ class Adv_Tabs extends Widget_Base
                                 <?php elseif ($tab['eael_adv_tabs_icon_type'] === 'image') : ?>
                                     <img src="<?php echo esc_attr($tab['eael_adv_tabs_tab_title_image']['url']); ?>" alt="<?php echo esc_attr(get_post_meta($tab['eael_adv_tabs_tab_title_image']['id'], '_wp_attachment_image_alt', true)); ?>">
                                 <?php endif; ?>
-                            <?php endif; ?> <span class="eael-tab-title"><?php echo Helper::eael_wp_kses($tab['eael_adv_tabs_tab_title']); ?></span>
+                            <?php endif; ?>
+
+                            <?php if( $settings['eael_adv_tab_icon_position'] === 'eael-tab-inline-icon' && $settings['eael_adv_tabs_tab_icon_alignment'] !== 'after' ) : ?>
+                                <?php 
+                                $this->add_render_attribute( $tab_title_setting_key . '_repeater_tab_title_attr', [
+                                    'class' => [ 'eael-tab-title', ' title-after-icon' ],
+                                ] );
+
+                                printf('<%1$s %2$s>%3$s</%1$s>', 
+                                    $repeater_html_tag,
+                                    $this->get_render_attribute_string( $tab_title_setting_key . '_repeater_tab_title_attr'), 
+                                    $repeater_tab_title 
+                                ); 
+                                ?>
+                            <?php endif; ?>
+
+                            <?php if( $settings['eael_adv_tab_icon_position'] !== 'eael-tab-inline-icon' ) : ?>
+                                <?php 
+                                $this->add_render_attribute( $tab_title_setting_key . '_repeater_tab_title_attr', [
+                                    'class' => [ 'eael-tab-title', ' title-after-icon' ],
+                                ] );
+
+                                printf('<%1$s %2$s>%3$s</%1$s>', 
+                                    $repeater_html_tag,
+                                    $this->get_render_attribute_string( $tab_title_setting_key . '_repeater_tab_title_attr'), 
+                                    $repeater_tab_title 
+                                ); 
+                                ?>
+                            <?php endif; ?>
                         </li>
                     <?php endforeach; ?>
                 </ul>
             </div>
+            
             <div class="eael-tabs-content">
-                <?php foreach ($settings['eael_adv_tabs_tab'] as $tab) :
-                    $eael_find_default_tab[] = $tab['eael_adv_tabs_tab_show_as_default']; ?>
+		        <?php foreach ($settings['eael_adv_tabs_tab'] as $tab) :
+			        $eael_find_default_tab[] = $tab['eael_adv_tabs_tab_show_as_default'];
+			        $tab_id = $tab['eael_adv_tabs_tab_id'] ? $tab['eael_adv_tabs_tab_id'] : Helper::str_to_css_id( $tab['eael_adv_tabs_tab_title'] );
+			        $tab_id = $tab_id === 'safari' ? 'eael-safari-tab' : $tab_id . '-tab'; ?>
 
-                    <div class="clearfix <?php echo esc_attr($tab['eael_adv_tabs_tab_show_as_default']); ?>">
-                        <?php if ('content' == $tab['eael_adv_tabs_text_type']) : ?>
-                            <?php echo do_shortcode($tab['eael_adv_tabs_tab_content']); ?>
-                        <?php elseif ('template' == $tab['eael_adv_tabs_text_type']) : ?>
-                            <?php if (!empty($tab['eael_primary_templates'])) {
-                                echo Plugin::$instance->frontend->get_builder_content($tab['eael_primary_templates'], true);
-                            } ?>
-                        <?php endif; ?>
+                    <div id="<?php echo $tab_id; ?>" class="clearfix eael-tab-content-item <?php echo esc_attr($tab['eael_adv_tabs_tab_show_as_default']); ?>" data-title-link="<?php echo $tab_id; ?>">
+				        <?php if ('content' == $tab['eael_adv_tabs_text_type']) : ?>
+					        <?php echo do_shortcode($tab['eael_adv_tabs_tab_content']); ?>
+				        <?php elseif ('template' == $tab['eael_adv_tabs_text_type']) : ?>
+					        <?php if ( ! empty( $tab['eael_primary_templates'] ) ) {
+						        echo Plugin::$instance->frontend->get_builder_content( $tab['eael_primary_templates'] );
+					        } ?>
+				        <?php endif; ?>
                     </div>
-                <?php endforeach; ?>
+		        <?php endforeach; ?>
             </div>
         </div>
 <?php }

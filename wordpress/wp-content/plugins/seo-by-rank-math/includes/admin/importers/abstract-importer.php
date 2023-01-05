@@ -216,7 +216,7 @@ abstract class Plugin_Importer {
 	 * @return mixed
 	 */
 	private function format_message( $result, $action, $message ) {
-		if ( 'blocks' === $action ) {
+		if ( 'blocks' === $action || 'recalculate' === $action ) {
 			return is_array( $result ) ? sprintf( $message, $result['start'], $result['end'], $result['total_items'] ) : $result;
 		}
 
@@ -521,9 +521,13 @@ abstract class Plugin_Importer {
 			return false;
 		}
 
-		$table = DB::query_builder( 'options' )->selectCount( '*', 'count' );
+		$table = DB::query_builder( 'options' )->select( 'option_id' );
 		foreach ( $this->option_keys as $option_key ) {
-			$table->orWhere( 'option_name', $option_key );
+			if ( '%' === substr( $option_key, -1 ) ) {
+				$table->orWhereLike( 'option_name', substr( $option_key, 0, -1 ), '' );
+			} else {
+				$table->orWhere( 'option_name', $option_key );
+			}
 		}
 
 		return absint( $table->getVar() ) > 0 ? true : false;
@@ -539,7 +543,21 @@ abstract class Plugin_Importer {
 			return false;
 		}
 
-		$result = DB::query_builder( 'postmeta' )->selectCount( '*', 'count' )->whereLike( 'meta_key', $this->meta_key )->getVar();
+		$result = DB::query_builder( 'postmeta' )->select( 'meta_id' )->whereLike( 'meta_key', $this->meta_key, '' )->getVar();
 		return absint( $result ) > 0 ? true : false;
+	}
+
+	/**
+	 * Recalculate SEO scores.
+	 */
+	private function recalculate() {
+		$this->set_pagination( \RankMath\Tools\Update_Score::get()->find( false ) );
+
+		$return = $this->get_pagination_arg();
+		$data   = \RankMath\Tools\Update_Score::get()->update_seo_score();
+
+		$return['data'] = $data;
+
+		return $return;
 	}
 }

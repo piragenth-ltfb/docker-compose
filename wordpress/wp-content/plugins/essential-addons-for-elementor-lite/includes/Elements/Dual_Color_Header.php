@@ -58,7 +58,7 @@ class Dual_Color_Header extends Widget_Base
 		return 'https://essential-addons.com/elementor/docs/dual-color-headline/';
 	}
 
-	protected function _register_controls()
+	protected function register_controls()
 	{
 		/**
 		 * Dual Color Heading Content Settings
@@ -189,15 +189,15 @@ class Dual_Color_Header extends Widget_Base
 				'options' => [
 					'left' => [
 						'title' => esc_html__('Left', 'essential-addons-for-elementor-lite'),
-						'icon' => 'fa fa-align-left',
+						'icon' => 'eicon-text-align-left',
 					],
 					'center' => [
 						'title' => esc_html__('Center', 'essential-addons-for-elementor-lite'),
-						'icon' => 'fa fa-align-center',
+						'icon' => 'eicon-text-align-center',
 					],
 					'right' => [
 						'title' => esc_html__('Right', 'essential-addons-for-elementor-lite'),
-						'icon' => 'fa fa-align-right',
+						'icon' => 'eicon-text-align-right',
 					],
 				],
 				'default' => 'center',
@@ -227,7 +227,7 @@ class Dual_Color_Header extends Widget_Base
 						],
 					],
 					'default' => '1',
-					'description' => '<span class="pro-feature"> Get the  <a href="https://wpdeveloper.net/in/upgrade-essential-addons-elementor" target="_blank">Pro version</a> for more stunning elements and customization options.</span>',
+					'description' => '<span class="pro-feature"> Get the  <a href="https://wpdeveloper.com/upgrade/ea-pro" target="_blank">Pro version</a> for more stunning elements and customization options.</span>',
 				]
 			);
 
@@ -652,15 +652,15 @@ class Dual_Color_Header extends Widget_Base
 				'options' => [
 					'flex-start' => [
 						'title' => __('Flex Start', 'essential-addons-for-elementor-lite'),
-						'icon' => 'fa fa-align-left',
+						'icon' => 'eicon-text-align-left',
 					],
 					'center' => [
 						'title' => __('Center', 'essential-addons-for-elementor-lite'),
-						'icon' => 'fa fa-align-center',
+						'icon' => 'eicon-text-align-center',
 					],
 					'flex-end' => [
 						'title' => __('Flex End', 'essential-addons-for-elementor-lite'),
-						'icon' => 'fa fa-align-right',
+						'icon' => 'eicon-text-align-right',
 					],
 				],
 				'default' => 'center',
@@ -907,7 +907,9 @@ class Dual_Color_Header extends Widget_Base
 		$settings = $this->get_settings_for_display();
         $gradient_style = '';
         if ( $settings['eael_dch_dual_title_color_gradient_first']  && $settings['eael_dch_dual_title_color_gradient_second']  ) {
-            $gradient_style = 'style="background: -webkit-linear-gradient('. $settings['eael_dch_dual_title_color_gradient_first']. ', '. $settings['eael_dch_dual_title_color_gradient_second'].');-webkit-background-clip: text;
+            $settings_eael_dch_dual_title_color_gradient_first = Helper::eael_fetch_color_or_global_color($settings, 'eael_dch_dual_title_color_gradient_first');
+            $settings_eael_dch_dual_title_color_gradient_second = Helper::eael_fetch_color_or_global_color($settings, 'eael_dch_dual_title_color_gradient_second');
+            $gradient_style = 'style="background: -webkit-linear-gradient('. $settings_eael_dch_dual_title_color_gradient_first. ', '. $settings_eael_dch_dual_title_color_gradient_second.');-webkit-background-clip: text;
             -webkit-text-fill-color: transparent;"';
         };
 		$icon_migrated = isset($settings['__fa4_migrated']['eael_dch_icon_new']);

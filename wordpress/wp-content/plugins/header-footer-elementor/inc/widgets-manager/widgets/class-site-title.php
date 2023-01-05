@@ -89,17 +89,6 @@ class Site_Title extends Widget_Base {
 	/**
 	 * Register site title controls.
 	 *
-	 * @since 1.3.0
-	 * @access protected
-	 */
-	protected function _register_controls() { // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
-
-		$this->register_controls();
-	}
-
-	/**
-	 * Register site title controls.
-	 *
 	 * @since 1.5.7
 	 * @access protected
 	 */
@@ -242,9 +231,9 @@ class Site_Title extends Widget_Base {
 		$this->add_responsive_control(
 			'heading_text_align',
 			[
-				'label'        => __( 'Alignment', 'header-footer-elementor' ),
-				'type'         => Controls_Manager::CHOOSE,
-				'options'      => [
+				'label'              => __( 'Alignment', 'header-footer-elementor' ),
+				'type'               => Controls_Manager::CHOOSE,
+				'options'            => [
 					'left'    => [
 						'title' => __( 'Left', 'header-footer-elementor' ),
 						'icon'  => 'fa fa-align-left',
@@ -262,10 +251,11 @@ class Site_Title extends Widget_Base {
 						'icon'  => 'fa fa-align-justify',
 					],
 				],
-				'selectors'    => [
+				'selectors'          => [
 					'{{WRAPPER}} .hfe-heading' => 'text-align: {{VALUE}};',
 				],
-				'prefix_class' => 'hfe%s-heading-align-',
+				'prefix_class'       => 'hfe%s-heading-align-',
+				'frontend_available' => true,
 			]
 		);
 		$this->end_controls_section();
@@ -506,19 +496,5 @@ class Site_Title extends Widget_Base {
 			<# } #>
 		</div>
 		<?php
-	}
-
-	/**
-	 * Render site title output in the editor.
-	 *
-	 * Written as a Backbone JavaScript template and used to generate the live preview.
-	 *
-	 * Remove this after Elementor v3.3.0
-	 *
-	 * @since 1.3.0
-	 * @access protected
-	 */
-	protected function _content_template() {
-		$this->content_template();
 	}
 }

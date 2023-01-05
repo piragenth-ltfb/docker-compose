@@ -83,7 +83,7 @@ class DB {
 			$table->orWhereLike( 'url_to', $args['search'] );
 		}
 
-		if ( ! empty( $args['orderby'] ) && in_array( $args['orderby'], [ 'id', 'url_to', 'header_code', 'hits', 'last_accessed' ], true ) ) {
+		if ( ! empty( $args['orderby'] ) && in_array( $args['orderby'], [ 'id', 'url_to', 'header_code', 'hits', 'created', 'last_accessed' ], true ) ) {
 			$table->orderBy( $args['orderby'], $args['order'] );
 		}
 
@@ -181,11 +181,16 @@ class DB {
 		}
 
 		foreach ( $sources as $source ) {
-			if ( 'exact' === $source['comparison'] && isset( $source['ignore'] ) && 'case' === $source['ignore'] && strtolower( $source['pattern'] ) === strtolower( $uri ) ) {
+			$compare_uri = $uri;
+			if ( 'exact' === $source['comparison'] ) {
+				$compare_uri = untrailingslashit( $compare_uri );
+			}
+
+			if ( 'exact' === $source['comparison'] && isset( $source['ignore'] ) && 'case' === $source['ignore'] && strtolower( $source['pattern'] ) === strtolower( $compare_uri ) ) {
 				return true;
 			}
 
-			if ( Str::comparison( self::get_clean_pattern( $source['pattern'], $source['comparison'] ), $uri, $source['comparison'] ) ) {
+			if ( Str::comparison( self::get_clean_pattern( $source['pattern'], $source['comparison'] ), $compare_uri, $source['comparison'] ) ) {
 				return true;
 			}
 		}
@@ -224,8 +229,13 @@ class DB {
 	 * @return string
 	 */
 	public static function get_clean_pattern( $pattern, $comparison ) {
-		$pattern = trim( $pattern, '/' );
-		return 'regex' === $comparison ? ( '@' . stripslashes( $pattern ) . '@' ) : $pattern;
+		if ( 'exact' === $comparison ) {
+			$pattern = trim( $pattern, '/' );
+		}
+
+		$cleaned = 'regex' === $comparison ? ( '@' . stripslashes( $pattern ) . '@' ) : $pattern;
+
+		return apply_filters( 'rank_math/redirection/get_clean_pattern', $cleaned, $pattern, $comparison );
 	}
 
 	/**
@@ -237,11 +247,56 @@ class DB {
 	 * @return bool|array
 	 */
 	public static function get_redirection_by_id( $id, $status = 'all' ) {
-		$table = self::table()->where( 'id', $id );
+		$fields = [
+			[ 'id', '=', $id ],
+		];
 
 		if ( 'all' !== $status ) {
-			$table->where( 'status', $status );
+			$fields[] = [ 'status', '=', $status ];
 		}
+
+		return self::get_redirection_by( $fields );
+	}
+
+	/**
+	 *  Get redirection
+	 *
+	 * @param array $data Redirection data.
+	 *
+	 * @return bool|array
+	 */
+	public static function get_redirection( $data ) {
+		// Exist by destination.
+		$exist = self::get_redirection_by(
+			[
+				[ 'url_to', '=', $data['destination'] ],
+				[ 'header_code', '=', $data['type'] ],
+				[ 'status', '=', $data['status'] ],
+			]
+		);
+
+		if ( $exist ) {
+			return $exist;
+		}
+
+		// Exist by ID.
+		if ( ! empty( $data['id'] ) ) {
+			return self::get_redirection_by_id( $data['id'] );
+		}
+
+		return false;
+	}
+
+	/**
+	 *  Get source by.
+	 *
+	 * @param array  $data     Redirection fields.
+	 * @param string $status Status to filter with.
+	 *
+	 * @return bool|array
+	 */
+	public static function get_redirection_by( $data = [], $status = 'all' ) {
+		$table = self::table()->where( $data );
 
 		$item = $table->one( ARRAY_A );
 		if ( ! isset( $item['sources'] ) ) {
@@ -387,7 +442,14 @@ class DB {
 	 */
 	public static function delete( $ids ) {
 		Cache::purge( $ids );
-		return self::table()->whereIn( 'id', (array) $ids )->delete();
+		$deleted = self::table()->whereIn( 'id', (array) $ids )->delete();
+
+		/**
+		 * Fires after deleting redirections.
+		 */
+		do_action( 'rank_math/redirection/deleted', $ids, $deleted );
+
+		return $deleted;
 	}
 
 	/**

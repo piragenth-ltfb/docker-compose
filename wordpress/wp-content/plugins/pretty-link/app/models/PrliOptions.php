@@ -43,6 +43,7 @@ class PrliOptions
 
   public function set_default_options() {
     // Must account for the Legacy Options
+    $activated_timestamp  = 'activated_timestamp';
     $prli_exclude_ips  = 'prli_exclude_ips';
     $prettybar_image_url  = 'prli_prettybar_image_url';
     $prettybar_background_image_url  = 'prli_prettybar_background_image_url';
@@ -67,6 +68,10 @@ class PrliOptions
     $link_nofollow = 'prli_link_nofollow';
     $link_sponsored = 'prli_link_sponsored';
     $link_redirect_type = 'prli_link_redirect_type';
+
+    if(!isset($this->activated_timestamp)) {
+      $this->activated_timestamp = time();
+    }
 
     if(!isset($this->prettybar_show_title)) {
       if($var = get_option( $prettybar_show_title )) {

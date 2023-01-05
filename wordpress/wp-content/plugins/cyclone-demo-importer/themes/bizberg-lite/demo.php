@@ -76,18 +76,6 @@ function cdi_import_files() {
             'preview_url' => 'https://bizbergthemes.com/education-business-pro/homepage-pro/'
         ),
         array(
-            'import_file_name'=> __('Education 1 PRO Slider 1','cdi'),
-            'categories'      =>  array( 'PRO' , 'Homepage' ),
-            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/homepage-slider-1.jpg',
-            'preview_url' => 'https://bizbergthemes.com/education-business-pro/homepage-slider-1/'
-        ),
-        array(
-            'import_file_name'=> __('Education 1 PRO Slider 2','cdi'),
-            'categories'      =>  array( 'PRO' , 'Homepage' ),
-            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/homepage-slider-2.jpg',
-            'preview_url' => 'https://bizbergthemes.com/education-business-pro/homepage-slider-2/'
-        ),
-        array(
             'import_file_name'=> __('Education 2','cdi'),
             'categories'      =>  array( 'Free' , 'Homepage' ),
             'local_import_file'=> CDI_PLUGIN_DIR_PATH . '/themes/professional-education-consultancy-lite/inc/content.xml',

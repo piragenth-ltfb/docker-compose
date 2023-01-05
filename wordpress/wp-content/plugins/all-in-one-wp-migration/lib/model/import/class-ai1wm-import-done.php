@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2018 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,12 +23,18 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'Kangaroos cannot jump here' );
+}
+
 class Ai1wm_Import_Done {
 
 	public static function execute( $params ) {
+		global $wp_rewrite;
 
 		// Check multisite.json file
-		if ( true === is_file( ai1wm_multisite_path( $params ) ) ) {
+		if ( is_file( ai1wm_multisite_path( $params ) ) ) {
+
 			// Read multisite.json file
 			$handle = ai1wm_open( ai1wm_multisite_path( $params ), 'r' );
 
@@ -46,34 +52,84 @@ class Ai1wm_Import_Done {
 
 			// Deactivate WordPress SSL plugins
 			if ( ! is_ssl() ) {
-				ai1wm_deactivate_plugins( array(
-					ai1wm_discover_plugin_basename( 'really-simple-ssl/rlrsssl-really-simple-ssl.php' ),
-					ai1wm_discover_plugin_basename( 'wordpress-https/wordpress-https.php' ),
-					ai1wm_discover_plugin_basename( 'wp-force-ssl/wp-force-ssl.php' ),
-				) );
+				ai1wm_deactivate_plugins(
+					array(
+						ai1wm_discover_plugin_basename( 'really-simple-ssl/rlrsssl-really-simple-ssl.php' ),
+						ai1wm_discover_plugin_basename( 'wordpress-https/wordpress-https.php' ),
+						ai1wm_discover_plugin_basename( 'wp-force-ssl/wp-force-ssl.php' ),
+						ai1wm_discover_plugin_basename( 'force-https-littlebizzy/force-https.php' ),
+					)
+				);
+
+				ai1wm_woocommerce_force_ssl( false );
 			}
 
 			// Deactivate WordPress plugins
-			ai1wm_deactivate_plugins( array(
-				ai1wm_discover_plugin_basename( 'invisible-recaptcha/invisible-recaptcha.php' ),
-				ai1wm_discover_plugin_basename( 'wps-hide-login/wps-hide-login.php' ),
-				ai1wm_discover_plugin_basename( 'hide-my-wp/index.php' ),
-				ai1wm_discover_plugin_basename( 'hide-my-wordpress/index.php' ),
-				ai1wm_discover_plugin_basename( 'mycustomwidget/my_custom_widget.php' ),
-				ai1wm_discover_plugin_basename( 'lockdown-wp-admin/lockdown-wp-admin.php' ),
-				ai1wm_discover_plugin_basename( 'rename-wp-login/rename-wp-login.php' ),
-			) );
+			ai1wm_deactivate_plugins(
+				array(
+					ai1wm_discover_plugin_basename( 'invisible-recaptcha/invisible-recaptcha.php' ),
+					ai1wm_discover_plugin_basename( 'wps-hide-login/wps-hide-login.php' ),
+					ai1wm_discover_plugin_basename( 'hide-my-wp/index.php' ),
+					ai1wm_discover_plugin_basename( 'hide-my-wordpress/index.php' ),
+					ai1wm_discover_plugin_basename( 'mycustomwidget/my_custom_widget.php' ),
+					ai1wm_discover_plugin_basename( 'lockdown-wp-admin/lockdown-wp-admin.php' ),
+					ai1wm_discover_plugin_basename( 'rename-wp-login/rename-wp-login.php' ),
+					ai1wm_discover_plugin_basename( 'wp-simple-firewall/icwp-wpsf.php' ),
+					ai1wm_discover_plugin_basename( 'join-my-multisite/joinmymultisite.php' ),
+					ai1wm_discover_plugin_basename( 'multisite-clone-duplicator/multisite-clone-duplicator.php' ),
+					ai1wm_discover_plugin_basename( 'wordpress-mu-domain-mapping/domain_mapping.php' ),
+					ai1wm_discover_plugin_basename( 'wordpress-starter/siteground-wizard.php' ),
+					ai1wm_discover_plugin_basename( 'pro-sites/pro-sites.php' ),
+					ai1wm_discover_plugin_basename( 'wpide/WPide.php' ),
+					ai1wm_discover_plugin_basename( 'page-optimize/page-optimize.php' ),
+				)
+			);
+
+			// Deactivate Swift Optimizer rules
+			ai1wm_deactivate_swift_optimizer_rules(
+				array(
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration/all-in-one-wp-migration.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-azure-storage-extension/all-in-one-wp-migration-azure-storage-extension.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-b2-extension/all-in-one-wp-migration-b2-extension.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-backup/all-in-one-wp-migration-backup.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-box-extension/all-in-one-wp-migration-box-extension.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-digitalocean-extension/all-in-one-wp-migration-digitalocean-extension.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-direct-extension/all-in-one-wp-migration-direct-extension.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-dropbox-extension/all-in-one-wp-migration-dropbox-extension.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-file-extension/all-in-one-wp-migration-file-extension.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-ftp-extension/all-in-one-wp-migration-ftp-extension.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-gcloud-storage-extension/all-in-one-wp-migration-gcloud-storage-extension.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-gdrive-extension/all-in-one-wp-migration-gdrive-extension.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-glacier-extension/all-in-one-wp-migration-glacier-extension.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-mega-extension/all-in-one-wp-migration-mega-extension.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-multisite-extension/all-in-one-wp-migration-multisite-extension.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-onedrive-extension/all-in-one-wp-migration-onedrive-extension.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-pcloud-extension/all-in-one-wp-migration-pcloud-extension.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-pro/all-in-one-wp-migration-pro.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-s3-client-extension/all-in-one-wp-migration-s3-client-extension.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-s3-extension/all-in-one-wp-migration-s3-extension.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-unlimited-extension/all-in-one-wp-migration-unlimited-extension.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-url-extension/all-in-one-wp-migration-url-extension.php' ),
+					ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-webdav-extension/all-in-one-wp-migration-webdav-extension.php' ),
+				)
+			);
+
+			// Deactivate Revolution Slider
+			ai1wm_deactivate_revolution_slider( ai1wm_discover_plugin_basename( 'revslider/revslider.php' ) );
 
 			// Deactivate Jetpack modules
-			ai1wm_deactivate_jetpack_modules( array(
-				'photon',
-				'sso',
-			) );
+			ai1wm_deactivate_jetpack_modules( array( 'photon', 'sso' ) );
+
+			// Flush Elementor cache
+			ai1wm_elementor_cache_flush();
+
+			// Initial DB version
+			ai1wm_initial_db_version();
 
 		} else {
 
 			// Check package.json file
-			if ( true === is_file( ai1wm_package_path( $params ) ) ) {
+			if ( is_file( ai1wm_package_path( $params ) ) ) {
 
 				// Read package.json file
 				$handle = ai1wm_open( ai1wm_package_path( $params ), 'r' );
@@ -102,34 +158,85 @@ class Ai1wm_Import_Done {
 
 				// Deactivate WordPress SSL plugins
 				if ( ! is_ssl() ) {
-					ai1wm_deactivate_plugins( array(
-						ai1wm_discover_plugin_basename( 'really-simple-ssl/rlrsssl-really-simple-ssl.php' ),
-						ai1wm_discover_plugin_basename( 'wordpress-https/wordpress-https.php' ),
-						ai1wm_discover_plugin_basename( 'wp-force-ssl/wp-force-ssl.php' ),
-					) );
+					ai1wm_deactivate_plugins(
+						array(
+							ai1wm_discover_plugin_basename( 'really-simple-ssl/rlrsssl-really-simple-ssl.php' ),
+							ai1wm_discover_plugin_basename( 'wordpress-https/wordpress-https.php' ),
+							ai1wm_discover_plugin_basename( 'wp-force-ssl/wp-force-ssl.php' ),
+							ai1wm_discover_plugin_basename( 'force-https-littlebizzy/force-https.php' ),
+						)
+					);
+
+					ai1wm_woocommerce_force_ssl( false );
 				}
 
 				// Deactivate WordPress plugins
-				ai1wm_deactivate_plugins( array(
-					ai1wm_discover_plugin_basename( 'invisible-recaptcha/invisible-recaptcha.php' ),
-					ai1wm_discover_plugin_basename( 'wps-hide-login/wps-hide-login.php' ),
-					ai1wm_discover_plugin_basename( 'hide-my-wp/index.php' ),
-					ai1wm_discover_plugin_basename( 'hide-my-wordpress/index.php' ),
-					ai1wm_discover_plugin_basename( 'mycustomwidget/my_custom_widget.php' ),
-					ai1wm_discover_plugin_basename( 'lockdown-wp-admin/lockdown-wp-admin.php' ),
-					ai1wm_discover_plugin_basename( 'rename-wp-login/rename-wp-login.php' ),
-				) );
+				ai1wm_deactivate_plugins(
+					array(
+						ai1wm_discover_plugin_basename( 'invisible-recaptcha/invisible-recaptcha.php' ),
+						ai1wm_discover_plugin_basename( 'wps-hide-login/wps-hide-login.php' ),
+						ai1wm_discover_plugin_basename( 'hide-my-wp/index.php' ),
+						ai1wm_discover_plugin_basename( 'hide-my-wordpress/index.php' ),
+						ai1wm_discover_plugin_basename( 'mycustomwidget/my_custom_widget.php' ),
+						ai1wm_discover_plugin_basename( 'lockdown-wp-admin/lockdown-wp-admin.php' ),
+						ai1wm_discover_plugin_basename( 'rename-wp-login/rename-wp-login.php' ),
+						ai1wm_discover_plugin_basename( 'wp-simple-firewall/icwp-wpsf.php' ),
+						ai1wm_discover_plugin_basename( 'join-my-multisite/joinmymultisite.php' ),
+						ai1wm_discover_plugin_basename( 'multisite-clone-duplicator/multisite-clone-duplicator.php' ),
+						ai1wm_discover_plugin_basename( 'wordpress-mu-domain-mapping/domain_mapping.php' ),
+						ai1wm_discover_plugin_basename( 'wordpress-starter/siteground-wizard.php' ),
+						ai1wm_discover_plugin_basename( 'pro-sites/pro-sites.php' ),
+						ai1wm_discover_plugin_basename( 'wpide/WPide.php' ),
+						ai1wm_discover_plugin_basename( 'page-optimize/page-optimize.php' ),
+					)
+				);
+
+				// Deactivate Swift Optimizer rules
+				ai1wm_deactivate_swift_optimizer_rules(
+					array(
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration/all-in-one-wp-migration.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-azure-storage-extension/all-in-one-wp-migration-azure-storage-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-b2-extension/all-in-one-wp-migration-b2-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-backup/all-in-one-wp-migration-backup.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-box-extension/all-in-one-wp-migration-box-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-digitalocean-extension/all-in-one-wp-migration-digitalocean-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-direct-extension/all-in-one-wp-migration-direct-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-dropbox-extension/all-in-one-wp-migration-dropbox-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-file-extension/all-in-one-wp-migration-file-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-ftp-extension/all-in-one-wp-migration-ftp-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-gcloud-storage-extension/all-in-one-wp-migration-gcloud-storage-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-gdrive-extension/all-in-one-wp-migration-gdrive-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-glacier-extension/all-in-one-wp-migration-glacier-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-mega-extension/all-in-one-wp-migration-mega-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-multisite-extension/all-in-one-wp-migration-multisite-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-onedrive-extension/all-in-one-wp-migration-onedrive-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-pcloud-extension/all-in-one-wp-migration-pcloud-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-pro/all-in-one-wp-migration-pro.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-s3-client-extension/all-in-one-wp-migration-s3-client-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-s3-extension/all-in-one-wp-migration-s3-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-unlimited-extension/all-in-one-wp-migration-unlimited-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-url-extension/all-in-one-wp-migration-url-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-webdav-extension/all-in-one-wp-migration-webdav-extension.php' ),
+					)
+				);
+
+				// Deactivate Revolution Slider
+				ai1wm_deactivate_revolution_slider( ai1wm_discover_plugin_basename( 'revslider/revslider.php' ) );
 
 				// Deactivate Jetpack modules
-				ai1wm_deactivate_jetpack_modules( array(
-					'photon',
-					'sso',
-				) );
+				ai1wm_deactivate_jetpack_modules( array( 'photon', 'sso' ) );
+
+				// Flush Elementor cache
+				ai1wm_elementor_cache_flush();
+
+				// Initial DB version
+				ai1wm_initial_db_version();
 			}
 		}
 
 		// Check blogs.json file
-		if ( true === is_file( ai1wm_blogs_path( $params ) ) ) {
+		if ( is_file( ai1wm_blogs_path( $params ) ) ) {
+
 			// Read blogs.json file
 			$handle = ai1wm_open( ai1wm_blogs_path( $params ), 'r' );
 
@@ -160,48 +267,104 @@ class Ai1wm_Import_Done {
 
 				// Deactivate WordPress SSL plugins
 				if ( ! is_ssl() ) {
-					ai1wm_deactivate_plugins( array(
-						ai1wm_discover_plugin_basename( 'really-simple-ssl/rlrsssl-really-simple-ssl.php' ),
-						ai1wm_discover_plugin_basename( 'wordpress-https/wordpress-https.php' ),
-						ai1wm_discover_plugin_basename( 'wp-force-ssl/wp-force-ssl.php' ),
-					) );
+					ai1wm_deactivate_plugins(
+						array(
+							ai1wm_discover_plugin_basename( 'really-simple-ssl/rlrsssl-really-simple-ssl.php' ),
+							ai1wm_discover_plugin_basename( 'wordpress-https/wordpress-https.php' ),
+							ai1wm_discover_plugin_basename( 'wp-force-ssl/wp-force-ssl.php' ),
+							ai1wm_discover_plugin_basename( 'force-https-littlebizzy/force-https.php' ),
+						)
+					);
+
+					ai1wm_woocommerce_force_ssl( false );
 				}
 
 				// Deactivate WordPress plugins
-				ai1wm_deactivate_plugins( array(
-					ai1wm_discover_plugin_basename( 'invisible-recaptcha/invisible-recaptcha.php' ),
-					ai1wm_discover_plugin_basename( 'wps-hide-login/wps-hide-login.php' ),
-					ai1wm_discover_plugin_basename( 'hide-my-wp/index.php' ),
-					ai1wm_discover_plugin_basename( 'hide-my-wordpress/index.php' ),
-					ai1wm_discover_plugin_basename( 'mycustomwidget/my_custom_widget.php' ),
-					ai1wm_discover_plugin_basename( 'lockdown-wp-admin/lockdown-wp-admin.php' ),
-					ai1wm_discover_plugin_basename( 'rename-wp-login/rename-wp-login.php' ),
-				) );
+				ai1wm_deactivate_plugins(
+					array(
+						ai1wm_discover_plugin_basename( 'invisible-recaptcha/invisible-recaptcha.php' ),
+						ai1wm_discover_plugin_basename( 'wps-hide-login/wps-hide-login.php' ),
+						ai1wm_discover_plugin_basename( 'hide-my-wp/index.php' ),
+						ai1wm_discover_plugin_basename( 'hide-my-wordpress/index.php' ),
+						ai1wm_discover_plugin_basename( 'mycustomwidget/my_custom_widget.php' ),
+						ai1wm_discover_plugin_basename( 'lockdown-wp-admin/lockdown-wp-admin.php' ),
+						ai1wm_discover_plugin_basename( 'rename-wp-login/rename-wp-login.php' ),
+						ai1wm_discover_plugin_basename( 'wp-simple-firewall/icwp-wpsf.php' ),
+						ai1wm_discover_plugin_basename( 'join-my-multisite/joinmymultisite.php' ),
+						ai1wm_discover_plugin_basename( 'multisite-clone-duplicator/multisite-clone-duplicator.php' ),
+						ai1wm_discover_plugin_basename( 'wordpress-mu-domain-mapping/domain_mapping.php' ),
+						ai1wm_discover_plugin_basename( 'wordpress-starter/siteground-wizard.php' ),
+						ai1wm_discover_plugin_basename( 'pro-sites/pro-sites.php' ),
+						ai1wm_discover_plugin_basename( 'wpide/WPide.php' ),
+						ai1wm_discover_plugin_basename( 'page-optimize/page-optimize.php' ),
+					)
+				);
+
+				// Deactivate Swift Optimizer rules
+				ai1wm_deactivate_swift_optimizer_rules(
+					array(
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration/all-in-one-wp-migration.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-azure-storage-extension/all-in-one-wp-migration-azure-storage-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-b2-extension/all-in-one-wp-migration-b2-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-backup/all-in-one-wp-migration-backup.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-box-extension/all-in-one-wp-migration-box-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-digitalocean-extension/all-in-one-wp-migration-digitalocean-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-direct-extension/all-in-one-wp-migration-direct-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-dropbox-extension/all-in-one-wp-migration-dropbox-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-file-extension/all-in-one-wp-migration-file-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-ftp-extension/all-in-one-wp-migration-ftp-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-gcloud-storage-extension/all-in-one-wp-migration-gcloud-storage-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-gdrive-extension/all-in-one-wp-migration-gdrive-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-glacier-extension/all-in-one-wp-migration-glacier-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-mega-extension/all-in-one-wp-migration-mega-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-multisite-extension/all-in-one-wp-migration-multisite-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-onedrive-extension/all-in-one-wp-migration-onedrive-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-pcloud-extension/all-in-one-wp-migration-pcloud-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-pro/all-in-one-wp-migration-pro.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-s3-client-extension/all-in-one-wp-migration-s3-client-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-s3-extension/all-in-one-wp-migration-s3-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-unlimited-extension/all-in-one-wp-migration-unlimited-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-url-extension/all-in-one-wp-migration-url-extension.php' ),
+						ai1wm_discover_plugin_basename( 'all-in-one-wp-migration-webdav-extension/all-in-one-wp-migration-webdav-extension.php' ),
+					)
+				);
+
+				// Deactivate Revolution Slider
+				ai1wm_deactivate_revolution_slider( ai1wm_discover_plugin_basename( 'revslider/revslider.php' ) );
 
 				// Deactivate Jetpack modules
-				ai1wm_deactivate_jetpack_modules( array(
-					'photon',
-					'sso',
-				) );
+				ai1wm_deactivate_jetpack_modules( array( 'photon', 'sso' ) );
+
+				// Flush Elementor cache
+				ai1wm_elementor_cache_flush();
+
+				// Initial DB version
+				ai1wm_initial_db_version();
 			}
 		}
 
+		// Clear auth cookie (WP Cerber)
+		if ( ai1wm_validate_plugin_basename( 'wp-cerber/wp-cerber.php' ) ) {
+			wp_clear_auth_cookie();
+		}
+
+		$should_reset_permalinks = false;
+
+		// Switch to default permalink structure
+		if ( ( $should_reset_permalinks = ai1wm_should_reset_permalinks( $params ) ) ) {
+			$wp_rewrite->set_permalink_structure( '' );
+		}
+
 		// Set progress
-		Ai1wm_Status::done(
-			__(
-				'Your data has been imported successfully!',
-				AI1WM_PLUGIN_NAME
-			),
-			sprintf(
-				__(
-					'You need to perform two more steps:<br />' .
-					'<strong>1. You must save your permalinks structure twice. <a class="ai1wm-no-underline" href="%s" target="_blank">Permalinks Settings</a></strong> <small>(opens a new window)</small><br />' .
-					'<strong>2. <a class="ai1wm-no-underline" href="https://wordpress.org/support/view/plugin-reviews/all-in-one-wp-migration?rate=5#postform" target="_blank">Optionally, review the plugin</a>.</strong> <small>(opens a new window)</small>',
-					AI1WM_PLUGIN_NAME
-				),
-				admin_url( 'options-permalink.php#submit' )
-			)
-		);
+		if ( ai1wm_validate_plugin_basename( 'fusion-builder/fusion-builder.php' ) ) {
+			Ai1wm_Status::done( __( 'Your site has been imported successfully!', AI1WM_PLUGIN_NAME ), Ai1wm_Template::get_content( 'import/avada', array( 'should_reset_permalinks' => $should_reset_permalinks ) ) );
+		} elseif ( ai1wm_validate_plugin_basename( 'oxygen/functions.php' ) ) {
+			Ai1wm_Status::done( __( 'Your site has been imported successfully!', AI1WM_PLUGIN_NAME ), Ai1wm_Template::get_content( 'import/oxygen', array( 'should_reset_permalinks' => $should_reset_permalinks ) ) );
+		} else {
+			Ai1wm_Status::done( __( 'Your site has been imported successfully!', AI1WM_PLUGIN_NAME ), Ai1wm_Template::get_content( 'import/done', array( 'should_reset_permalinks' => $should_reset_permalinks ) ) );
+		}
+
+		do_action( 'ai1wm_status_import_done', $params );
 
 		return $params;
 	}

@@ -518,7 +518,7 @@ class PrliLink {
 
     $decoded_urls = array_map(
       function($url) {
-        return html_entity_decode(rawurldecode($url));
+        return esc_url_raw(html_entity_decode(rawurldecode($url)));
       },
       $urls
     );
@@ -550,9 +550,9 @@ class PrliLink {
              CONCAT(%s, li.slug) AS pretty_url
         FROM {$this->table_name} AS li
        WHERE li.link_status='enabled'
-         AND li.url {$where}
     ";
     $query = $wpdb->prepare($query, $prli_blogurl.PrliUtils::get_permalink_pre_slug_uri());
+    $query .= "         AND li.url {$where}";
 
     $results = (array)$wpdb->get_results($query);
 

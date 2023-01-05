@@ -94,24 +94,6 @@ function cdi_import_files() {
             'preview_url' => 'https://bizbergthemes.com/education-business-pro/homepage-pro/'
         ),
         array(
-            'import_file_name'=> __('Education 1 PRO Slider 1','cdi'),
-            'categories'      =>  array( 'Homepage' ),
-            'local_import_file'=> CDI_PLUGIN_DIR_PATH . '/themes/education-business-pro/inc/content.xml',
-            'local_import_customizer_file' => CDI_PLUGIN_DIR_PATH . '/themes/education-business-pro/inc/bizberg-options.dat',
-            'local_import_widget_file'     => CDI_PLUGIN_DIR_PATH . '/themes/education-business-pro/inc/widgets.wie',
-            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/homepage-slider-1.jpg',
-            'preview_url' => 'https://bizbergthemes.com/education-business-pro/homepage-slider-1/'
-        ),
-        array(
-            'import_file_name'=> __('Education 1 PRO Slider 2','cdi'),
-            'categories'      =>  array( 'Homepage' ),
-            'local_import_file'=> CDI_PLUGIN_DIR_PATH . '/themes/education-business-pro/inc/content.xml',
-            'local_import_customizer_file' => CDI_PLUGIN_DIR_PATH . '/themes/education-business-pro/inc/bizberg-options.dat',
-            'local_import_widget_file'     => CDI_PLUGIN_DIR_PATH . '/themes/education-business-pro/inc/widgets.wie',
-            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/education-business/homepage-slider-2.jpg',
-            'preview_url' => 'https://bizbergthemes.com/education-business-pro/homepage-slider-2/'
-        ),
-        array(
             'import_file_name'=> __('Education 2','cdi'),
             'categories'      =>  array( 'Homepage' ),
             'local_import_file'=> CDI_PLUGIN_DIR_PATH . '/themes/professional-education-consultancy-pro/inc/content.xml',
@@ -220,13 +202,13 @@ function cdi_import_files() {
             'preview_url' => 'https://bizbergthemes.com/ngo-charity-fundraising-pro/'
         ),
         array(
-            'import_file_name'=> __('Charity Slider','cdi'),
+            'import_file_name'=> __('Clean Charity Homepage 2','cdi'),
             'categories'      =>  array( 'Homepage' ),
             'local_import_file'=> CDI_PLUGIN_DIR_PATH . '/themes/ngo-charity-fundraising-pro/inc/content.xml',
             'local_import_customizer_file' => CDI_PLUGIN_DIR_PATH . '/themes/ngo-charity-fundraising-pro/inc/bizberg-options.dat',
             'local_import_widget_file'     => CDI_PLUGIN_DIR_PATH . '/themes/ngo-charity-fundraising-pro/inc/widgets.wie',
             'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/ngo-charity-fundraising-lite/homepage-pro.jpg',
-            'preview_url' => 'https://bizbergthemes.com/ngo-charity-fundraising-pro/homepage-pro/'
+            'preview_url' => 'https://bizbergthemes.com/ngo-charity-fundraising-pro/homepage-2/'
         ),
         array(
             'import_file_name'=> __('Restaurant','cdi'),
@@ -419,8 +401,8 @@ function cdi_after_import_setup( $selected_import ) {
             cdi_set_page_theme_mod( 'charity-free' );
             break;
 
-        case 'Charity Slider':
-            $front_page_id = get_page_by_title( 'Homepage PRO' );
+        case 'Clean Charity Homepage 2':
+            $front_page_id = get_page_by_title( 'Clean Charity Homepage 2' );
             cdi_set_page_theme_mod( 'charity-free' );
             break;
 
@@ -506,6 +488,36 @@ function cdi_register_plugins( $plugins ) {
           'required' => true,             
         ],
     ];
+
+    if( !empty( $_GET['page'] ) && $_GET['page'] == 'one-click-demo-import' ){
+
+        $import = !empty( $_GET['import'] ) ? $_GET['import'] : '';
+
+        switch ( $import ) {
+
+            case '24':
+            case '23':
+
+                array_push( $theme_plugins ,[ 
+                    'name'     => esc_html__( 'Charity Addon for Elementor', 'cdi' ),
+                    'slug'     => 'charity-addon-for-elementor', 
+                    'required' => true,             
+                ]);
+
+                array_push( $theme_plugins ,[ 
+                    'name'     => esc_html__( 'GiveWP – Donation Plugin and Fundraising Platform', 'cdi' ),
+                    'slug'     => 'give', 
+                    'required' => true,             
+                ]);
+                
+                break;
+            
+            default:
+                // code...
+                break;
+        }
+
+    }
  
     return $theme_plugins;
 

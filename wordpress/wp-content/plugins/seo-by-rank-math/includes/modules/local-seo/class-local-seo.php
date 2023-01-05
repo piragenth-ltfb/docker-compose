@@ -76,7 +76,7 @@ class Local_Seo {
 		global $wpdb;
 		$pages = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT ID, post_title FROM {$wpdb->prefix}posts WHERE post_type = 'page' AND post_title LIKE %s",
+				"SELECT ID, post_title FROM {$wpdb->prefix}posts WHERE post_type = 'page' AND post_status = 'publish' AND post_title LIKE %s",
 				"%{$wpdb->esc_like( $term )}%"
 			),
 			ARRAY_A
@@ -87,6 +87,7 @@ class Local_Seo {
 			$data[] = [
 				'id'   => $page['ID'],
 				'text' => $page['post_title'],
+				'url'  => get_permalink( $page['ID'] ),
 			];
 		}
 
@@ -228,17 +229,25 @@ class Local_Seo {
 	 */
 	private function add_contact_points( &$entity ) {
 		$phone_numbers = Helper::get_settings( 'titles.phone_numbers' );
-		if ( ! isset( $phone_numbers[0]['number'] ) ) {
+		if ( empty( $phone_numbers ) ) {
 			return;
 		}
 
-		$entity['contactPoint'] = [];
+		$numbers = [];
 		foreach ( $phone_numbers as $number ) {
-			$entity['contactPoint'][] = [
+			if ( empty( $number['number'] ) ) {
+				continue;
+			}
+
+			$numbers[] = [
 				'@type'       => 'ContactPoint',
 				'telephone'   => $number['number'],
 				'contactType' => $number['type'],
 			];
+		}
+
+		if ( ! empty( $numbers ) ) {
+			$entity['contactPoint'] = $numbers;
 		}
 	}
 

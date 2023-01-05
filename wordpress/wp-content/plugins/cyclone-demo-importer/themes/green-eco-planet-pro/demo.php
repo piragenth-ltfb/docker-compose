@@ -4,6 +4,15 @@ add_filter( 'pt-ocdi/import_files', 'cdi_import_files' );
 function cdi_import_files() {
     return array(
         array(
+            'import_file_name'=> __('Fully Green Homepage PRO','cdi'),
+            'categories'      =>  array( 'Homepage' ),
+            'local_import_file'=> CDI_PLUGIN_DIR_PATH . '/themes/green-eco-planet-pro/inc/content.xml',
+            'local_import_customizer_file' => CDI_PLUGIN_DIR_PATH . '/themes/green-eco-planet-pro/inc/options.dat',
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/green-eco-planet/homepage-fully-green.jpg',
+            'local_import_widget_file'     => CDI_PLUGIN_DIR_PATH . '/themes/green-eco-planet-pro/inc/widgets.wie',
+            'preview_url' => 'https://bizbergthemes.com/green-eco-planet-pro/fully-green-homepage-pro/'
+        ),
+        array(
             'import_file_name'=> __('Homepage Free','cdi'),
             'categories'      =>  array( 'Homepage' ),
             'local_import_file'=> CDI_PLUGIN_DIR_PATH . '/themes/green-eco-planet-pro/inc/content.xml',
@@ -22,22 +31,13 @@ function cdi_import_files() {
             'preview_url' => 'https://bizbergthemes.com/green-eco-planet-pro/homepage-pro/'
         ),
         array(
-            'import_file_name'=> __('Homepage Slider 1','cdi'),
+            'import_file_name'=> __('Green Globe PRO','cdi'),
             'categories'      =>  array( 'Homepage' ),
             'local_import_file'=> CDI_PLUGIN_DIR_PATH . '/themes/green-eco-planet-pro/inc/content.xml',
             'local_import_customizer_file' => CDI_PLUGIN_DIR_PATH . '/themes/green-eco-planet-pro/inc/options.dat',
             'local_import_widget_file'     => CDI_PLUGIN_DIR_PATH . '/themes/green-eco-planet-pro/inc/widgets.wie',
-            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/green-eco-planet/homepage-slider-1.jpg',
-            'preview_url' => 'https://bizbergthemes.com/green-eco-planet-pro/homepage-slider-1/'
-        ),
-        array(
-            'import_file_name'=> __('Homepage Slider 2','cdi'),
-            'categories'      =>  array( 'Homepage' ),
-            'local_import_file'=> CDI_PLUGIN_DIR_PATH . '/themes/green-eco-planet-pro/inc/content.xml',
-            'local_import_customizer_file' => CDI_PLUGIN_DIR_PATH . '/themes/green-eco-planet-pro/inc/options.dat',
-            'local_import_widget_file'     => CDI_PLUGIN_DIR_PATH . '/themes/green-eco-planet-pro/inc/widgets.wie',
-            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/green-eco-planet/homepage-slider-2.jpg',
-            'preview_url' => 'https://bizbergthemes.com/green-eco-planet-pro/homepage-slider-2/'
+            'import_preview_image_url'   => CDI_PLUGIN_DIR_URL . '/assets/images/green-eco-planet/green-globe-pro.jpg',
+            'preview_url' => 'https://bizbergthemes.com/green-eco-planet-pro/green-globe-pro/'
         ),
     );
 }
@@ -65,12 +65,12 @@ function cdi_after_import_setup( $selected_import ) {
             $front_page_id = get_page_by_path( 'homepage-pro' );
             break;
 
-        case 'Homepage Slider 1':
-            $front_page_id = get_page_by_path( 'homepage-slider-1' );
+        case 'Fully Green Homepage PRO':
+            $front_page_id = get_page_by_path( 'fully-green-homepage-pro' );
             break;
 
-        case 'Homepage Slider 2':
-            $front_page_id = get_page_by_path( 'homepage-slider-2' );
+        case 'Green Globe PRO':
+            $front_page_id = get_page_by_path( 'green-globe-pro' );
             break;
         
         default:
@@ -122,6 +122,16 @@ function cdi_register_plugins( $plugins ) {
         [ 
           'name'     => 'Essential Addons for Elementor', 
           'slug'     => 'essential-addons-for-elementor-lite', 
+          'required' => true,             
+        ],
+        [ 
+          'name'     => 'Charity Addon for Elementor', 
+          'slug'     => 'charity-addon-for-elementor', 
+          'required' => true,             
+        ],
+        [ 
+          'name'     => 'GiveWP – Donation Plugin and Fundraising Platform', 
+          'slug'     => 'give', 
           'required' => true,             
         ],
     ];

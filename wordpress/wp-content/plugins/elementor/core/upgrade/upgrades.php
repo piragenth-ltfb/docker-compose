@@ -1,13 +1,16 @@
 <?php
 namespace Elementor\Core\Upgrade;
 
+use Elementor\Api;
 use Elementor\Core\Breakpoints\Manager as Breakpoints_Manager;
 use Elementor\Core\Experiments\Manager as Experiments_Manager;
+use Elementor\Core\Schemes\Base;
 use Elementor\Core\Settings\Manager as SettingsManager;
 use Elementor\Core\Settings\Page\Manager as SettingsPageManager;
 use Elementor\Icons_Manager;
 use Elementor\Modules\Usage\Module;
 use Elementor\Plugin;
+use Elementor\Tracker;
 use Elementor\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -26,6 +29,7 @@ class Upgrades {
 
 	public static function _on_each_version( $updater ) {
 		self::recalc_usage_data( $updater );
+		self::remove_remote_info_api_data();
 
 		$uploads_manager = Plugin::$instance->uploads_manager;
 
@@ -640,6 +644,10 @@ class Upgrades {
 	 * @return bool
 	 */
 	public static function recalc_usage_data( $updater ) {
+		if ( ! Tracker::is_allow_track() ) {
+			return false;
+		}
+
 		/** @var Module $module */
 		$module = Plugin::$instance->modules_manager->get_modules( 'usage' );
 
@@ -819,7 +827,7 @@ class Upgrades {
 			foreach ( $colors_to_save as $index => $color ) {
 				$kit->add_repeater_row( 'custom_colors', [
 					'_id' => Utils::generate_random_string(),
-					'title' => __( 'Saved Color', 'elementor' ) . ' #' . ( $index + 1 ),
+					'title' => esc_html__( 'Saved Color', 'elementor' ) . ' #' . ( $index + 1 ),
 					'color' => $color,
 				] );
 			}
@@ -926,6 +934,71 @@ class Upgrades {
 		};
 
 		return self::move_settings_to_kit( $callback, $updater, $include_revisions );
+	}
+
+	public static function _v_3_4_8_fix_font_awesome_default_value_from_1_to_yes() {
+		// if `Icons_Manager::LOAD_FA4_SHIM_OPTION_KEY` value is '1', then set it to `yes`.
+		$load_fa4_shim_option = get_option( Icons_Manager::LOAD_FA4_SHIM_OPTION_KEY );
+
+		if ( '1' === $load_fa4_shim_option ) {
+			update_option( Icons_Manager::LOAD_FA4_SHIM_OPTION_KEY, 'yes' );
+		}
+	}
+
+	public static function _v_3_5_0_remove_old_elementor_scheme() {
+		global $wpdb;
+
+		$key = Base::SCHEME_OPTION_PREFIX;
+
+		$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '{$key}%';" ); // phpcs:ignore
+	}
+
+	public static function _v_3_8_0_fix_php8_image_custom_size() {
+		global $wpdb;
+
+		$attachment_ids = $wpdb->get_col(
+			'SELECT `post_id` FROM `' . $wpdb->postmeta . '`
+				WHERE `meta_key` = "_wp_attachment_metadata"
+					AND (
+						`meta_value` LIKE \'%elementor_custom_%\'
+					);'
+		);
+
+		foreach ( $attachment_ids as $attachment_id ) {
+			$attachment_metadata = wp_get_attachment_metadata( $attachment_id );
+			if ( empty( $attachment_metadata['sizes'] ) || ! is_array( $attachment_metadata['sizes'] ) ) {
+				continue;
+			}
+
+			$old_attachment_metadata = $attachment_metadata;
+			foreach ( $attachment_metadata['sizes'] as $size_key => $size_value ) {
+				if ( 0 !== strpos( $size_key, 'elementor_custom_' ) ) {
+					continue;
+				}
+
+				if ( absint( $size_value['width'] ) !== $size_value['width'] ) {
+					$attachment_metadata['sizes'][ $size_key ]['width'] = (int) $size_value['width'];
+				}
+
+				if ( absint( $size_value['height'] ) !== $size_value['height'] ) {
+					$attachment_metadata['sizes'][ $size_key ]['height'] = (int) $size_value['height'];
+				}
+			}
+
+			if ( $old_attachment_metadata['sizes'] === $attachment_metadata['sizes'] ) {
+				continue;
+			}
+
+			wp_update_attachment_metadata( $attachment_id, $attachment_metadata );
+		}
+	}
+
+	public static function remove_remote_info_api_data() {
+		global $wpdb;
+
+		$key = Api::TRANSIENT_KEY_PREFIX;
+
+		return $wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '{$key}%';" ); // phpcs:ignore
 	}
 
 	/**

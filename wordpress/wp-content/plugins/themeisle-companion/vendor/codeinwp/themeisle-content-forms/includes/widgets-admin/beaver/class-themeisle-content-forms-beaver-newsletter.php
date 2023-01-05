@@ -93,15 +93,18 @@ class Newsletter_Admin extends Beaver_Widget_Base {
 	 * @return array
 	 */
 	public function add_widget_specific_controls( $fields ) {
+		$providers = array(
+			'mailchimp'  => esc_html__( 'MailChimp', 'themeisle-companion' ),
+			'sendinblue' => esc_html__( 'Sendinblue ', 'themeisle-companion' )
+		);
+		if ( version_compare( '7.1', phpversion() ) !== 1 ) {
+			$providers['mailerlite'] = esc_html__( 'MailerLite', 'themeisle-companion' );
+		}
 		$fields['fields'] = array(
 			'provider'        => array(
 				'type'    => 'select',
 				'label'   => esc_html__( 'Subscribe to', 'themeisle-companion' ),
-				'options' => array(
-					'mailchimp'  => esc_html__( 'MailChimp', 'themeisle-companion' ),
-					'sendinblue' => esc_html__( 'Sendinblue ', 'themeisle-companion' ),
-					'mailerlite' => esc_html__( 'MailerLite', 'themeisle-companion' ),
-				),
+				'options' => $providers,
 			),
 			'access_key'      => array(
 				'type'  => 'text',

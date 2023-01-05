@@ -29,6 +29,7 @@ class Add_Attributes {
 	 */
 	public function __construct() {
 		$this->action( 'wp', 'add_attributes', 9999 );
+		$this->action( 'rest_api_init', 'add_attributes' );
 	}
 
 	/**
@@ -69,11 +70,11 @@ class Add_Attributes {
 			$is_dirty = false;
 			$attrs    = HTML::extract_attributes( $image[0] );
 
-			if ( ! isset( $attrs['src'] ) ) {
+			if ( ! isset( $attrs['src'] ) && ! isset( $attrs['data-ct-lazy'] ) ) {
 				continue;
 			}
 
-			$post->filename = $attrs['src'];
+			$post->filename = isset( $attrs['data-ct-lazy'] ) ? $attrs['data-ct-lazy'] : $attrs['src'];
 
 			// Lazy load support.
 			if ( ! empty( $attrs['data-src'] ) ) {

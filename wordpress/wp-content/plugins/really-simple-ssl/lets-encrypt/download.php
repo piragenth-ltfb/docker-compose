@@ -12,7 +12,7 @@ require_once( BASE_PATH.'wp-load.php' );
 require_once( BASE_PATH.'wp-includes/class-phpass.php' );
 require_once( BASE_PATH . 'wp-admin/includes/image.php' );
 
-if ( !current_user_can('manage_options') ) {
+if ( !rsssl_user_can_manage() ) {
 	die();
 }
 if ( !isset($_GET["type"]) ) {
@@ -46,7 +46,7 @@ switch($type) {
 }
 
 if (!file_exists($file)) {
-	echo __("File missing. Please retry the previous steps.", "really-simple-ssl");
+	$content = __("File missing. Please retry the previous steps.", "really-simple-ssl");
 	die();
 } else {
 	$content = file_get_contents($file);
@@ -71,12 +71,12 @@ if ($fp) {
 	header("Content-Transfer-Encoding: binary");
 	echo $content;
 } else {
-	echo "Someting went wrong #2";
+	echo "Something went wrong #2";
 }
 fclose($fp);
 
 
-function find_wordpress_base_path()
+function rsssl_find_wordpress_base_path()
 {
 	$path = dirname(__FILE__);
 
