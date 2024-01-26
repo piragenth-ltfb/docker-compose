@@ -1,0 +1,11 @@
+version: "2"
+services:
+  guacamole:
+    image: oznu/guacamole
+    container_name: guacamole
+    volumes:
+      - postgres:/config
+    network_mode: host
+volumes:
+  postgres:
+    driver: local

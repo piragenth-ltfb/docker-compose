@@ -1,0 +1,16 @@
+version: "2.1"
+services:
+  emby:
+    image: linuxserver/emby
+    container_name: emby
+    ports:
+      - 8097:8096
+    volumes:
+      - /home/piragenth/config/emby/:/config
+      - /home/piragenth/drive-1/:/home/piragenth/drive-1/
+      - /home/piragenth/drive-2/:/home/piragenth/drive-2/
+    restart: unless-stopped
+
+
+
+

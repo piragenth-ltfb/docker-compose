@@ -1,0 +1,10 @@
+version: "2.1"
+services:
+  ubuntu-kde:
+    image: linuxserver/webtop:ubuntu-kde
+    container_name: webtop-ubuntu-kde
+    ports:
+      - 3003:3000
+    shm_size: "5gb" #optional
+    restart: unless-stopped
+

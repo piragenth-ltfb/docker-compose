@@ -1,0 +1,9 @@
+version: '3.3'
+services:
+  php-apache-environment:
+    container_name: php-apache
+    image: php:8.0-apache
+    volumes:
+      - /home/piragenth/forms:/var/www/html/
+    ports:
+      - 8090:80

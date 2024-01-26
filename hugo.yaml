@@ -1,0 +1,11 @@
+version: '3'
+services:
+  hugo:
+    container_name: hugo
+    image: piragenthdocker/hugo:latest
+    volumes:
+      - "/home/piragenth/Documents/GitHub/piragenth-ltfb.github.io:/srv/hugo"
+    ports:
+      - 8085:8085
+    command: hugo server -s /srv/hugo --disableFastRender -w --bind 0.0.0.0 -p 8085
+    restart: unless-stopped

@@ -1,0 +1,4 @@
+from ubuntu:latest
+RUN apt update && apt install wget hugo -y && cd /home && wget https://github.com/gohugoio/hugo/releases/download/v0.105.0/hugo_0.105.0_linux-amd64.deb && dpkg -i hugo_0.105.0_linux-amd64.deb && mkdir -p /srv/hugo && cd /srv/hugo
+CMD hugo server 
+ 

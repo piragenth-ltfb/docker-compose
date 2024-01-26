@@ -1,0 +1,19 @@
+---
+version: "3.9"
+services:
+  ispyagentdvr:
+    image: mekayelanik/ispyagentdvr:latest
+    container_name: ispyagentdvr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Dhaka
+    volumes:
+      - /home/piragenth/cctv/agentdvr/config:/AgentDVR/Media/XML
+      - /home/piragenth/cctv/agentdvr/recordings:/AgentDVR/Media/WebServerRoot/Media
+      - /home/piragenth/cctv/agentdvr/commands:/AgentDVR/Commands
+    ports:
+      - 8090:8090
+      - 3478:3478/udp
+      - 50000-50010:50000-50010/udp
+    restart: unless-stopped

@@ -1,0 +1,10 @@
+---
+version: "2.1"
+services:
+  ubuntu-mate:
+    image: linuxserver/webtop:ubuntu-mate
+    container_name: webtop-ubuntu-mate
+    ports:
+      - 3001:3000
+    shm_size: "10gb" #optional
+    restart: unless-stopped

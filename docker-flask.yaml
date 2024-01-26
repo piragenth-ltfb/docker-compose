@@ -1,0 +1,20 @@
+version: '2'
+services:
+  flask:
+    image: piragenthdocker/flask:python
+    container_name: flask-app
+    ports:
+      - 5000:80
+    volumes:
+      - /home:/home/
+    command: bash /home/piragenth007/Flask/flask-app.py
+#    command: pip install -r /home/piragenth/Documents/GitHub/Flask/venv-pip.txt 
+#    command: python3 /home/piragenth/Documents/GitHub/Flask/app.py
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    ports:
+      - 3306:3306
+    envionment:
+      - MYSQL_ROOT_PASSWORD: Piragenth@3559

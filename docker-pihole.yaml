@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole # check the latest version on docker hub.
+    hostname: pihole # set an easy hostname to remember
+#    domainname: pihole.local # your local domain name
+#    mac_address: de:ad:be:ef:ff:01 # can change or leave this
+    cap_add:
+      - NET_ADMIN
+#    networks:
+#      macvlan: # same as network specified below
+#        ipv4_address: 192.168.1.17 # the IP of the pihole container
+    dns:
+      - 8.8.8.8
+    ports: # expose all pihole ports.
+      - 443/tcp
+      - 53/tcp
+      - 53/udp
+      - 67/udp
+      - 8080:80
+    volumes: # mount our data volumes.
+       - '/home/piragenth/Documents/pihole/etc-pihole/:/etc/pihole/'
+       - '/home/piragenth/Documents/pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/'
+       - '/home/piragenth/Documents/pihole/backups/:/backups/' # backups explained later
+    environment: # set variables for pihole configuration.
+#      ServerIP: 192.168.1.17 # must match ipv4_address above
+      VIRTUAL_HOST: pihole.local  # Must be hostname + domainname from above
+      WEBPASSWORD: "<pihole-password"
+    restart: unless-stopped

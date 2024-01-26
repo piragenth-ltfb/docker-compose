@@ -1,0 +1,11 @@
+version: '2'
+services:
+  squid:
+    image: piragenthdocker/proxy:squid
+    container_name: squid
+    ports:
+      - 80:80
+      - 443:443
+      - 3128:3128
+    restart: unless-stopped
+

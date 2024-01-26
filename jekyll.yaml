@@ -1,0 +1,18 @@
+version: '3'
+services:
+  jekyll-serve:
+    container_name: jekyll
+    image: jekyll/jekyll:latest
+    volumes:
+      - "/home/piragenth/Documents/GitHub/piragenth-ltfb.github.io/:/srv/jekyll/"
+    ports:
+      - 8082:4000
+    command: 'jekyll serve --incremental --verbose'
+    networks:
+      - docker-compose_default
+    restart: unless-stopped
+
+networks:
+  docker-compose_default:
+    external: true
+

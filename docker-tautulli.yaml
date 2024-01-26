@@ -1,0 +1,15 @@
+---
+version: "2.1"
+services:
+  tautulli:
+    image: linuxserver/tautulli:latest
+    container_name: tautulli
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - /home/piragenth/tautulli:/config
+    ports:
+      - 8181:8181
+    restart: unless-stopped

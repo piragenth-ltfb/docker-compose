@@ -1,0 +1,9 @@
+version: '3'
+services:
+  jekyll-serve:
+    image: jekyll/jekyll
+    volumes:
+      - "/home/piragenth/jekyll-docker/LTFB:/srv/jekyll"
+    ports:
+      - 80:4000
+    command: 'jekyll serve'

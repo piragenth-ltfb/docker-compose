@@ -1,0 +1,14 @@
+version: "2.1"
+services:
+  homeassistant:
+    image: linuxserver/homeassistant:latest
+    container_name: homeassistant
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - /home/piragenth/home-assistant/:/config
+    ports:
+      - 8123:8123 
+    restart: unless-stopped

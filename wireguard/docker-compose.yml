@@ -1,0 +1,26 @@
+version: "3"
+services:
+  wireguard:
+    image: linuxserver/wireguard:latest
+    container_name: wireguard
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE #optional
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - SERVERURL=auto  #optional
+      - SERVERPORT=51820 #optional
+      - PEERS=peer1,peer2 #optional
+      - PEERDNS=1.1.1.1,1.1.1.2 #optional
+#      - INTERNAL_SUBNET=10.88.0.3 #optional
+    volumes:
+      - /home/piragenth/Documents/wireguard/config:/config
+      - /lib/modules:/lib/modules #optional
+    ports:
+      - 51820:51820/udp
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped

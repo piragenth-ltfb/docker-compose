@@ -1,0 +1,10 @@
+---
+version: "2.1"
+services:
+  ubuntu-xfce:
+    image: piragenthdocker/webtop-ubuntu-xfce
+    container_name: webtop-ubuntu-xfce
+    ports:
+      - 3000:3000
+    shm_size: "10gb" #optional
+    restart: unless-stopped
